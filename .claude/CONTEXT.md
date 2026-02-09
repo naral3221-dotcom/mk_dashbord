@@ -7,8 +7,8 @@
 
 ## 📍 Last Updated
 - **날짜**: 2026-02-09
-- **시간**: (작업 시 업데이트)
-- **작업 상태**: 프로젝트 초기 설정 완료
+- **시간**: 세션 진행 중
+- **작업 상태**: 오케스트레이션 시스템 + Git 설정 완료
 
 ---
 
@@ -26,13 +26,21 @@
 - [x] 서브에이전트 정의 (7개)
 - [x] 오케스트레이터 가이드 작성
 - [x] 작업 로그 시스템 구축
+- [x] 컨텍스트 관리 시스템 (CONTEXT.md, STATUS.md)
+- [x] 로드맵 작성 (ROADMAP.md)
+- [x] Git 초기화 + GitHub 연결
+- [x] 초기 커밋 완료 (5f845b3)
 
-### 대기 중인 작업
-- [ ] Next.js 프로젝트 초기화
-- [ ] Clean Architecture 폴더 구조
-- [ ] Prisma + PostgreSQL 설정
-- [ ] Clerk 인증
-- [ ] Vitest 테스트 환경
+### 대기 중인 작업 (Sprint 0 남은 항목)
+- [ ] 0.1 Next.js 프로젝트 초기화
+- [ ] 0.2 TypeScript strict 설정
+- [ ] 0.3 Clean Architecture 폴더 구조
+- [ ] 0.4 ESLint + Prettier 설정
+- [ ] 0.5 TailwindCSS + shadcn/ui 설정
+- [ ] 0.6 Vitest 테스트 환경
+- [ ] 0.7 Prisma 초기 설정
+- [ ] 0.8 환경변수 템플릿
+- [ ] 0.9 GitHub Actions CI/CD
 
 ---
 
