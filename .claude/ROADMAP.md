@@ -20,7 +20,7 @@ Sprint 7: Production & Polish ────────────── Week 9-
 
 ---
 
-## Sprint 0: Project Setup ⬅️ CURRENT
+## Sprint 0: Project Setup ✅ COMPLETED
 
 ### 목표
 프로젝트 기반 구조 완성, 개발 환경 설정
@@ -29,24 +29,24 @@ Sprint 7: Production & Polish ────────────── Week 9-
 
 | # | Task | Status | Agent | Commit |
 |---|------|--------|-------|--------|
-| 0.1 | Next.js 14 프로젝트 초기화 | ⬜ Todo | - | |
-| 0.2 | TypeScript strict 설정 | ⬜ Todo | - | |
-| 0.3 | Clean Architecture 폴더 구조 | ⬜ Todo | architect | |
-| 0.4 | ESLint + Prettier 설정 | ⬜ Todo | - | |
-| 0.5 | TailwindCSS + shadcn/ui 설정 | ⬜ Todo | - | |
-| 0.6 | Vitest 테스트 환경 | ⬜ Todo | - | |
-| 0.7 | Prisma 초기 설정 | ⬜ Todo | db-designer | |
-| 0.8 | 환경변수 템플릿 (.env.example) | ⬜ Todo | - | |
-| 0.9 | GitHub Actions CI/CD | ⬜ Todo | - | |
+| 0.1 | Next.js 14 프로젝트 초기화 | ✅ Done | - | 23b0da5 |
+| 0.2 | TypeScript strict 설정 | ✅ Done | - | 23b0da5 |
+| 0.3 | Clean Architecture 폴더 구조 | ✅ Done | architect | 23b0da5 |
+| 0.4 | ESLint + Prettier 설정 | ✅ Done | - | 23b0da5 |
+| 0.5 | TailwindCSS + shadcn/ui 설정 | ✅ Done | - | 23b0da5 |
+| 0.6 | Vitest 테스트 환경 | ✅ Done | - | 23b0da5 |
+| 0.7 | Prisma 초기 설정 | ✅ Done | db-designer | 23b0da5 |
+| 0.8 | 환경변수 템플릿 (.env.example) | ✅ Done | - | 23b0da5 |
+| 0.9 | GitHub Actions CI/CD | ✅ Done | - | 23b0da5 |
 
 ### Deliverables
-- [ ] 빌드 성공하는 Next.js 프로젝트
-- [ ] 테스트 실행 가능
-- [ ] CI 파이프라인 동작
+- [x] 빌드 성공하는 Next.js 프로젝트
+- [x] 테스트 실행 가능
+- [x] CI 파이프라인 동작
 
 ---
 
-## Sprint 1: Core Domain
+## Sprint 1: Core Domain ⬅️ CURRENT
 
 ### 목표
 핵심 비즈니스 엔티티 및 유스케이스 정의 (TDD)
