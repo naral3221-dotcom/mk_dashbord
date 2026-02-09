@@ -1,0 +1,164 @@
+// Marketing Analytics SaaS - Prisma Schema
+// Multi-tenant architecture with row-level security
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============================================
+// ENUMS
+// ============================================
+
+enum Plan {
+  FREE
+  STARTER
+  PRO
+  ENTERPRISE
+}
+
+enum Role {
+  OWNER
+  ADMIN
+  MEMBER
+  VIEWER
+}
+
+enum Platform {
+  META
+  GOOGLE
+  TIKTOK
+  NAVER
+  KAKAO
+}
+
+enum CampaignStatus {
+  ACTIVE
+  PAUSED
+  DELETED
+  ARCHIVED
+}
+
+// ============================================
+// MODELS
+// ============================================
+
+model Organization {
+  id               String       @id @default(cuid())
+  name             String
+  slug             String       @unique
+  plan             Plan         @default(FREE)
+  stripeCustomerId String?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  // Relations
+  users       User[]
+  adAccounts  AdAccount[]
+  conversions Conversion[]
+
+  @@index([slug])
+}
+
+model User {
+  id             String       @id @default(cuid())
+  email          String       @unique
+  name           String?
+  role           Role         @default(MEMBER)
+  organizationId String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  // Relations
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([email])
+  @@index([organizationId])
+}
+
+model AdAccount {
+  id             String       @id @default(cuid())
+  platform       Platform
+  accountId      String
+  accountName    String
+  accessToken    String?      // Will be encrypted at application level
+  refreshToken   String?      // For OAuth refresh
+  tokenExpiresAt DateTime?
+  isActive       Boolean      @default(true)
+  organizationId String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  // Relations
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  campaigns    Campaign[]
+
+  @@unique([platform, accountId, organizationId])
+  @@index([organizationId])
+  @@index([platform])
+}
+
+model Campaign {
+  id          String         @id @default(cuid())
+  externalId  String
+  name        String
+  status      CampaignStatus @default(ACTIVE)
+  adAccountId String
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  // Relations
+  adAccount AdAccount         @relation(fields: [adAccountId], references: [id], onDelete: Cascade)
+  insights  CampaignInsight[]
+
+  @@unique([externalId, adAccountId])
+  @@index([adAccountId])
+  @@index([status])
+}
+
+model CampaignInsight {
+  id          String   @id @default(cuid())
+  date        DateTime @db.Date
+  spend       Decimal  @default(0) @db.Decimal(12, 2)
+  impressions Int      @default(0)
+  clicks      Int      @default(0)
+  conversions Int      @default(0)
+  revenue     Decimal  @default(0) @db.Decimal(12, 2)
+  campaignId  String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@unique([campaignId, date])
+  @@index([campaignId])
+  @@index([date])
+}
+
+model Conversion {
+  id             String   @id @default(cuid())
+  timestamp      DateTime
+  source         String?  // utm_source
+  medium         String?  // utm_medium
+  campaign       String?  // utm_campaign
+  content        String?  // utm_content
+  term           String?  // utm_term
+  value          Decimal  @default(0) @db.Decimal(12, 2)
+  trackingData   Json?    // Additional tracking data (fbclid, gclid, etc.)
+  organizationId String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relations
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([timestamp])
+  @@index([source])
+  @@index([campaign])
+}
