@@ -5,3 +5,4 @@ export * from './AdAccount';
 export * from './Campaign';
 export * from './CampaignInsight';
 export * from './Conversion';
+export * from './Invitation';

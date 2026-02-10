@@ -1,2 +1,2 @@
 // external barrel export
-export {};
+// Clerk has been removed - auth is now handled internally

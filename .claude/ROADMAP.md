@@ -1,7 +1,7 @@
 # Implementation Roadmap
 
-> **마지막 수정**: 2026-02-09
-> **현재 단계**: Sprint 1 - Core Domain ✅ 완료
+> **마지막 수정**: 2026-02-10
+> **현재 단계**: Sprint 2 - Auth & Multi-tenancy ✅ 완료
 
 ---
 
@@ -77,30 +77,41 @@ Sprint 7: Production & Polish ────────────── Week 9-
 
 ---
 
-## Sprint 2: Authentication & Multi-tenancy ⬅️ CURRENT
+## Sprint 2: Authentication & Multi-tenancy ✅ COMPLETED
 
 ### 목표
-Clerk 인증 및 멀티테넌트 구조 구현
+NextAuth.js v5 인증 및 멀티테넌트 구조 구현
 
 ### Tasks
 
 | # | Task | Status | Agent | Commit |
 |---|------|--------|-------|--------|
-| 2.1 | Clerk 설정 및 통합 | ⬜ Todo | api-integrator | |
-| 2.2 | Organization 생성 플로우 | ⬜ Todo | implementer | |
-| 2.3 | 사용자 초대 기능 | ⬜ Todo | implementer | |
-| 2.4 | Role 기반 접근 제어 | ⬜ Todo | implementer | |
-| 2.5 | 멀티테넌트 미들웨어 | ⬜ Todo | implementer | |
-| 2.6 | 보호된 라우트 설정 | ⬜ Todo | implementer | |
+| 2.1 | NextAuth.js v5 설정 (JWT + Credentials + Google) | ✅ Done | implementer | - |
+| 2.2 | Organization 생성 플로우 | ✅ Done | test-writer → implementer | - |
+| 2.3 | 사용자 초대 기능 | ✅ Done | test-writer → implementer | - |
+| 2.4 | Role 기반 접근 제어 | ✅ Done | test-writer → implementer | - |
+| 2.5 | 멀티테넌트 미들웨어 | ✅ Done | implementer | - |
+| 2.6 | 보호된 라우트 설정 | ✅ Done | implementer | - |
+| 2.7 | Prisma Repository 구현체 (User, Org, Invitation) | ✅ Done | test-writer → implementer | - |
+| 2.8 | RegisterUserUseCase (자체 회원가입) | ✅ Done | test-writer → implementer | - |
+| 2.9 | Application Services (4개) | ✅ Done | test-writer → implementer | - |
+| 2.10 | Full UI (Sign-in/up, Onboarding, Dashboard, Settings) | ✅ Done | implementer | - |
 
 ### Deliverables
-- [ ] 로그인/회원가입 동작
-- [ ] 조직 생성 및 관리
-- [ ] 역할 기반 권한
+- [x] 로그인/회원가입 동작 (NextAuth.js)
+- [x] 조직 생성 및 관리
+- [x] 역할 기반 권한
+- [x] Clerk → NextAuth.js 마이그레이션 완료
+
+### Results
+- **23 test files, 322 tests, ALL PASSED**
+- 6 use cases, 4 app services, 3 Prisma repositories
+- 16 routes (API + pages)
+- TypeScript zero errors, build successful
 
 ---
 
-## Sprint 3: META Integration
+## Sprint 3: META Integration ⬅️ CURRENT
 
 ### 목표
 META (Facebook/Instagram) 광고 API 연동
@@ -218,7 +229,9 @@ Stripe 결제 및 SaaS 기능
 
 ### 2026-02-10
 - Sprint 1 완료: 6 엔티티 + 6 Repository 인터페이스 (174 tests)
-- Sprint 2로 이동
+- Sprint 2 완료: Auth & Multi-tenancy (322 tests, NextAuth.js)
+- Clerk → NextAuth.js 마이그레이션 완료
+- Sprint 3으로 이동
 
 ### 2026-02-09
 - 초기 로드맵 작성

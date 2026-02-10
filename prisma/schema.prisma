@@ -60,6 +60,7 @@ model Organization {
   users       User[]
   adAccounts  AdAccount[]
   conversions Conversion[]
+  invitations Invitation[]
 
   @@index([slug])
 }
@@ -68,13 +69,18 @@ model User {
   id             String       @id @default(cuid())
   email          String       @unique
   name           String?
+  passwordHash   String?
+  authProvider   String       @default("credentials")
+  emailVerified  DateTime?
+  image          String?
   role           Role         @default(MEMBER)
-  organizationId String
+  organizationId String?
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
 
   // Relations
-  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  sentInvitations Invitation[]
 
   @@index([email])
   @@index([organizationId])
@@ -161,4 +167,24 @@ model Conversion {
   @@index([timestamp])
   @@index([source])
   @@index([campaign])
+}
+
+model Invitation {
+  id             String    @id @default(cuid())
+  email          String
+  role           Role      @default(MEMBER)
+  token          String    @unique
+  expiresAt      DateTime
+  acceptedAt     DateTime?
+  organizationId String
+  invitedById    String
+  createdAt      DateTime  @default(now())
+
+  // Relations
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  invitedBy    User         @relation(fields: [invitedById], references: [id], onDelete: Cascade)
+
+  @@index([email])
+  @@index([token])
+  @@index([organizationId])
 }

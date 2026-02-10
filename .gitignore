@@ -50,3 +50,6 @@ next-env.d.ts
 *.cache
 
 /src/generated/prisma
+
+# Claude Code local settings
+.claude/settings.local.json

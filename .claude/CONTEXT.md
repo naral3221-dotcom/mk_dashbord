@@ -7,13 +7,13 @@
 
 ## 📍 Last Updated
 - **날짜**: 2026-02-10
-- **시간**: 세션 종료
-- **작업 상태**: Sprint 1 완료, Push 완료, Sprint 2 대기
+- **시간**: Sprint 2 완료 커밋
+- **작업 상태**: Sprint 2 완료, Sprint 3 대기
 
 ---
 
 ## 🎯 Current Sprint
-**Sprint 1: Core Domain** ✅ 완료
+**Sprint 2: Authentication & Multi-tenancy** ✅ 완료
 
 ### Sprint 0 완료 (✅)
 - [x] 0.1 Next.js 14 프로젝트 초기화
@@ -34,15 +34,27 @@
 - [x] 1.5 CampaignInsight 엔티티 (39 tests, 8 KPIs)
 - [x] 1.6 Conversion 엔티티 (21 tests)
 - [x] 1.7 Repository 인터페이스 정의 (6개)
-- [x] 1.8 Prisma 스키마 구현 (Sprint 0에서 완료)
+- [x] 1.8 Prisma 스키마 구현
 
-### Sprint 2 대기 중
-- [ ] 2.1 Clerk 설정 및 통합
-- [ ] 2.2 Organization 생성 플로우
-- [ ] 2.3 사용자 초대 기능
-- [ ] 2.4 Role 기반 접근 제어
-- [ ] 2.5 멀티테넌트 미들웨어
-- [ ] 2.6 보호된 라우트 설정
+### Sprint 2 완료 (✅)
+- [x] 2.1 NextAuth.js v5 설정 (JWT + Credentials + Google OAuth)
+- [x] 2.2 Organization 생성 플로우 (CreateOrganizationUseCase + API + UI)
+- [x] 2.3 사용자 초대 기능 (InviteUserUseCase + AcceptInvitationUseCase)
+- [x] 2.4 Role 기반 접근 제어 (CheckPermissionUseCase + AuthorizationService)
+- [x] 2.5 멀티테넌트 미들웨어 (NextAuth JWT middleware)
+- [x] 2.6 보호된 라우트 설정 (15+ routes)
+- [x] 2.7 Prisma Repository 구현체 (User, Organization, Invitation)
+- [x] 2.8 RegisterUserUseCase (자체 회원가입)
+- [x] 2.9 Application Services (Auth, Organization, Invitation, Authorization)
+- [x] 2.10 Full UI (Sign-in/up, Onboarding, Dashboard, Settings, Invite)
+
+### Sprint 3 대기 중
+- [ ] 3.1 META OAuth 연동
+- [ ] 3.2 Ad Account 연결 플로우
+- [ ] 3.3 Campaign 동기화 UseCase
+- [ ] 3.4 Insights 데이터 수집
+- [ ] 3.5 백그라운드 동기화 Job
+- [ ] 3.6 데이터 캐싱 전략
 
 ---
 
@@ -51,19 +63,26 @@
 dashboard/
 ├── CLAUDE.md                    # 메인 가이드라인
 ├── .claude/
-│   ├── ORCHESTRATOR.md          # 오케스트레이터 가이드
 │   ├── CONTEXT.md               # 현재 파일 (컨텍스트)
-│   ├── agents/                  # 에이전트 프롬프트
+│   ├── ROADMAP.md               # 로드맵
 │   └── logs/                    # 작업 로그
+├── src/
+│   ├── domain/                  # 6 entities, 7 repos, 6 use cases, IPasswordHasher
+│   ├── application/             # 4 services, 3 DTOs
+│   ├── infrastructure/          # Prisma repos, NextAuth, BcryptPasswordHasher
+│   └── app/                     # 16 routes, full UI
 ```
 
 ---
 
 ## 💭 Important Decisions Made
-1. **기술 스택**: Next.js 14 + TypeScript + PostgreSQL + Prisma + Clerk + Stripe
+1. **기술 스택**: Next.js 14 + TypeScript + PostgreSQL + Prisma + NextAuth.js + Stripe
 2. **아키텍처**: Clean Architecture (domain/application/infrastructure/presentation)
 3. **개발 방법론**: TDD (Red-Green-Refactor)
-4. **에이전트 모델**: 모든 서브에이전트 Opus 사용
+4. **인증**: NextAuth.js v5 (Clerk에서 마이그레이션 - 비용 절감)
+5. **세션 전략**: JWT (DB 세션 불필요, token에 userId/role/orgId 포함)
+6. **Prisma Adapter 미사용**: 기존 Repository 패턴 유지 (Clean Architecture)
+7. **organizationId nullable**: 회원가입 → 온보딩(조직 생성) 플로우 지원
 
 ---
 
@@ -84,5 +103,5 @@ dashboard/
 
 ## 📝 Pending User Decisions
 ```
-없음 - 다음 오더 대기 중
+없음 - Sprint 3 시작 대기 중
 ```

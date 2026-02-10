@@ -5,7 +5,11 @@ export interface UserProps {
   readonly email: string;
   readonly name: string | null;
   readonly role: Role;
-  readonly organizationId: string;
+  readonly organizationId: string | null;
+  readonly passwordHash: string | null;
+  readonly authProvider: string;
+  readonly emailVerified: Date | null;
+  readonly image: string | null;
   readonly createdAt: Date;
   readonly updatedAt: Date;
 }
@@ -14,7 +18,11 @@ export interface CreateUserProps {
   readonly email: string;
   readonly name?: string | null;
   readonly role?: Role;
-  readonly organizationId: string;
+  readonly organizationId?: string | null;
+  readonly passwordHash?: string | null;
+  readonly authProvider?: string;
+  readonly emailVerified?: Date | null;
+  readonly image?: string | null;
 }
 
 export class User {
@@ -29,10 +37,6 @@ export class User {
       throw new Error('Invalid email format');
     }
 
-    if (!props.organizationId) {
-      throw new Error('Organization ID is required');
-    }
-
     if (props.name && props.name.length > 100) {
       throw new Error('Name must be less than 100 characters');
     }
@@ -44,7 +48,11 @@ export class User {
       email: props.email.toLowerCase().trim(),
       name: props.name?.trim() ?? null,
       role: props.role ?? Role.MEMBER,
-      organizationId: props.organizationId,
+      organizationId: props.organizationId ?? null,
+      passwordHash: props.passwordHash ?? null,
+      authProvider: props.authProvider ?? 'credentials',
+      emailVerified: props.emailVerified ?? null,
+      image: props.image ?? null,
       createdAt: now,
       updatedAt: now,
     });
@@ -70,8 +78,24 @@ export class User {
     return this.props.role;
   }
 
-  get organizationId(): string {
+  get organizationId(): string | null {
     return this.props.organizationId;
+  }
+
+  get passwordHash(): string | null {
+    return this.props.passwordHash;
+  }
+
+  get authProvider(): string {
+    return this.props.authProvider;
+  }
+
+  get emailVerified(): Date | null {
+    return this.props.emailVerified;
+  }
+
+  get image(): string | null {
+    return this.props.image;
   }
 
   get createdAt(): Date {
@@ -102,6 +126,35 @@ export class User {
     return new User({
       ...this.props,
       role: newRole,
+      updatedAt: new Date(),
+    });
+  }
+
+  verifyEmail(): User {
+    return new User({
+      ...this.props,
+      emailVerified: new Date(),
+      updatedAt: new Date(),
+    });
+  }
+
+  updateProfile(data: { name?: string | null; image?: string | null }): User {
+    if (data.name && data.name.length > 100) {
+      throw new Error('Name must be less than 100 characters');
+    }
+
+    return new User({
+      ...this.props,
+      name: data.name !== undefined ? (data.name?.trim() ?? null) : this.props.name,
+      image: data.image !== undefined ? data.image : this.props.image,
+      updatedAt: new Date(),
+    });
+  }
+
+  joinOrganization(organizationId: string): User {
+    return new User({
+      ...this.props,
+      organizationId,
       updatedAt: new Date(),
     });
   }

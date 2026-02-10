@@ -6,7 +6,6 @@ describe('User Entity', () => {
   const validProps = {
     email: 'test@example.com',
     name: 'Test User',
-    organizationId: 'org-123',
   };
 
   describe('create()', () => {
@@ -15,7 +14,6 @@ describe('User Entity', () => {
       expect(user.email).toBe('test@example.com');
       expect(user.name).toBe('Test User');
       expect(user.role).toBe(Role.MEMBER);
-      expect(user.organizationId).toBe('org-123');
       expect(user.id).toBeDefined();
       expect(user.createdAt).toBeInstanceOf(Date);
     });
@@ -56,7 +54,7 @@ describe('User Entity', () => {
     });
 
     it('should allow undefined name (defaults to null)', () => {
-      const user = User.create({ email: 'test@example.com', organizationId: 'org-123' });
+      const user = User.create({ email: 'test@example.com' });
       expect(user.name).toBeNull();
     });
 
@@ -72,16 +70,40 @@ describe('User Entity', () => {
       );
     });
 
-    it('should throw on missing organizationId', () => {
-      expect(() =>
-        User.create({ ...validProps, organizationId: '' })
-      ).toThrow('Organization ID is required');
-    });
-
     it('should throw on name exceeding 100 chars', () => {
       expect(() =>
         User.create({ ...validProps, name: 'a'.repeat(101) })
       ).toThrow('Name must be less than 100 characters');
+    });
+
+    it('should default authProvider to credentials', () => {
+      const user = User.create(validProps);
+      expect(user.authProvider).toBe('credentials');
+    });
+
+    it('should accept specified authProvider', () => {
+      const user = User.create({ ...validProps, authProvider: 'google' });
+      expect(user.authProvider).toBe('google');
+    });
+
+    it('should default organizationId to null', () => {
+      const user = User.create(validProps);
+      expect(user.organizationId).toBeNull();
+    });
+
+    it('should accept organizationId', () => {
+      const user = User.create({ ...validProps, organizationId: 'org-123' });
+      expect(user.organizationId).toBe('org-123');
+    });
+
+    it('should default passwordHash to null', () => {
+      const user = User.create(validProps);
+      expect(user.passwordHash).toBeNull();
+    });
+
+    it('should default emailVerified to null', () => {
+      const user = User.create(validProps);
+      expect(user.emailVerified).toBeNull();
     });
   });
 
@@ -94,11 +116,19 @@ describe('User Entity', () => {
         name: 'Test',
         role: Role.ADMIN,
         organizationId: 'org-1',
+        passwordHash: 'hashed_password',
+        authProvider: 'google',
+        emailVerified: now,
+        image: 'https://example.com/avatar.png',
         createdAt: now,
         updatedAt: now,
       });
       expect(user.id).toBe('user-1');
       expect(user.role).toBe(Role.ADMIN);
+      expect(user.passwordHash).toBe('hashed_password');
+      expect(user.authProvider).toBe('google');
+      expect(user.emailVerified).toBe(now);
+      expect(user.image).toBe('https://example.com/avatar.png');
     });
   });
 
@@ -151,9 +181,64 @@ describe('User Entity', () => {
     });
   });
 
+  describe('verifyEmail()', () => {
+    it('should set emailVerified to current date', () => {
+      const user = User.create(validProps);
+      const before = new Date();
+      const verified = user.verifyEmail();
+      const after = new Date();
+      expect(verified.emailVerified).toBeInstanceOf(Date);
+      expect(verified.emailVerified!.getTime()).toBeGreaterThanOrEqual(before.getTime());
+      expect(verified.emailVerified!.getTime()).toBeLessThanOrEqual(after.getTime());
+      expect(user.emailVerified).toBeNull(); // immutable
+    });
+  });
+
+  describe('updateProfile()', () => {
+    it('should update name and image', () => {
+      const user = User.create(validProps);
+      const updated = user.updateProfile({ name: 'New Name', image: 'https://example.com/new.png' });
+      expect(updated.name).toBe('New Name');
+      expect(updated.image).toBe('https://example.com/new.png');
+      expect(user.name).toBe('Test User'); // immutable
+      expect(user.image).toBeNull(); // immutable
+    });
+
+    it('should update only name', () => {
+      const user = User.create({ ...validProps, image: 'https://example.com/old.png' });
+      const updated = user.updateProfile({ name: 'New Name' });
+      expect(updated.name).toBe('New Name');
+      expect(updated.image).toBe('https://example.com/old.png');
+    });
+
+    it('should update only image', () => {
+      const user = User.create(validProps);
+      const updated = user.updateProfile({ image: 'https://example.com/new.png' });
+      expect(updated.name).toBe('Test User');
+      expect(updated.image).toBe('https://example.com/new.png');
+    });
+
+    it('should throw on name exceeding 100 chars', () => {
+      const user = User.create(validProps);
+      expect(() => user.updateProfile({ name: 'a'.repeat(101) })).toThrow(
+        'Name must be less than 100 characters'
+      );
+    });
+  });
+
+  describe('joinOrganization()', () => {
+    it('should set organizationId', () => {
+      const user = User.create(validProps);
+      expect(user.organizationId).toBeNull();
+      const joined = user.joinOrganization('org-456');
+      expect(joined.organizationId).toBe('org-456');
+      expect(user.organizationId).toBeNull(); // immutable
+    });
+  });
+
   describe('toObject()', () => {
     it('should return plain object', () => {
-      const user = User.create(validProps, 'user-id');
+      const user = User.create({ ...validProps, organizationId: 'org-123' }, 'user-id');
       const obj = user.toObject();
       expect(obj.id).toBe('user-id');
       expect(obj.email).toBe('test@example.com');
