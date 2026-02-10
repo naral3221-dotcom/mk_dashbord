@@ -7,13 +7,13 @@
 
 ## Last Updated
 - **날짜**: 2026-02-10
-- **시간**: Sprint 4 완료
-- **작업 상태**: Sprint 4 완료, Sprint 5 대기
+- **시간**: Sprint 5 완료
+- **작업 상태**: Sprint 5 완료, Sprint 6 대기
 
 ---
 
 ## Current Sprint
-**Sprint 4: Dashboard Visualization** ✅ 완료
+**Sprint 5: Additional Platforms (Multi-Platform Adapter)** ✅ 완료
 
 ### Sprint 0 완료 (✅)
 - [x] 0.1 Next.js 14 프로젝트 초기화
@@ -68,12 +68,22 @@
 - [x] 4.9 DashboardContent + useDashboardData (16 tests, 병렬 fetch)
 - [x] 4.10 API Routes - dashboard/overview, dashboard/campaigns (lazy init)
 
-### Sprint 5 대기 중
-- [ ] 5.1 Platform Adapter 패턴 구현
-- [ ] 5.2 Google Ads 연동
-- [ ] 5.3 TikTok Ads 연동
-- [ ] 5.4 Naver 검색광고 연동
-- [ ] 5.5 통합 대시보드 뷰
+### Sprint 5 완료 (✅)
+- [x] 5.1 Platform Adapter 패턴 (IAdPlatformClient + IPlatformAdapterRegistry)
+- [x] 5.2 범용 유스케이스 4개 (ConnectAdAccount, SyncCampaigns, SyncInsights, RefreshToken)
+- [x] 5.3 Google Ads 연동 (GoogleAdsApiClient + GoogleAdsPlatformAdapter)
+- [x] 5.4 TikTok Ads 연동 (TikTokAdsApiClient + TikTokAdsPlatformAdapter)
+- [x] 5.5 Naver 검색광고 연동 (NaverAdsApiClient + NaverAdsPlatformAdapter)
+- [x] 5.6 MetaPlatformAdapter (기존 MetaApiClient 래핑)
+- [x] 5.7 PlatformAdapterRegistry (Map-based factory)
+- [x] 5.8 Dashboard 플랫폼 필터 (PlatformFilter, PlatformBadge)
+- [x] 5.9 통합 Cron, Accounts API, Integrations 페이지
+
+### Sprint 6 대기 중
+- [ ] 6.1 Stripe 연동
+- [ ] 6.2 구독 플랜 정의
+- [ ] 6.3 결제 플로우
+- [ ] 6.4 플랜별 기능 제한
 
 ---
 
@@ -89,13 +99,17 @@ dashboard/
 │   ├── PROMPT_GUIDE.md          # 프롬프트 가이드
 │   └── logs/                    # 작업 로그
 ├── src/
-│   ├── domain/                  # 6 entities, 7 repos, 12 use cases, 4 service interfaces
-│   ├── application/             # 7 services, 5 DTOs
-│   ├── infrastructure/          # 6 Prisma repos, NextAuth, META client, encryption, cache
+│   ├── domain/                  # 6 entities, 7 repos, 16 use cases, 6 service interfaces
+│   │   │                        # Platform Adapter: IAdPlatformClient, IPlatformAdapterRegistry
+│   │   │                        # Generalized: ConnectAdAccount, SyncCampaigns, SyncInsights, RefreshToken
+│   ├── application/             # 7+ services, 5+ DTOs
+│   ├── infrastructure/          # 6 Prisma repos, NextAuth, 4 platform clients, encryption, cache
+│   │   │                        # Adapters: Meta, Google, TikTok, Naver + PlatformAdapterRegistry
 │   ├── lib/                     # formatters
 │   ├── hooks/                   # useDateRange, useDashboardData
 │   ├── components/dashboard/    # KpiCard, DateRangeFilter, Charts(3), Table, DashboardContent
-│   └── app/                     # 24+ routes (Sprint 2 + META + Dashboard), UI components
+│   ├── components/              # PlatformFilter, PlatformBadge
+│   └── app/                     # 30 routes (Auth + META + Dashboard + Multi-platform), UI components
 ```
 
 ---
@@ -110,6 +124,8 @@ dashboard/
 7. **organizationId nullable**: 회원가입 → 온보딩(조직 생성) 플로우 지원
 8. **Chart Library**: Recharts (경량, React 19 호환, Tremor 대신 선택)
 9. **Prisma v7 lazy init**: API route에서 `require()` 패턴 사용 (빌드 시 PrismaClient 초기화 방지)
+10. **Platform Adapter Pattern**: IAdPlatformClient + IPlatformAdapterRegistry로 멀티 플랫폼 추상화
+11. **PlatformAdapterRegistry**: Map-based factory, 플랫폼별 어댑터 동적 등록/조회
 
 ---
 
@@ -132,5 +148,5 @@ dashboard/
 
 ## Pending User Decisions
 ```
-없음 - Sprint 5 시작 대기 중
+없음 - Sprint 6 시작 대기 중
 ```

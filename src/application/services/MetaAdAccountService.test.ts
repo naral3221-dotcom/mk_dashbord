@@ -3,7 +3,7 @@ import { MetaAdAccountService } from './MetaAdAccountService';
 import { IAdAccountRepository } from '@/domain/repositories/IAdAccountRepository';
 import { AdAccount } from '@/domain/entities/AdAccount';
 import { Platform } from '@/domain/entities/types';
-import { ConnectAdAccountRequest, toAdAccountResponse } from '../dto/MetaDTO';
+import { MetaConnectAdAccountRequest, toAdAccountResponse } from '../dto/MetaDTO';
 
 describe('MetaAdAccountService', () => {
   let service: MetaAdAccountService;
@@ -41,7 +41,7 @@ describe('MetaAdAccountService', () => {
     updatedAt: testDate,
   });
 
-  const sampleRequest: ConnectAdAccountRequest = {
+  const sampleRequest: MetaConnectAdAccountRequest = {
     userId: 'user-1',
     organizationId: 'org-1',
     shortLivedToken: 'short-token-abc',

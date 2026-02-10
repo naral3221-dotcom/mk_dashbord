@@ -1,6 +1,6 @@
 import { Platform } from '@/domain/entities/types';
 
-export interface ConnectAdAccountRequest {
+export interface MetaConnectAdAccountRequest {
   userId: string;
   organizationId: string;
   shortLivedToken: string;

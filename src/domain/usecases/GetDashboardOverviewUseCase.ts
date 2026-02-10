@@ -2,11 +2,13 @@ import { IAdAccountRepository } from '../repositories/IAdAccountRepository';
 import { ICampaignRepository } from '../repositories/ICampaignRepository';
 import { ICampaignInsightRepository, DateRange } from '../repositories/ICampaignInsightRepository';
 import { CampaignInsight } from '../entities/CampaignInsight';
+import { Platform } from '../entities/types';
 
 export interface GetDashboardOverviewInput {
   organizationId: string;
   startDate: Date;
   endDate: Date;
+  platform?: Platform;
 }
 
 export interface AggregatedKpis {
@@ -63,10 +65,17 @@ export class GetDashboardOverviewUseCase {
       throw new Error('Start date must be before end date');
     }
 
-    // 2. Find active ad accounts
-    const adAccounts = await this.adAccountRepo.findActiveByOrganizationId(input.organizationId);
+    // 2. Find ad accounts (filter by platform if specified)
+    const adAccounts = input.platform
+      ? await this.adAccountRepo.findByPlatform(input.organizationId, input.platform)
+      : await this.adAccountRepo.findActiveByOrganizationId(input.organizationId);
 
-    if (adAccounts.length === 0) {
+    // When filtering by platform, findByPlatform may return inactive accounts too
+    const activeAccounts = input.platform
+      ? adAccounts.filter(a => a.isActive)
+      : adAccounts;
+
+    if (activeAccounts.length === 0) {
       return this.buildEmptyResult();
     }
 
@@ -76,7 +85,7 @@ export class GetDashboardOverviewUseCase {
 
     const dateRange: DateRange = { start: input.startDate, end: input.endDate };
 
-    for (const adAccount of adAccounts) {
+    for (const adAccount of activeAccounts) {
       const campaigns = await this.campaignRepo.findByAdAccountId(adAccount.id);
 
       for (const campaign of campaigns) {

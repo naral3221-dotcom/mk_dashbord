@@ -351,6 +351,126 @@ describe('GetCampaignPerformanceUseCase', () => {
     expect(result.campaigns[1]!.spend).toBe(500);
   });
 
+  it('should filter by platform when platform is specified', async () => {
+    // Override default mock - findByPlatform returns only META account
+    vi.mocked(mockAdAccountRepo.findByPlatform).mockResolvedValue([adAccount1]);
+    vi.mocked(mockCampaignRepo.findByAdAccountId).mockResolvedValue([campaign1]);
+    vi.mocked(mockInsightRepo.findByCampaignAndDateRange).mockResolvedValue(insightsForCampaign1);
+
+    const result = await useCase.execute({
+      ...validInput,
+      platform: Platform.META,
+    });
+
+    expect(mockAdAccountRepo.findByPlatform).toHaveBeenCalledWith('org-1', Platform.META);
+    expect(mockAdAccountRepo.findActiveByOrganizationId).not.toHaveBeenCalled();
+    expect(result.campaigns).toHaveLength(1);
+    expect(result.campaigns[0]!.campaignId).toBe('campaign-1');
+    expect(result.campaigns[0]!.spend).toBe(500);
+  });
+
+  it('should return all platforms when platform is not specified', async () => {
+    vi.mocked(mockAdAccountRepo.findActiveByOrganizationId).mockResolvedValue([
+      adAccount1,
+      adAccount2,
+    ]);
+    vi.mocked(mockCampaignRepo.findByAdAccountId).mockImplementation(async (adAccountId) => {
+      if (adAccountId === 'ad-account-1') return [campaign1];
+      if (adAccountId === 'ad-account-2') return [campaign3];
+      return [];
+    });
+
+    const insightsForCampaign3 = [
+      CampaignInsight.reconstruct({
+        id: 'insight-3a',
+        date: new Date('2024-01-01'),
+        spend: 1000,
+        impressions: 50000,
+        clicks: 2500,
+        conversions: 100,
+        revenue: 5000,
+        campaignId: 'campaign-3',
+        createdAt: now,
+        updatedAt: now,
+      }),
+    ];
+
+    vi.mocked(mockInsightRepo.findByCampaignAndDateRange).mockImplementation(
+      async (campaignId) => {
+        if (campaignId === 'campaign-1') return insightsForCampaign1;
+        if (campaignId === 'campaign-3') return insightsForCampaign3;
+        return [];
+      },
+    );
+
+    const result = await useCase.execute(validInput);
+
+    expect(mockAdAccountRepo.findActiveByOrganizationId).toHaveBeenCalledWith('org-1');
+    expect(mockAdAccountRepo.findByPlatform).not.toHaveBeenCalled();
+    expect(result.campaigns).toHaveLength(2);
+  });
+
+  it('should return empty result for platform with no accounts', async () => {
+    vi.mocked(mockAdAccountRepo.findByPlatform).mockResolvedValue([]);
+
+    const result = await useCase.execute({
+      ...validInput,
+      platform: Platform.TIKTOK,
+    });
+
+    expect(mockAdAccountRepo.findByPlatform).toHaveBeenCalledWith('org-1', Platform.TIKTOK);
+    expect(result.campaigns).toEqual([]);
+    expect(result.totalCount).toBe(0);
+  });
+
+  it('should filter out inactive accounts when filtering by platform', async () => {
+    const inactiveGoogleAccount = AdAccount.reconstruct({
+      id: 'ad-account-inactive',
+      platform: Platform.GOOGLE,
+      accountId: '444444',
+      accountName: 'Inactive Google Account',
+      accessToken: 'token-4',
+      refreshToken: null,
+      tokenExpiresAt: new Date(now.getTime() + 60 * 24 * 60 * 60 * 1000),
+      isActive: false,
+      organizationId: 'org-1',
+      createdAt: now,
+      updatedAt: now,
+    });
+
+    // findByPlatform returns both active and inactive
+    vi.mocked(mockAdAccountRepo.findByPlatform).mockResolvedValue([
+      adAccount2,
+      inactiveGoogleAccount,
+    ]);
+    vi.mocked(mockCampaignRepo.findByAdAccountId).mockResolvedValue([campaign3]);
+    vi.mocked(mockInsightRepo.findByCampaignAndDateRange).mockResolvedValue([
+      CampaignInsight.reconstruct({
+        id: 'insight-3x',
+        date: new Date('2024-01-01'),
+        spend: 600,
+        impressions: 30000,
+        clicks: 1500,
+        conversions: 60,
+        revenue: 3000,
+        campaignId: 'campaign-3',
+        createdAt: now,
+        updatedAt: now,
+      }),
+    ]);
+
+    const result = await useCase.execute({
+      ...validInput,
+      platform: Platform.GOOGLE,
+    });
+
+    // Should only process active account (adAccount2)
+    expect(mockCampaignRepo.findByAdAccountId).toHaveBeenCalledTimes(1);
+    expect(mockCampaignRepo.findByAdAccountId).toHaveBeenCalledWith('ad-account-2');
+    expect(result.campaigns).toHaveLength(1);
+    expect(result.campaigns[0]!.spend).toBe(600);
+  });
+
   it('should throw when organizationId is empty', async () => {
     const invalidInput: GetCampaignPerformanceInput = {
       organizationId: '',

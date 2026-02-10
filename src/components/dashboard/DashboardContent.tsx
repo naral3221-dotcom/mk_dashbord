@@ -1,30 +1,44 @@
 'use client';
 
+import { useState } from 'react';
 import { useDateRange } from '@/hooks/useDateRange';
 import { useDashboardData } from '@/hooks/useDashboardData';
 import { DateRangeFilter } from './DateRangeFilter';
+import { PlatformFilter } from './PlatformFilter';
 import { KpiCard } from './KpiCard';
 import { SpendTrendChart } from './SpendTrendChart';
 import { CampaignComparisonChart } from './CampaignComparisonChart';
 import { SpendDistributionChart } from './SpendDistributionChart';
 import { CampaignPerformanceTable } from './CampaignPerformanceTable';
+import { Platform } from '@/domain/entities/types';
 
 export function DashboardContent() {
   const dateRange = useDateRange('30d');
-  const queryParams = dateRange.toQueryParams();
+  const [selectedPlatform, setSelectedPlatform] = useState<Platform | null>(null);
+
+  const baseParams = dateRange.toQueryParams();
+  const queryParams = selectedPlatform
+    ? `${baseParams}&platform=${selectedPlatform}`
+    : baseParams;
   const { overview, campaigns, loading, error } = useDashboardData(queryParams);
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Dashboard</h1>
-        <DateRangeFilter
-          preset={dateRange.preset}
-          startDate={dateRange.startDate}
-          endDate={dateRange.endDate}
-          onPresetChange={dateRange.setPreset}
-          onCustomRangeChange={dateRange.setCustomRange}
-        />
+        <div className="flex items-center gap-4">
+          <PlatformFilter
+            selectedPlatform={selectedPlatform}
+            onPlatformChange={setSelectedPlatform}
+          />
+          <DateRangeFilter
+            preset={dateRange.preset}
+            startDate={dateRange.startDate}
+            endDate={dateRange.endDate}
+            onPresetChange={dateRange.setPreset}
+            onCustomRangeChange={dateRange.setCustomRange}
+          />
+        </div>
       </div>
 
       {error && (

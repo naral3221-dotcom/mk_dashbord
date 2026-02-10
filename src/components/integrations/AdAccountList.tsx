@@ -10,13 +10,43 @@ interface AdAccountItem {
   accountName: string;
   isActive: boolean;
   tokenExpiresAt: string | null;
+  createdAt: string;
+  updatedAt: string;
 }
 
 interface Props {
   organizationId: string;
+  platform?: string;
 }
 
-export function AdAccountList({ organizationId }: Props) {
+const PLATFORM_LABELS: Record<string, string> = {
+  META: 'META',
+  GOOGLE: 'Google',
+  TIKTOK: 'TikTok',
+  NAVER: 'Naver',
+  KAKAO: 'Kakao',
+};
+
+function PlatformBadge({ platform }: { platform: string }) {
+  const colorMap: Record<string, string> = {
+    META: 'bg-blue-100 text-blue-800',
+    GOOGLE: 'bg-red-100 text-red-800',
+    TIKTOK: 'bg-gray-100 text-gray-800',
+    NAVER: 'bg-green-100 text-green-800',
+    KAKAO: 'bg-yellow-100 text-yellow-800',
+  };
+
+  const colorClass = colorMap[platform] ?? 'bg-gray-100 text-gray-800';
+  const label = PLATFORM_LABELS[platform] ?? platform;
+
+  return (
+    <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${colorClass}`}>
+      {label}
+    </span>
+  );
+}
+
+export function AdAccountList({ organizationId, platform }: Props) {
   const [accounts, setAccounts] = useState<AdAccountItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [syncing, setSyncing] = useState<string | null>(null);
@@ -24,12 +54,18 @@ export function AdAccountList({ organizationId }: Props) {
 
   useEffect(() => {
     fetchAccounts();
-  }, [organizationId]);
+  }, [organizationId, platform]);
 
   const fetchAccounts = async () => {
     setLoading(true);
+    setError(null);
     try {
-      const response = await fetch('/api/meta/accounts');
+      const params = new URLSearchParams({ organizationId });
+      if (platform) {
+        params.set('platform', platform);
+      }
+
+      const response = await fetch(`/api/accounts?${params.toString()}`);
       const data = await response.json() as { accounts?: AdAccountItem[]; error?: string };
 
       if (!response.ok) {
@@ -45,10 +81,20 @@ export function AdAccountList({ organizationId }: Props) {
     }
   };
 
-  const handleSync = async (accountId: string) => {
+  const handleSync = async (accountId: string, accountPlatform: string) => {
     setSyncing(accountId);
     try {
-      const response = await fetch('/api/meta/sync/campaigns', {
+      // Route sync to the correct platform endpoint
+      let syncUrl = '/api/meta/sync/campaigns';
+      if (accountPlatform === 'GOOGLE') {
+        syncUrl = '/api/google/sync/campaigns';
+      } else if (accountPlatform === 'TIKTOK') {
+        syncUrl = '/api/tiktok/sync/campaigns';
+      } else if (accountPlatform === 'NAVER') {
+        syncUrl = '/api/naver/sync/campaigns';
+      }
+
+      const response = await fetch(syncUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ adAccountId: accountId }),
@@ -79,9 +125,10 @@ export function AdAccountList({ organizationId }: Props) {
   }
 
   if (accounts.length === 0) {
+    const platformLabel = platform ? PLATFORM_LABELS[platform] ?? platform : '';
     return (
       <p className="py-8 text-center text-sm text-gray-500">
-        No META accounts connected yet.
+        No {platformLabel} accounts connected yet.
       </p>
     );
   }
@@ -103,7 +150,10 @@ export function AdAccountList({ organizationId }: Props) {
               <XCircle className="h-5 w-5 text-gray-400" />
             )}
             <div>
-              <p className="text-sm font-medium">{account.accountName}</p>
+              <div className="flex items-center gap-2">
+                <p className="text-sm font-medium">{account.accountName}</p>
+                {!platform && <PlatformBadge platform={account.platform} />}
+              </div>
               <p className="text-xs text-gray-500">ID: {account.accountId}</p>
               {account.tokenExpiresAt && (
                 <p className="text-xs text-gray-400">
@@ -113,7 +163,7 @@ export function AdAccountList({ organizationId }: Props) {
             </div>
           </div>
           <button
-            onClick={() => handleSync(account.id)}
+            onClick={() => handleSync(account.id, account.platform)}
             disabled={syncing === account.id || !account.isActive}
             className="inline-flex items-center gap-1 rounded-md border px-3 py-1.5 text-xs font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:opacity-50"
           >

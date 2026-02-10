@@ -13,7 +13,7 @@
 | Sprint 2: Auth & Multi-tenancy | ✅ Completed | 100% |
 | Sprint 3: META Integration | ✅ Completed | 100% |
 | Sprint 4: Dashboard Visualization | ✅ Completed | 100% |
-| Sprint 5: Additional Platforms | ⚪ Not Started | 0% |
+| Sprint 5: Additional Platforms | ✅ Completed | 100% |
 | Sprint 6: Billing & SaaS | ⚪ Not Started | 0% |
 | Sprint 7: Production & Polish | ⚪ Not Started | 0% |
 
@@ -110,17 +110,37 @@
 
 ---
 
+## Sprint 5: Additional Platforms (Multi-Platform Adapter) ✅
+
+### Tasks
+| Task | Status | Agent | Notes |
+|------|--------|-------|-------|
+| Platform Adapter 패턴 구현 | ✅ Done | architect → implementer | IAdPlatformClient + IPlatformAdapterRegistry |
+| 범용 유스케이스 4개 | ✅ Done | test-writer → implementer | ConnectAdAccount, SyncCampaigns, SyncInsights, RefreshToken |
+| Google Ads 연동 | ✅ Done | api-integrator → implementer | GoogleAdsApiClient + GoogleAdsPlatformAdapter |
+| TikTok Ads 연동 | ✅ Done | api-integrator → implementer | TikTokAdsApiClient + TikTokAdsPlatformAdapter |
+| Naver 검색광고 연동 | ✅ Done | api-integrator → implementer | NaverAdsApiClient + NaverAdsPlatformAdapter |
+| MetaPlatformAdapter | ✅ Done | implementer | 기존 MetaApiClient 래핑 |
+| PlatformAdapterRegistry | ✅ Done | implementer | Map-based factory |
+| Dashboard 플랫폼 필터 | ✅ Done | implementer | PlatformFilter, PlatformBadge 컴포넌트 |
+| 통합 Cron/API/Integrations | ✅ Done | implementer | 통합 cron, accounts API, integrations 페이지 |
+
+**Results**: 814 tests total (+229), 65 test files, ALL PASSED
+
+---
+
 ## Key Metrics
 
 ```
-총 테스트: 585 (all passing)
-총 Sprint 완료: 5 (Sprint 0-4)
+총 테스트: 814 (all passing), 65 test files
+총 Sprint 완료: 6 (Sprint 0-5)
 도메인 엔티티: 6
-유스케이스: 12
-앱 서비스: 7
+유스케이스: 16 (12 + 4 generalized)
+앱 서비스: 7+
 Prisma 리포지토리: 6
-API Routes: 8+
-UI 컴포넌트: 20+
+API Routes: 30
+UI 컴포넌트: 25+
+플랫폼: 4 (META, Google Ads, TikTok Ads, Naver Search Ads)
 TypeScript errors: 0
 Build: ✅ Passing
 ```
@@ -136,10 +156,11 @@ Build: ✅ Passing
 2026-02-10: Sprint 2 완료 (322 tests)
 2026-02-10: Sprint 3 완료 (469 tests)
 2026-02-10: Sprint 4 완료 (585 tests)
+2026-02-10: Sprint 5 완료 (814 tests)
 ```
 
 ---
 
 ## Version
-- Current: v0.4.0 (Sprint 4 완료)
-- Next: v0.5.0 (Sprint 5 완료 시)
+- Current: v0.5.0 (Sprint 5 완료)
+- Next: v0.6.0 (Sprint 6 완료 시)

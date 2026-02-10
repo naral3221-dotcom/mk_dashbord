@@ -11,11 +11,14 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { formatCurrency, formatNumber, formatPercent, formatRatio } from '@/lib/formatters';
+import { PlatformBadge } from './PlatformBadge';
+import { Platform } from '@/domain/entities/types';
 
 export interface CampaignRowData {
   campaignId: string;
   campaignName: string;
   status: string;
+  platform?: Platform;
   spend: number;
   impressions: number;
   clicks: number;
@@ -116,6 +119,7 @@ export function CampaignPerformanceTable({ data, loading }: CampaignPerformanceT
                   Name{sortIndicator('campaignName')}
                 </button>
               </TableHead>
+              <TableHead>Platform</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>
                 <button type="button" onClick={() => handleSort('spend')} data-testid="sort-spend">
@@ -163,6 +167,9 @@ export function CampaignPerformanceTable({ data, loading }: CampaignPerformanceT
             {sortedData.map((row) => (
               <TableRow key={row.campaignId} data-testid={`campaign-row-${row.campaignId}`}>
                 <TableCell className="font-medium">{row.campaignName}</TableCell>
+                <TableCell>
+                  {row.platform && <PlatformBadge platform={row.platform} />}
+                </TableCell>
                 <TableCell>
                   <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${statusBadge[row.status] ?? 'bg-gray-100'}`}>
                     {row.status}

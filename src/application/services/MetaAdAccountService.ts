@@ -2,7 +2,7 @@ import { ConnectMetaAdAccountUseCase } from '@/domain/usecases/ConnectMetaAdAcco
 import { IAdAccountRepository } from '@/domain/repositories/IAdAccountRepository';
 import { Platform } from '@/domain/entities/types';
 import {
-  ConnectAdAccountRequest,
+  MetaConnectAdAccountRequest,
   AdAccountResponse,
   MetaAdAccountListResponse,
   toAdAccountResponse,
@@ -14,7 +14,7 @@ export class MetaAdAccountService {
     private readonly adAccountRepo: IAdAccountRepository,
   ) {}
 
-  async connectAdAccount(request: ConnectAdAccountRequest): Promise<{ account: AdAccountResponse; isNew: boolean }> {
+  async connectAdAccount(request: MetaConnectAdAccountRequest): Promise<{ account: AdAccountResponse; isNew: boolean }> {
     const result = await this.connectUseCase.execute({
       userId: request.userId,
       organizationId: request.organizationId,

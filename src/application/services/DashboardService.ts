@@ -6,6 +6,7 @@ import {
   toDashboardOverviewResponse,
   toCampaignPerformanceResponse,
 } from '../dto/DashboardDTO';
+import { Platform } from '@/domain/entities/types';
 
 export class DashboardService {
   constructor(
@@ -17,11 +18,13 @@ export class DashboardService {
     organizationId: string,
     startDate: Date,
     endDate: Date,
+    platform?: Platform,
   ): Promise<DashboardOverviewResponse> {
     const result = await this.getOverviewUseCase.execute({
       organizationId,
       startDate,
       endDate,
+      platform,
     });
     return toDashboardOverviewResponse(result);
   }
@@ -30,11 +33,13 @@ export class DashboardService {
     organizationId: string,
     startDate: Date,
     endDate: Date,
+    platform?: Platform,
   ): Promise<CampaignPerformanceResponse> {
     const result = await this.getCampaignPerformanceUseCase.execute({
       organizationId,
       startDate,
       endDate,
+      platform,
     });
     return toCampaignPerformanceResponse(result);
   }

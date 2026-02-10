@@ -1,4 +1,4 @@
-import { CampaignStatus } from '../entities/types';
+import { CampaignStatus, Platform } from '../entities/types';
 import { IAdAccountRepository } from '../repositories/IAdAccountRepository';
 import { ICampaignRepository } from '../repositories/ICampaignRepository';
 import { ICampaignInsightRepository } from '../repositories/ICampaignInsightRepository';
@@ -7,6 +7,7 @@ export interface GetCampaignPerformanceInput {
   organizationId: string;
   startDate: Date;
   endDate: Date;
+  platform?: Platform;
 }
 
 export interface CampaignPerformanceItem {
@@ -48,15 +49,23 @@ export class GetCampaignPerformanceUseCase {
       throw new Error('Start date must be before end date');
     }
 
-    // 2. Find active ad accounts for organization
-    const adAccounts = await this.adAccountRepo.findActiveByOrganizationId(input.organizationId);
-    if (adAccounts.length === 0) {
+    // 2. Find ad accounts (filter by platform if specified)
+    const adAccounts = input.platform
+      ? await this.adAccountRepo.findByPlatform(input.organizationId, input.platform)
+      : await this.adAccountRepo.findActiveByOrganizationId(input.organizationId);
+
+    // When filtering by platform, findByPlatform may return inactive accounts too
+    const activeAccounts = input.platform
+      ? adAccounts.filter(a => a.isActive)
+      : adAccounts;
+
+    if (activeAccounts.length === 0) {
       return { campaigns: [], totalCount: 0 };
     }
 
     // 3. For each account, find campaigns
     const allCampaigns = [];
-    for (const account of adAccounts) {
+    for (const account of activeAccounts) {
       const campaigns = await this.campaignRepo.findByAdAccountId(account.id);
       allCampaigns.push(...campaigns);
     }

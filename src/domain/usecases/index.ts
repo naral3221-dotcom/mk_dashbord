@@ -48,3 +48,23 @@ export type {
   GetCampaignPerformanceOutput,
   CampaignPerformanceItem,
 } from './GetCampaignPerformanceUseCase';
+export { ConnectAdAccountUseCase } from './ConnectAdAccountUseCase';
+export type {
+  ConnectAdAccountInput,
+  ConnectAdAccountOutput,
+} from './ConnectAdAccountUseCase';
+export { SyncCampaignsUseCase } from './SyncCampaignsUseCase';
+export type {
+  SyncCampaignsInput,
+  SyncCampaignsOutput,
+} from './SyncCampaignsUseCase';
+export { SyncInsightsUseCase } from './SyncInsightsUseCase';
+export type {
+  SyncInsightsInput,
+  SyncInsightsOutput,
+} from './SyncInsightsUseCase';
+export { RefreshTokenUseCase } from './RefreshTokenUseCase';
+export type {
+  RefreshTokenInput,
+  RefreshTokenOutput,
+} from './RefreshTokenUseCase';

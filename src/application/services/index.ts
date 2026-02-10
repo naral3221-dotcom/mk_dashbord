@@ -4,4 +4,6 @@ export { InvitationService } from './InvitationService';
 export { AuthorizationService } from './AuthorizationService';
 export { MetaAdAccountService } from './MetaAdAccountService';
 export { MetaSyncService } from './MetaSyncService';
+export { AdAccountService } from './AdAccountService';
+export { SyncService } from './SyncService';
 export { DashboardService } from './DashboardService';

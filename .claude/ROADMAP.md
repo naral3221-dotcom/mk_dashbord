@@ -1,7 +1,7 @@
 # Implementation Roadmap
 
 > **마지막 수정**: 2026-02-10
-> **현재 단계**: Sprint 4 - Dashboard Visualization ✅ 완료
+> **현재 단계**: Sprint 5 - Additional Platforms (Multi-Platform Adapter) ✅ 완료
 
 ---
 
@@ -13,8 +13,8 @@ Sprint 1: Core Domain ───────────────────�
 Sprint 2: Authentication & Multi-tenancy ─── ✅ Complete
 Sprint 3: META Integration ───────────────── ✅ Complete
 Sprint 4: Dashboard Visualization ─────────── ✅ Complete
-Sprint 5: Additional Platforms ───────────── ⬜ Next
-Sprint 6: Billing & SaaS Features ────────── ⬜ Planned
+Sprint 5: Additional Platforms ───────────── ✅ Complete
+Sprint 6: Billing & SaaS Features ────────── ⬜ Next
 Sprint 7: Production & Polish ────────────── ⬜ Planned
 ```
 
@@ -184,28 +184,46 @@ META (Facebook/Instagram) 광고 API 연동
 
 ---
 
-## Sprint 5: Additional Platforms ⬅️ NEXT
+## Sprint 5: Additional Platforms (Multi-Platform Adapter) ✅ COMPLETED
 
 ### 목표
-Google Ads, TikTok, Naver 연동
+Platform Adapter 패턴으로 멀티 플랫폼 추상화, Google Ads/TikTok/Naver 연동
 
 ### Tasks
 
 | # | Task | Status | Agent | Commit |
 |---|------|--------|-------|--------|
-| 5.1 | Platform Adapter 패턴 구현 | ⬜ Todo | architect | |
-| 5.2 | Google Ads 연동 | ⬜ Todo | api-integrator | |
-| 5.3 | TikTok Ads 연동 | ⬜ Todo | api-integrator | |
-| 5.4 | Naver 검색광고 연동 | ⬜ Todo | api-integrator | |
-| 5.5 | 통합 대시보드 뷰 | ⬜ Todo | implementer | |
+| 5.1 | Platform Adapter 패턴 (IAdPlatformClient + IPlatformAdapterRegistry) | ✅ Done | architect → implementer | - |
+| 5.2 | 범용 유스케이스 4개 (ConnectAdAccount, SyncCampaigns, SyncInsights, RefreshToken) | ✅ Done | test-writer → implementer | - |
+| 5.3 | MetaPlatformAdapter (기존 MetaApiClient 래핑) | ✅ Done | implementer | - |
+| 5.4 | Google Ads 연동 (GoogleAdsApiClient + GoogleAdsPlatformAdapter) | ✅ Done | api-integrator → implementer | - |
+| 5.5 | TikTok Ads 연동 (TikTokAdsApiClient + TikTokAdsPlatformAdapter) | ✅ Done | api-integrator → implementer | - |
+| 5.6 | Naver 검색광고 연동 (NaverAdsApiClient + NaverAdsPlatformAdapter) | ✅ Done | api-integrator → implementer | - |
+| 5.7 | PlatformAdapterRegistry (Map-based factory) | ✅ Done | implementer | - |
+| 5.8 | Dashboard 플랫폼 필터 (PlatformFilter, PlatformBadge) | ✅ Done | implementer | - |
+| 5.9 | 통합 Cron, Accounts API, Integrations 페이지 | ✅ Done | implementer | - |
 
 ### Deliverables
-- [ ] 멀티 플랫폼 지원
-- [ ] 통합 성과 분석
+- [x] 멀티 플랫폼 지원 (META, Google Ads, TikTok Ads, Naver Search Ads)
+- [x] Platform Adapter 패턴으로 플랫폼 추가 용이
+- [x] 통합 대시보드 플랫폼 필터
+- [x] 30 API routes total
+
+### Results
+- **814 tests total (585 Sprint 1-4 + 229 Sprint 5), 65 test files, ALL PASSED**
+- 2 domain interfaces: IAdPlatformClient, IPlatformAdapterRegistry
+- 4 generalized use cases: ConnectAdAccount, SyncCampaigns, SyncInsights, RefreshToken
+- 4 platform adapters: MetaPlatformAdapter, GoogleAdsPlatformAdapter, TikTokAdsPlatformAdapter, NaverAdsPlatformAdapter
+- 3 new API clients: GoogleAdsApiClient, TikTokAdsApiClient, NaverAdsApiClient
+- PlatformAdapterRegistry (Map-based factory)
+- 2 UI components: PlatformFilter, PlatformBadge
+- Unified cron, accounts API, integrations page
+- New env vars: GOOGLE_ADS_CLIENT_ID, GOOGLE_ADS_CLIENT_SECRET, GOOGLE_ADS_DEVELOPER_TOKEN, TIKTOK_APP_ID, TIKTOK_APP_SECRET
+- TypeScript zero errors, build successful
 
 ---
 
-## Sprint 6: Billing & SaaS Features
+## Sprint 6: Billing & SaaS Features ⬅️ NEXT
 
 ### 목표
 Stripe 결제 및 SaaS 기능
@@ -253,7 +271,15 @@ Stripe 결제 및 SaaS 기능
 
 ## Changelog
 
-### 2026-02-10
+### 2026-02-10 (Sprint 5)
+- Sprint 5 완료: Additional Platforms - Multi-Platform Adapter (814 tests, 229 new, 65 test files)
+  - Platform Adapter Pattern: IAdPlatformClient + IPlatformAdapterRegistry
+  - 4 generalized use cases: ConnectAdAccount, SyncCampaigns, SyncInsights, RefreshToken
+  - 4 platform adapters: Meta, Google Ads, TikTok Ads, Naver Search Ads
+  - 3 new API clients, PlatformAdapterRegistry, PlatformFilter/Badge UI
+  - Unified cron, accounts API, integrations page, 30 API routes total
+
+### 2026-02-10 (Sprint 1-4)
 - Sprint 1 완료: 6 엔티티 + 6 Repository 인터페이스 (174 tests)
 - Sprint 2 완료: Auth & Multi-tenancy (322 tests, NextAuth.js)
 - Clerk → NextAuth.js 마이그레이션 완료

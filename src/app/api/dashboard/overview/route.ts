@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/infrastructure/auth/nextauth.config';
+import { Platform } from '@/domain/entities/types';
 
 function getService() {
   const { PrismaClient } = require('@/generated/prisma');
@@ -56,8 +57,13 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid date format' }, { status: 400 });
     }
 
+    const platformParam = searchParams.get('platform');
+    const platform = platformParam && Object.values(Platform).includes(platformParam as Platform)
+      ? (platformParam as Platform)
+      : undefined;
+
     const service = getService();
-    const result = await service.getOverview(organizationId, startDate, endDate);
+    const result = await service.getOverview(organizationId, startDate, endDate, platform);
     return NextResponse.json(result);
   } catch (err) {
     return NextResponse.json(
