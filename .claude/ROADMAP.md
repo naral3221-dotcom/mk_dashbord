@@ -55,13 +55,13 @@ Sprint 7: Production & Polish ────────────── Week 9-
 
 | # | Task | Status | Agent | Commit |
 |---|------|--------|-------|--------|
-| 1.1 | Organization 엔티티 | ✅ Done | test-writer → implementer | pending |
-| 1.2 | User 엔티티 | ✅ Done | test-writer → implementer | pending |
-| 1.3 | AdAccount 엔티티 | ✅ Done | test-writer → implementer | pending |
-| 1.4 | Campaign 엔티티 | ✅ Done | test-writer → implementer | pending |
-| 1.5 | CampaignInsight 엔티티 | ✅ Done | test-writer → implementer | pending |
-| 1.6 | Conversion 엔티티 | ✅ Done | test-writer → implementer | pending |
-| 1.7 | Repository 인터페이스 정의 | ✅ Done | architect | pending |
+| 1.1 | Organization 엔티티 | ✅ Done | test-writer → implementer | 2b8334b |
+| 1.2 | User 엔티티 | ✅ Done | test-writer → implementer | 2b8334b |
+| 1.3 | AdAccount 엔티티 | ✅ Done | test-writer → implementer | 2b8334b |
+| 1.4 | Campaign 엔티티 | ✅ Done | test-writer → implementer | 2b8334b |
+| 1.5 | CampaignInsight 엔티티 | ✅ Done | test-writer → implementer | 2b8334b |
+| 1.6 | Conversion 엔티티 | ✅ Done | test-writer → implementer | 2b8334b |
+| 1.7 | Repository 인터페이스 정의 | ✅ Done | architect | 2b8334b |
 | 1.8 | Prisma 스키마 구현 | ✅ Done | db-designer | 23b0da5 |
 
 ### Deliverables
