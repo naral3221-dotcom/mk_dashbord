@@ -6,14 +6,14 @@
 ---
 
 ## 📍 Last Updated
-- **날짜**: 2026-02-09
-- **시간**: 세션 종료
-- **작업 상태**: Sprint 0 완료, Sprint 1 대기
+- **날짜**: 2026-02-10
+- **시간**: 작업 중
+- **작업 상태**: Sprint 1 완료 (엔티티 + Repository 인터페이스)
 
 ---
 
 ## 🎯 Current Sprint
-**Sprint 1: Core Domain** ⬅️ 다음 작업
+**Sprint 1: Core Domain** ✅ 완료
 
 ### Sprint 0 완료 (✅)
 - [x] 0.1 Next.js 14 프로젝트 초기화
@@ -26,15 +26,23 @@
 - [x] 0.8 환경변수 템플릿
 - [x] 0.9 GitHub Actions CI/CD
 
-### Sprint 1 대기 중
-- [ ] 1.1 Organization 엔티티
-- [ ] 1.2 User 엔티티
-- [ ] 1.3 AdAccount 엔티티
-- [ ] 1.4 Campaign 엔티티
-- [ ] 1.5 CampaignInsight 엔티티
-- [ ] 1.6 Conversion 엔티티
-- [ ] 1.7 Repository 인터페이스 정의
-- [ ] 1.8 Prisma 스키마 구현
+### Sprint 1 완료 (✅)
+- [x] 1.1 Organization 엔티티 (33 tests)
+- [x] 1.2 User 엔티티 (22 tests)
+- [x] 1.3 AdAccount 엔티티 (23 tests)
+- [x] 1.4 Campaign 엔티티 (25 tests)
+- [x] 1.5 CampaignInsight 엔티티 (39 tests, 8 KPIs)
+- [x] 1.6 Conversion 엔티티 (21 tests)
+- [x] 1.7 Repository 인터페이스 정의 (6개)
+- [x] 1.8 Prisma 스키마 구현 (Sprint 0에서 완료)
+
+### Sprint 2 대기 중
+- [ ] 2.1 Clerk 설정 및 통합
+- [ ] 2.2 Organization 생성 플로우
+- [ ] 2.3 사용자 초대 기능
+- [ ] 2.4 Role 기반 접근 제어
+- [ ] 2.5 멀티테넌트 미들웨어
+- [ ] 2.6 보호된 라우트 설정
 
 ---
 

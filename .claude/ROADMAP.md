@@ -1,7 +1,7 @@
 # Implementation Roadmap
 
 > **마지막 수정**: 2026-02-09
-> **현재 단계**: Sprint 0 - Project Setup
+> **현재 단계**: Sprint 1 - Core Domain ✅ 완료
 
 ---
 
@@ -46,7 +46,7 @@ Sprint 7: Production & Polish ────────────── Week 9-
 
 ---
 
-## Sprint 1: Core Domain ⬅️ CURRENT
+## Sprint 1: Core Domain ✅ COMPLETED
 
 ### 목표
 핵심 비즈니스 엔티티 및 유스케이스 정의 (TDD)
@@ -55,23 +55,29 @@ Sprint 7: Production & Polish ────────────── Week 9-
 
 | # | Task | Status | Agent | Commit |
 |---|------|--------|-------|--------|
-| 1.1 | Organization 엔티티 | ⬜ Todo | test-writer → implementer | |
-| 1.2 | User 엔티티 | ⬜ Todo | test-writer → implementer | |
-| 1.3 | AdAccount 엔티티 | ⬜ Todo | test-writer → implementer | |
-| 1.4 | Campaign 엔티티 | ⬜ Todo | test-writer → implementer | |
-| 1.5 | CampaignInsight 엔티티 | ⬜ Todo | test-writer → implementer | |
-| 1.6 | Conversion 엔티티 | ⬜ Todo | test-writer → implementer | |
-| 1.7 | Repository 인터페이스 정의 | ⬜ Todo | architect | |
-| 1.8 | Prisma 스키마 구현 | ⬜ Todo | db-designer | |
+| 1.1 | Organization 엔티티 | ✅ Done | test-writer → implementer | pending |
+| 1.2 | User 엔티티 | ✅ Done | test-writer → implementer | pending |
+| 1.3 | AdAccount 엔티티 | ✅ Done | test-writer → implementer | pending |
+| 1.4 | Campaign 엔티티 | ✅ Done | test-writer → implementer | pending |
+| 1.5 | CampaignInsight 엔티티 | ✅ Done | test-writer → implementer | pending |
+| 1.6 | Conversion 엔티티 | ✅ Done | test-writer → implementer | pending |
+| 1.7 | Repository 인터페이스 정의 | ✅ Done | architect | pending |
+| 1.8 | Prisma 스키마 구현 | ✅ Done | db-designer | 23b0da5 |
 
 ### Deliverables
-- [ ] Domain 레이어 완성 (테스트 포함)
-- [ ] Prisma 스키마 완성
-- [ ] 90%+ 테스트 커버리지
+- [x] Domain 레이어 완성 (174 tests, all passing)
+- [x] Prisma 스키마 완성
+- [x] 100% 테스트 커버리지 (domain entities)
+
+### Results
+- **8 test files, 174 tests, ALL PASSED**
+- 6 entities: Organization, User, AdAccount, Campaign, CampaignInsight, Conversion
+- 6 repository interfaces
+- CampaignInsight: 8 computed KPIs (CTR, CPC, CPM, CVR, CPA, ROAS, ROI, Profit)
 
 ---
 
-## Sprint 2: Authentication & Multi-tenancy
+## Sprint 2: Authentication & Multi-tenancy ⬅️ CURRENT
 
 ### 목표
 Clerk 인증 및 멀티테넌트 구조 구현
@@ -209,6 +215,10 @@ Stripe 결제 및 SaaS 기능
 ---
 
 ## 📋 Changelog
+
+### 2026-02-10
+- Sprint 1 완료: 6 엔티티 + 6 Repository 인터페이스 (174 tests)
+- Sprint 2로 이동
 
 ### 2026-02-09
 - 초기 로드맵 작성
