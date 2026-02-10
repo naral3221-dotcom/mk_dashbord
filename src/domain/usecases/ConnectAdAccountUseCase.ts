@@ -1,6 +1,7 @@
 import { AdAccount } from '../entities/AdAccount';
-import { Platform, RolePermissions } from '../entities/types';
+import { Platform, RolePermissions, PlanLimits } from '../entities/types';
 import { IAdAccountRepository } from '../repositories/IAdAccountRepository';
+import { IOrganizationRepository } from '../repositories/IOrganizationRepository';
 import { IUserRepository } from '../repositories/IUserRepository';
 import { IPlatformAdapterRegistry } from '../services/IPlatformAdapterRegistry';
 import { ITokenEncryption } from '../services/ITokenEncryption';
@@ -31,6 +32,7 @@ export class ConnectAdAccountUseCase {
     private readonly userRepo: IUserRepository,
     private readonly platformRegistry: IPlatformAdapterRegistry,
     private readonly tokenEncryption: ITokenEncryption,
+    private readonly orgRepo: IOrganizationRepository,
   ) {}
 
   async execute(input: ConnectAdAccountInput): Promise<ConnectAdAccountOutput> {
@@ -44,6 +46,18 @@ export class ConnectAdAccountUseCase {
     }
     if (!RolePermissions[user.role].canManageAdAccounts) {
       throw new Error('Insufficient permissions to manage ad accounts');
+    }
+
+    // 1.5 Check plan limits
+    const org = await this.orgRepo.findById(input.organizationId);
+    if (!org) {
+      throw new Error('Organization not found');
+    }
+    const planLimits = PlanLimits[org.plan];
+
+    // Check platform allowed
+    if (!(planLimits.allowedPlatforms as readonly Platform[]).includes(input.platform)) {
+      throw new Error(`Platform ${input.platform} is not available on the ${org.plan} plan`);
     }
 
     // 2. Get the platform adapter
@@ -118,6 +132,14 @@ export class ConnectAdAccountUseCase {
       }
       isNewAccount = false;
     } else {
+      // Check ad account limit for new accounts
+      if (planLimits.maxAdAccounts !== -1) {
+        const accountCount = await this.adAccountRepo.countByOrganizationId(input.organizationId);
+        if (accountCount >= planLimits.maxAdAccounts) {
+          throw new Error('Ad account limit reached for your current plan');
+        }
+      }
+
       // Create new ad account
       adAccount = AdAccount.create({
         platform: input.platform,

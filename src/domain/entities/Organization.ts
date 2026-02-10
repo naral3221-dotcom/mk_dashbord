@@ -108,6 +108,14 @@ export class Organization {
     });
   }
 
+  changePlan(newPlan: Plan): Organization {
+    return new Organization({
+      ...this.props,
+      plan: newPlan,
+      updatedAt: new Date(),
+    });
+  }
+
   setStripeCustomerId(customerId: string): Organization {
     if (!customerId || customerId.trim().length === 0) {
       throw new Error('Stripe customer ID is required');

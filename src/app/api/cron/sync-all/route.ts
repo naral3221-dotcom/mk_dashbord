@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { PlanLimits, Plan } from '@/domain/entities/types';
 
 function getMetaService() {
   const { PrismaClient } = require('@/generated/prisma');
@@ -80,7 +81,13 @@ export async function POST(request: NextRequest) {
       const { syncService, orgRepo } = getMetaService();
       const { organizations } = await orgRepo.findAll({ take: 1000 });
 
-      for (const org of organizations) {
+      // Filter to only orgs with autoSync enabled (skip FREE plan)
+      const syncableOrgs = organizations.filter((org: { id: string; name: string; plan: string }) => {
+        const limits = PlanLimits[org.plan as Plan];
+        return limits?.hasAutoSync !== false;
+      });
+
+      for (const org of syncableOrgs) {
         try {
           const result = await syncService.syncAllActiveAccounts(org.id);
           if (result.totalAccounts > 0) {

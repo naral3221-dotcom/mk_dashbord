@@ -43,6 +43,16 @@ enum CampaignStatus {
   ARCHIVED
 }
 
+enum SubscriptionStatus {
+  ACTIVE
+  PAST_DUE
+  CANCELED
+  INCOMPLETE
+  TRIALING
+  PAUSED
+  UNPAID
+}
+
 // ============================================
 // MODELS
 // ============================================
@@ -57,10 +67,12 @@ model Organization {
   updatedAt        DateTime     @updatedAt
 
   // Relations
-  users       User[]
-  adAccounts  AdAccount[]
-  conversions Conversion[]
-  invitations Invitation[]
+  users         User[]
+  adAccounts    AdAccount[]
+  conversions   Conversion[]
+  invitations   Invitation[]
+  subscription  Subscription?
+  billingEvents BillingEvent[]
 
   @@index([slug])
 }
@@ -187,4 +199,41 @@ model Invitation {
   @@index([email])
   @@index([token])
   @@index([organizationId])
+}
+
+model Subscription {
+  id                    String             @id @default(cuid())
+  organizationId        String             @unique
+  stripeSubscriptionId  String             @unique
+  stripePriceId         String
+  plan                  Plan               @default(FREE)
+  status                SubscriptionStatus @default(INCOMPLETE)
+  currentPeriodStart    DateTime
+  currentPeriodEnd      DateTime
+  cancelAtPeriodEnd     Boolean            @default(false)
+  canceledAt            DateTime?
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime           @updatedAt
+
+  // Relations
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([stripeSubscriptionId])
+  @@index([status])
+}
+
+model BillingEvent {
+  id             String   @id @default(cuid())
+  organizationId String
+  eventType      String
+  stripeEventId  String   @unique
+  data           Json
+  createdAt      DateTime @default(now())
+
+  // Relations
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([stripeEventId])
 }

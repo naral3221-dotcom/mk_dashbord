@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getPrisma } from '@/infrastructure/database/prisma';
 import { PrismaAdAccountRepository } from '@/infrastructure/repositories/PrismaAdAccountRepository';
 import { PrismaUserRepository } from '@/infrastructure/repositories/PrismaUserRepository';
+import { PrismaOrganizationRepository } from '@/infrastructure/repositories/PrismaOrganizationRepository';
 import { NaverAdsApiClient } from '@/infrastructure/external/naver/NaverAdsApiClient';
 import { NaverAdsPlatformAdapter } from '@/infrastructure/external/naver/NaverAdsPlatformAdapter';
 import { AesTokenEncryption } from '@/infrastructure/encryption/AesTokenEncryption';
@@ -14,12 +15,13 @@ function getUseCase() {
   const prisma = getPrisma();
   const adAccountRepo = new PrismaAdAccountRepository(prisma);
   const userRepo = new PrismaUserRepository(prisma);
+  const orgRepo = new PrismaOrganizationRepository(prisma);
   const naverApiClient = new NaverAdsApiClient();
   const naverAdapter = new NaverAdsPlatformAdapter(naverApiClient);
   const registry = new PlatformAdapterRegistry();
   registry.register(naverAdapter);
   const tokenEncryption = new AesTokenEncryption(process.env.ENCRYPTION_KEY!);
-  return { useCase: new ConnectAdAccountUseCase(adAccountRepo, userRepo, registry, tokenEncryption), adAccountRepo };
+  return { useCase: new ConnectAdAccountUseCase(adAccountRepo, userRepo, registry, tokenEncryption, orgRepo), adAccountRepo };
 }
 
 export async function GET() {

@@ -212,6 +212,41 @@ describe('Organization Entity', () => {
     });
   });
 
+  describe('changePlan()', () => {
+    it('should change plan to any direction', () => {
+      const org = Organization.reconstruct({
+        id: 'org-1',
+        name: 'Test Org',
+        slug: 'test-org',
+        plan: Plan.PRO,
+        stripeCustomerId: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+
+      const downgraded = org.changePlan(Plan.FREE);
+      expect(downgraded.plan).toBe(Plan.FREE);
+
+      const upgraded = org.changePlan(Plan.ENTERPRISE);
+      expect(upgraded.plan).toBe(Plan.ENTERPRISE);
+    });
+
+    it('should change plan to same plan', () => {
+      const org = Organization.reconstruct({
+        id: 'org-1',
+        name: 'Test Org',
+        slug: 'test-org',
+        plan: Plan.PRO,
+        stripeCustomerId: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+
+      const same = org.changePlan(Plan.PRO);
+      expect(same.plan).toBe(Plan.PRO);
+    });
+  });
+
   describe('setStripeCustomerId()', () => {
     it('should set stripe customer id', () => {
       const org = Organization.create(validProps);

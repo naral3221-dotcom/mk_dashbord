@@ -38,24 +38,36 @@ export const PlanLimits = {
     maxUsers: 2,
     dataRetentionDays: 30,
     apiCallsPerDay: 100,
+    allowedPlatforms: [Platform.META],
+    hasAutoSync: false,
+    hasExports: false,
   },
   [Plan.STARTER]: {
     maxAdAccounts: 3,
     maxUsers: 5,
     dataRetentionDays: 90,
     apiCallsPerDay: 1000,
+    allowedPlatforms: [Platform.META, Platform.GOOGLE],
+    hasAutoSync: true,
+    hasExports: false,
   },
   [Plan.PRO]: {
     maxAdAccounts: 10,
     maxUsers: 20,
     dataRetentionDays: 365,
     apiCallsPerDay: 10000,
+    allowedPlatforms: [Platform.META, Platform.GOOGLE, Platform.TIKTOK],
+    hasAutoSync: true,
+    hasExports: true,
   },
   [Plan.ENTERPRISE]: {
     maxAdAccounts: -1,
     maxUsers: -1,
     dataRetentionDays: -1,
     apiCallsPerDay: -1,
+    allowedPlatforms: [Platform.META, Platform.GOOGLE, Platform.TIKTOK, Platform.NAVER, Platform.KAKAO],
+    hasAutoSync: true,
+    hasExports: true,
   },
 } as const;
 
@@ -89,6 +101,16 @@ export const RolePermissions = {
     canViewInsights: true,
   },
 } as const;
+
+export enum SubscriptionStatus {
+  ACTIVE = 'ACTIVE',
+  PAST_DUE = 'PAST_DUE',
+  CANCELED = 'CANCELED',
+  INCOMPLETE = 'INCOMPLETE',
+  TRIALING = 'TRIALING',
+  PAUSED = 'PAUSED',
+  UNPAID = 'UNPAID',
+}
 
 export type PlanLimit = (typeof PlanLimits)[Plan];
 export type RolePermission = (typeof RolePermissions)[Role];

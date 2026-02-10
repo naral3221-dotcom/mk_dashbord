@@ -7,3 +7,4 @@ export { MetaSyncService } from './MetaSyncService';
 export { AdAccountService } from './AdAccountService';
 export { SyncService } from './SyncService';
 export { DashboardService } from './DashboardService';
+export { BillingService } from './BillingService';

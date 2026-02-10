@@ -14,7 +14,7 @@
 | Sprint 3: META Integration | ✅ Completed | 100% |
 | Sprint 4: Dashboard Visualization | ✅ Completed | 100% |
 | Sprint 5: Additional Platforms | ✅ Completed | 100% |
-| Sprint 6: Billing & SaaS | ⚪ Not Started | 0% |
+| Sprint 6: Billing & SaaS | ✅ Completed | 100% |
 | Sprint 7: Production & Polish | ⚪ Not Started | 0% |
 
 ---
@@ -129,17 +129,39 @@
 
 ---
 
+## Sprint 6: Billing & SaaS ✅
+
+### Tasks
+| Task | Status | Agent | Notes |
+|------|--------|-------|-------|
+| Subscription + BillingEvent 엔티티 | ✅ Done | test-writer → implementer | Subscription 26t, BillingEvent 13t |
+| ISubscriptionRepo + IBillingEventRepo + IPaymentGateway | ✅ Done | architect | PlanLimits 확장 포함 |
+| CreateCheckoutSession UseCase | ✅ Done | test-writer → implementer | 14 tests |
+| HandleStripeWebhook UseCase | ✅ Done | test-writer → implementer | 20 tests, 멱등성 |
+| CreatePortalSession UseCase | ✅ Done | test-writer → implementer | 8 tests |
+| GetSubscription UseCase | ✅ Done | test-writer → implementer | 8 tests |
+| CheckFeatureAccess UseCase | ✅ Done | test-writer → implementer | 16 tests |
+| StripePaymentGateway + PrismaRepos | ✅ Done | api-integrator → implementer | 30 tests (17+13) |
+| BillingService + BillingDTO + 5 API routes | ✅ Done | implementer | 12 tests |
+| Feature Gating (ConnectAdAccount limits, cron) | ✅ Done | implementer | PlanLimits, changePlan() |
+| Billing UI (5 components + 2 hooks + 2 pages) | ✅ Done | implementer | 27 tests |
+| middleware.ts + sidebar 업데이트 | ✅ Done | implementer | publicRoutes, billing nav |
+
+**Results**: 996 tests total (+182), 83 test files, ALL PASSED
+
+---
+
 ## Key Metrics
 
 ```
-총 테스트: 814 (all passing), 65 test files
-총 Sprint 완료: 6 (Sprint 0-5)
-도메인 엔티티: 6
-유스케이스: 16 (12 + 4 generalized)
-앱 서비스: 7+
-Prisma 리포지토리: 6
-API Routes: 30
-UI 컴포넌트: 25+
+총 테스트: 996 (all passing), 83 test files
+총 Sprint 완료: 7 (Sprint 0-6)
+도메인 엔티티: 8 (6 + Subscription, BillingEvent)
+유스케이스: 21 (12 + 4 generalized + 5 billing)
+앱 서비스: 10
+Prisma 리포지토리: 8 (6 + Subscription, BillingEvent)
+API Routes: 35
+UI 컴포넌트: 30+
 플랫폼: 4 (META, Google Ads, TikTok Ads, Naver Search Ads)
 TypeScript errors: 0
 Build: ✅ Passing
@@ -157,10 +179,11 @@ Build: ✅ Passing
 2026-02-10: Sprint 3 완료 (469 tests)
 2026-02-10: Sprint 4 완료 (585 tests)
 2026-02-10: Sprint 5 완료 (814 tests)
+2026-02-10: Sprint 6 완료 (996 tests)
 ```
 
 ---
 
 ## Version
-- Current: v0.5.0 (Sprint 5 완료)
-- Next: v0.6.0 (Sprint 6 완료 시)
+- Current: v0.6.0 (Sprint 6 완료)
+- Next: v0.7.0 (Sprint 7 완료 시)

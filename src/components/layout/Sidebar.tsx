@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BarChart3, Settings, Users, Home, Plug } from 'lucide-react';
+import { BarChart3, Settings, Users, Home, Plug, CreditCard } from 'lucide-react';
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: Home },
@@ -10,6 +10,7 @@ const navItems = [
   { href: '/integrations', label: 'Integrations', icon: Plug },
   { href: '/settings', label: 'Settings', icon: Settings },
   { href: '/settings/members', label: 'Members', icon: Users },
+  { href: '/settings/billing', label: 'Billing', icon: CreditCard },
 ];
 
 export function Sidebar() {

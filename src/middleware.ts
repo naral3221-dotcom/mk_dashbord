@@ -7,6 +7,8 @@ const publicRoutes = [
   '/sign-up',
   '/api/auth',
   '/invite',
+  '/api/webhooks',
+  '/pricing',
 ];
 
 function isPublicRoute(pathname: string): boolean {

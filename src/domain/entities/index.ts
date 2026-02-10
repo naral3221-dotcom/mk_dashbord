@@ -6,3 +6,5 @@ export * from './Campaign';
 export * from './CampaignInsight';
 export * from './Conversion';
 export * from './Invitation';
+export * from './Subscription';
+export * from './BillingEvent';

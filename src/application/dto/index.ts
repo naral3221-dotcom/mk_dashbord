@@ -4,3 +4,4 @@ export * from './InvitationDTO';
 export * from './MetaDTO';
 export * from './AdAccountDTO';
 export * from './DashboardDTO';
+export * from './BillingDTO';

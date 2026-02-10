@@ -7,13 +7,13 @@
 
 ## Last Updated
 - **날짜**: 2026-02-10
-- **시간**: Sprint 5 완료
-- **작업 상태**: Sprint 5 완료, Sprint 6 대기
+- **시간**: Sprint 6 완료
+- **작업 상태**: Sprint 6 완료, Sprint 7 대기
 
 ---
 
 ## Current Sprint
-**Sprint 5: Additional Platforms (Multi-Platform Adapter)** ✅ 완료
+**Sprint 6: Billing & SaaS** ✅ 완료, **Sprint 7** 대기
 
 ### Sprint 0 완료 (✅)
 - [x] 0.1 Next.js 14 프로젝트 초기화
@@ -79,11 +79,23 @@
 - [x] 5.8 Dashboard 플랫폼 필터 (PlatformFilter, PlatformBadge)
 - [x] 5.9 통합 Cron, Accounts API, Integrations 페이지
 
-### Sprint 6 대기 중
-- [ ] 6.1 Stripe 연동
-- [ ] 6.2 구독 플랜 정의
-- [ ] 6.3 결제 플로우
-- [ ] 6.4 플랜별 기능 제한
+### Sprint 6 완료 (✅)
+- [x] 6.1 Subscription + BillingEvent 엔티티 (26 + 13 tests)
+- [x] 6.2 ISubscriptionRepository, IBillingEventRepository, IPaymentGateway 인터페이스
+- [x] 6.3 5 Use Cases (CreateCheckoutSession, HandleStripeWebhook, CreatePortalSession, GetSubscription, CheckFeatureAccess)
+- [x] 6.4 StripePaymentGateway + PrismaSubscriptionRepository + PrismaBillingEventRepository
+- [x] 6.5 BillingService + BillingDTO + 5 API routes (billing/checkout, portal, subscription, usage, webhooks/stripe)
+- [x] 6.6 Feature gating (PlanLimits 확장, ConnectAdAccount limits, cron FREE skip)
+- [x] 6.7 Billing UI (5 components + 2 hooks + 2 pages + sidebar)
+
+### Sprint 7 대기 중
+- [ ] 7.1 에러 처리 강화
+- [ ] 7.2 로깅 시스템
+- [ ] 7.3 성능 최적화
+- [ ] 7.4 E2E 테스트
+- [ ] 7.5 Vercel 배포 설정
+- [ ] 7.6 모니터링 설정
+- [ ] 7.7 문서화
 
 ---
 
@@ -99,17 +111,21 @@ dashboard/
 │   ├── PROMPT_GUIDE.md          # 프롬프트 가이드
 │   └── logs/                    # 작업 로그
 ├── src/
-│   ├── domain/                  # 6 entities, 7 repos, 16 use cases, 6 service interfaces
+│   ├── domain/                  # 8 entities, 9 repos, 21 use cases, 7 service interfaces
 │   │   │                        # Platform Adapter: IAdPlatformClient, IPlatformAdapterRegistry
 │   │   │                        # Generalized: ConnectAdAccount, SyncCampaigns, SyncInsights, RefreshToken
-│   ├── application/             # 7+ services, 5+ DTOs
-│   ├── infrastructure/          # 6 Prisma repos, NextAuth, 4 platform clients, encryption, cache
+│   │   │                        # Billing: Subscription, BillingEvent, IPaymentGateway
+│   │   │                        # Billing UCs: CreateCheckout, HandleWebhook, Portal, GetSub, CheckAccess
+│   ├── application/             # 10 services, 6+ DTOs (incl. BillingDTO)
+│   ├── infrastructure/          # 8 Prisma repos, NextAuth, 4 platform clients, encryption, cache
 │   │   │                        # Adapters: Meta, Google, TikTok, Naver + PlatformAdapterRegistry
+│   │   │                        # Stripe: StripePaymentGateway, stripePriceConfig
 │   ├── lib/                     # formatters
-│   ├── hooks/                   # useDateRange, useDashboardData
+│   ├── hooks/                   # useDateRange, useDashboardData, useSubscription, usePlanLimits
 │   ├── components/dashboard/    # KpiCard, DateRangeFilter, Charts(3), Table, DashboardContent
+│   ├── components/billing/      # PricingCard, PricingTable, CurrentPlanBadge, UsageMeter, UpgradePrompt
 │   ├── components/              # PlatformFilter, PlatformBadge
-│   └── app/                     # 30 routes (Auth + META + Dashboard + Multi-platform), UI components
+│   └── app/                     # 35 routes (Auth + META + Dashboard + Multi-platform + Billing), UI components
 ```
 
 ---
@@ -126,6 +142,10 @@ dashboard/
 9. **Prisma v7 lazy init**: API route에서 `require()` 패턴 사용 (빌드 시 PrismaClient 초기화 방지)
 10. **Platform Adapter Pattern**: IAdPlatformClient + IPlatformAdapterRegistry로 멀티 플랫폼 추상화
 11. **PlatformAdapterRegistry**: Map-based factory, 플랫폼별 어댑터 동적 등록/조회
+12. **Stripe Checkout (redirect)**: PCI 컴플라이언스 자동, Customer Portal로 구독 관리 위임
+13. **IPaymentGateway 도메인 인터페이스**: Stripe 직접 의존 없이 Clean Architecture 유지
+14. **Webhook 멱등성**: BillingEvent 테이블, stripeEventId unique 체크로 중복 처리 방지
+15. **Organization 단위 구독**: 개별 사용자 아닌 조직 단위 결제/구독
 
 ---
 
@@ -148,5 +168,5 @@ dashboard/
 
 ## Pending User Decisions
 ```
-없음 - Sprint 6 시작 대기 중
+없음 - Sprint 7 시작 대기 중
 ```

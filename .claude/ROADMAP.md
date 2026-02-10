@@ -1,7 +1,7 @@
 # Implementation Roadmap
 
 > **마지막 수정**: 2026-02-10
-> **현재 단계**: Sprint 5 - Additional Platforms (Multi-Platform Adapter) ✅ 완료
+> **현재 단계**: Sprint 6 - Billing & SaaS ✅ 완료
 
 ---
 
@@ -14,8 +14,8 @@ Sprint 2: Authentication & Multi-tenancy ─── ✅ Complete
 Sprint 3: META Integration ───────────────── ✅ Complete
 Sprint 4: Dashboard Visualization ─────────── ✅ Complete
 Sprint 5: Additional Platforms ───────────── ✅ Complete
-Sprint 6: Billing & SaaS Features ────────── ⬜ Next
-Sprint 7: Production & Polish ────────────── ⬜ Planned
+Sprint 6: Billing & SaaS Features ────────── ✅ Complete
+Sprint 7: Production & Polish ────────────── ⬅️ Next
 ```
 
 ---
@@ -223,29 +223,46 @@ Platform Adapter 패턴으로 멀티 플랫폼 추상화, Google Ads/TikTok/Nave
 
 ---
 
-## Sprint 6: Billing & SaaS Features ⬅️ NEXT
+## Sprint 6: Billing & SaaS Features ✅ COMPLETED
 
 ### 목표
-Stripe 결제 및 SaaS 기능
+Stripe 결제 연동, 구독 플랜 관리, 플랜별 기능 제한, 빌링 UI
 
 ### Tasks
 
 | # | Task | Status | Agent | Commit |
 |---|------|--------|-------|--------|
-| 6.1 | Stripe 연동 | ⬜ Todo | api-integrator | |
-| 6.2 | 구독 플랜 정의 | ⬜ Todo | architect | |
-| 6.3 | 결제 플로우 | ⬜ Todo | implementer | |
-| 6.4 | 플랜별 기능 제한 | ⬜ Todo | implementer | |
-| 6.5 | Webhook 처리 | ⬜ Todo | implementer | |
-| 6.6 | 인보이스/영수증 | ⬜ Todo | implementer | |
+| 6.1 | Subscription + BillingEvent 엔티티 | ✅ Done | test-writer → implementer | 9fb07ad |
+| 6.2 | ISubscriptionRepo + IBillingEventRepo + IPaymentGateway 인터페이스 | ✅ Done | architect | 9fb07ad |
+| 6.3 | 5 Use Cases (Checkout, Webhook, Portal, GetSub, CheckAccess) | ✅ Done | test-writer → implementer | 9fb07ad |
+| 6.4 | StripePaymentGateway + PrismaRepos + stripePriceConfig | ✅ Done | api-integrator → implementer | 9fb07ad |
+| 6.5 | BillingService + BillingDTO + 5 API Routes | ✅ Done | implementer | 9fb07ad |
+| 6.6 | Feature Gating + Billing UI (5 components, 2 hooks, 2 pages) | ✅ Done | implementer | 9fb07ad |
 
 ### Deliverables
-- [ ] 구독 결제 시스템
-- [ ] 플랜별 기능 분리
+- [x] Stripe 결제 연동 (Checkout + Customer Portal)
+- [x] 구독 플랜 관리 (FREE/STARTER/PROFESSIONAL/ENTERPRISE)
+- [x] 플랜별 기능 제한 (ConnectAdAccount limits, cron FREE skip)
+- [x] 빌링 UI (PricingTable, CurrentPlanBadge, UsageMeter, UpgradePrompt)
+- [x] Webhook 멱등성 (BillingEvent)
+
+### Results
+- **996 tests total (814 Sprint 1-5 + 182 Sprint 6), 83 test files, ALL PASSED**
+- 2 domain entities: Subscription, BillingEvent
+- 2 domain repository interfaces: ISubscriptionRepository, IBillingEventRepository
+- 1 domain service interface: IPaymentGateway
+- 5 use cases: CreateCheckoutSession, HandleStripeWebhook, CreatePortalSession, GetSubscription, CheckFeatureAccess
+- 1 app service: BillingService
+- 5 API routes: billing/checkout, billing/portal, billing/subscription, billing/usage, webhooks/stripe
+- 5 UI components: PricingCard, PricingTable, CurrentPlanBadge, UsageMeter, UpgradePrompt
+- 2 hooks: useSubscription, usePlanLimits
+- 2 pages: /pricing, /settings/billing
+- Feature gating: PlanLimits extended, ConnectAdAccount limits, cron FREE skip
+- TypeScript zero errors, build successful
 
 ---
 
-## Sprint 7: Production & Polish
+## Sprint 7: Production & Polish ⬅️ NEXT
 
 ### 목표
 프로덕션 배포 및 안정화
@@ -270,6 +287,16 @@ Stripe 결제 및 SaaS 기능
 ---
 
 ## Changelog
+
+### 2026-02-10 (Sprint 6)
+- Sprint 6 완료: Billing & SaaS (996 tests, 182 new, 83 test files)
+  - 2 entities: Subscription, BillingEvent
+  - 5 use cases: CreateCheckoutSession, HandleStripeWebhook, CreatePortalSession, GetSubscription, CheckFeatureAccess
+  - StripePaymentGateway + stripePriceConfig, PrismaSubscriptionRepository, PrismaBillingEventRepository
+  - BillingService + 5 API routes (billing/checkout, portal, subscription, usage, webhooks/stripe)
+  - Feature gating: PlanLimits extended, ConnectAdAccount limits, cron FREE skip
+  - 5 UI components + 2 hooks + 2 pages (/pricing, /settings/billing) + sidebar billing nav
+  - 35 API routes total
 
 ### 2026-02-10 (Sprint 5)
 - Sprint 5 완료: Additional Platforms - Multi-Platform Adapter (814 tests, 229 new, 65 test files)

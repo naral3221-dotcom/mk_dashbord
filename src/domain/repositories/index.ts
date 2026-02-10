@@ -5,3 +5,5 @@ export * from './ICampaignRepository';
 export * from './ICampaignInsightRepository';
 export * from './IConversionRepository';
 export * from './IInvitationRepository';
+export * from './ISubscriptionRepository';
+export * from './IBillingEventRepository';

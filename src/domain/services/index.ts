@@ -10,3 +10,12 @@ export type {
   TokenExchangeResult,
 } from './IAdPlatformClient';
 export type { IPlatformAdapterRegistry } from './IPlatformAdapterRegistry';
+export type {
+  IPaymentGateway,
+  CheckoutSessionParams,
+  CheckoutSessionResult,
+  PortalSessionParams,
+  PortalSessionResult,
+  WebhookEventData,
+  SubscriptionData,
+} from './IPaymentGateway';

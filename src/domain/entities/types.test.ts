@@ -53,6 +53,9 @@ describe('Domain Types', () => {
         maxUsers: 2,
         dataRetentionDays: 30,
         apiCallsPerDay: 100,
+        allowedPlatforms: [Platform.META],
+        hasAutoSync: false,
+        hasExports: false,
       });
     });
 

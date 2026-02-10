@@ -4,17 +4,20 @@ import {
   ConnectAdAccountInput,
 } from './ConnectAdAccountUseCase';
 import { IAdAccountRepository } from '../repositories/IAdAccountRepository';
+import { IOrganizationRepository } from '../repositories/IOrganizationRepository';
 import { IUserRepository } from '../repositories/IUserRepository';
 import { IPlatformAdapterRegistry } from '../services/IPlatformAdapterRegistry';
 import { IAdPlatformClient, TokenExchangeResult } from '../services/IAdPlatformClient';
 import { ITokenEncryption } from '../services/ITokenEncryption';
 import { User } from '../entities/User';
 import { AdAccount } from '../entities/AdAccount';
-import { Role, Platform } from '../entities/types';
+import { Organization } from '../entities/Organization';
+import { Role, Platform, Plan } from '../entities/types';
 
 describe('ConnectAdAccountUseCase', () => {
   let useCase: ConnectAdAccountUseCase;
   let mockAdAccountRepo: IAdAccountRepository;
+  let mockOrgRepo: IOrganizationRepository;
   let mockUserRepo: IUserRepository;
   let mockPlatformRegistry: IPlatformAdapterRegistry;
   let mockTokenEncryption: ITokenEncryption;
@@ -112,6 +115,18 @@ describe('ConnectAdAccountUseCase', () => {
       countByOrganizationId: vi.fn(),
     };
 
+    mockOrgRepo = {
+      findById: vi.fn(),
+      findBySlug: vi.fn(),
+      findByStripeCustomerId: vi.fn(),
+      findByPlan: vi.fn(),
+      save: vi.fn(),
+      delete: vi.fn(),
+      existsBySlug: vi.fn(),
+      countByPlan: vi.fn(),
+      findAll: vi.fn(),
+    };
+
     mockUserRepo = {
       findById: vi.fn(),
       findByEmail: vi.fn(),
@@ -165,6 +180,17 @@ describe('ConnectAdAccountUseCase', () => {
     };
 
     // Default happy path mocks
+    const defaultOrg = Organization.reconstruct({
+      id: 'org-1',
+      name: 'Test Org',
+      slug: 'test-org',
+      plan: Plan.ENTERPRISE,  // ENTERPRISE allows all platforms
+      stripeCustomerId: null,
+      createdAt: now,
+      updatedAt: now,
+    });
+    vi.mocked(mockOrgRepo.findById).mockResolvedValue(defaultOrg);
+    vi.mocked(mockAdAccountRepo.countByOrganizationId).mockResolvedValue(0);
     vi.mocked(mockUserRepo.findById).mockResolvedValue(memberUser);
     vi.mocked(mockOAuthAdapter.exchangeCodeForToken).mockResolvedValue(oauthTokenResultNoRefresh);
     vi.mocked(mockTokenEncryption.encrypt).mockImplementation(
@@ -178,6 +204,7 @@ describe('ConnectAdAccountUseCase', () => {
       mockUserRepo,
       mockPlatformRegistry,
       mockTokenEncryption,
+      mockOrgRepo,
     );
   });
 
@@ -405,5 +432,77 @@ describe('ConnectAdAccountUseCase', () => {
     // Encrypt should only be called once (for the access token)
     expect(mockTokenEncryption.encrypt).toHaveBeenCalledTimes(1);
     expect(mockTokenEncryption.encrypt).toHaveBeenCalledWith('long-lived-token-meta');
+  });
+
+  it('should throw "Organization not found" when org does not exist', async () => {
+    vi.mocked(mockOrgRepo.findById).mockResolvedValue(null);
+    await expect(useCase.execute(validOAuthInput)).rejects.toThrow('Organization not found');
+  });
+
+  it('should throw when platform is not allowed on plan', async () => {
+    const freeOrg = Organization.reconstruct({
+      id: 'org-1', name: 'Test Org', slug: 'test-org', plan: Plan.FREE,
+      stripeCustomerId: null, createdAt: now, updatedAt: now,
+    });
+    vi.mocked(mockOrgRepo.findById).mockResolvedValue(freeOrg);
+
+    // FREE only allows META, try connecting NAVER
+    await expect(useCase.execute(validApiKeyInput)).rejects.toThrow(
+      'Platform NAVER is not available on the FREE plan'
+    );
+  });
+
+  it('should throw when ad account limit reached for new accounts', async () => {
+    const freeOrg = Organization.reconstruct({
+      id: 'org-1', name: 'Test Org', slug: 'test-org', plan: Plan.FREE,
+      stripeCustomerId: null, createdAt: now, updatedAt: now,
+    });
+    vi.mocked(mockOrgRepo.findById).mockResolvedValue(freeOrg);
+    vi.mocked(mockAdAccountRepo.countByOrganizationId).mockResolvedValue(1); // FREE limit is 1
+
+    await expect(useCase.execute(validOAuthInput)).rejects.toThrow(
+      'Ad account limit reached for your current plan'
+    );
+  });
+
+  it('should allow reconnecting existing account even at limit', async () => {
+    const freeOrg = Organization.reconstruct({
+      id: 'org-1', name: 'Test Org', slug: 'test-org', plan: Plan.FREE,
+      stripeCustomerId: null, createdAt: now, updatedAt: now,
+    });
+    vi.mocked(mockOrgRepo.findById).mockResolvedValue(freeOrg);
+    vi.mocked(mockAdAccountRepo.countByOrganizationId).mockResolvedValue(1);
+
+    // Existing account - should allow reconnect even at limit
+    const existingAccount = AdAccount.reconstruct({
+      id: 'existing-acc', platform: Platform.META, accountId: 'act_123456789',
+      accountName: 'My Meta Ad Account', accessToken: 'old-token', refreshToken: null,
+      tokenExpiresAt: new Date(), isActive: true, organizationId: 'org-1',
+      createdAt: now, updatedAt: now,
+    });
+    vi.mocked(mockAdAccountRepo.findByPlatformAndAccountId).mockResolvedValue(existingAccount);
+
+    const result = await useCase.execute(validOAuthInput);
+    expect(result.isNewAccount).toBe(false);
+  });
+
+  it('should allow META platform on FREE plan', async () => {
+    const freeOrg = Organization.reconstruct({
+      id: 'org-1', name: 'Test Org', slug: 'test-org', plan: Plan.FREE,
+      stripeCustomerId: null, createdAt: now, updatedAt: now,
+    });
+    vi.mocked(mockOrgRepo.findById).mockResolvedValue(freeOrg);
+    vi.mocked(mockAdAccountRepo.countByOrganizationId).mockResolvedValue(0);
+
+    const result = await useCase.execute(validOAuthInput); // META platform
+    expect(result.adAccount.platform).toBe(Platform.META);
+  });
+
+  it('should skip ad account limit check for ENTERPRISE plan', async () => {
+    // defaultOrg is ENTERPRISE (limit=-1)
+    vi.mocked(mockAdAccountRepo.countByOrganizationId).mockResolvedValue(100);
+
+    const result = await useCase.execute(validOAuthInput);
+    expect(result.isNewAccount).toBe(true);
   });
 });
