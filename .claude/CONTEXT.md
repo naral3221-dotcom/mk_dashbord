@@ -7,13 +7,13 @@
 
 ## 📍 Last Updated
 - **날짜**: 2026-02-10
-- **시간**: Sprint 2 완료 커밋
-- **작업 상태**: Sprint 2 완료, Sprint 3 대기
+- **시간**: Sprint 3 완료
+- **작업 상태**: Sprint 3 완료, Sprint 4 대기
 
 ---
 
 ## 🎯 Current Sprint
-**Sprint 2: Authentication & Multi-tenancy** ✅ 완료
+**Sprint 3: META Integration** ✅ 완료
 
 ### Sprint 0 완료 (✅)
 - [x] 0.1 Next.js 14 프로젝트 초기화
@@ -48,13 +48,22 @@
 - [x] 2.9 Application Services (Auth, Organization, Invitation, Authorization)
 - [x] 2.10 Full UI (Sign-in/up, Onboarding, Dashboard, Settings, Invite)
 
-### Sprint 3 대기 중
-- [ ] 3.1 META OAuth 연동
-- [ ] 3.2 Ad Account 연결 플로우
-- [ ] 3.3 Campaign 동기화 UseCase
-- [ ] 3.4 Insights 데이터 수집
-- [ ] 3.5 백그라운드 동기화 Job
-- [ ] 3.6 데이터 캐싱 전략
+### Sprint 3 완료 (✅)
+- [x] 3.1 META OAuth 연동 (OAuth flow + callback)
+- [x] 3.2 Ad Account 연결 플로우 (ConnectMetaAdAccountUseCase)
+- [x] 3.3 Campaign 동기화 UseCase (SyncMetaCampaignsUseCase)
+- [x] 3.4 Insights 데이터 수집 (SyncMetaInsightsUseCase)
+- [x] 3.5 백그라운드 동기화 Job (cron/sync-meta route)
+- [x] 3.6 데이터 캐싱 전략 (InMemoryCacheService)
+
+### Sprint 4 대기 중
+- [ ] 4.1 레이아웃 (사이드바, 헤더)
+- [ ] 4.2 대시보드 홈 (KPI 카드)
+- [ ] 4.3 캠페인 목록 페이지
+- [ ] 4.4 캠페인 상세 페이지
+- [ ] 4.5 차트 컴포넌트 (Tremor)
+- [ ] 4.6 날짜 필터 구현
+- [ ] 4.7 데이터 테이블 (정렬, 필터)
 
 ---
 
@@ -67,10 +76,10 @@ dashboard/
 │   ├── ROADMAP.md               # 로드맵
 │   └── logs/                    # 작업 로그
 ├── src/
-│   ├── domain/                  # 6 entities, 7 repos, 6 use cases, IPasswordHasher
-│   ├── application/             # 4 services, 3 DTOs
-│   ├── infrastructure/          # Prisma repos, NextAuth, BcryptPasswordHasher
-│   └── app/                     # 16 routes, full UI
+│   ├── domain/                  # 6 entities, 7 repos, 10 use cases, 4 service interfaces
+│   ├── application/             # 6 services, 4 DTOs
+│   ├── infrastructure/          # 6 Prisma repos, NextAuth, META client, encryption, cache
+│   └── app/                     # 22 routes (16 Sprint 2 + 6 META), UI components
 ```
 
 ---
@@ -103,5 +112,5 @@ dashboard/
 
 ## 📝 Pending User Decisions
 ```
-없음 - Sprint 3 시작 대기 중
+없음 - Sprint 4 시작 대기 중
 ```

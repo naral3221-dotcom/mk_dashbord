@@ -2,11 +2,12 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BarChart3, Settings, Users, Home } from 'lucide-react';
+import { BarChart3, Settings, Users, Home, Plug } from 'lucide-react';
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: Home },
   { href: '/dashboard/campaigns', label: 'Campaigns', icon: BarChart3 },
+  { href: '/integrations', label: 'Integrations', icon: Plug },
   { href: '/settings', label: 'Settings', icon: Settings },
   { href: '/settings/members', label: 'Members', icon: Users },
 ];
@@ -22,7 +23,7 @@ export function Sidebar() {
       <nav className="flex-1 space-y-1 p-4">
         {navItems.map((item) => {
           const Icon = item.icon;
-          const isActive = pathname === item.href;
+          const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
           return (
             <Link
               key={item.href}
