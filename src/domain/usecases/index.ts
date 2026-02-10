@@ -34,3 +34,17 @@ export type {
   SyncMetaInsightsInput,
   SyncMetaInsightsOutput,
 } from './SyncMetaInsightsUseCase';
+export { GetDashboardOverviewUseCase } from './GetDashboardOverviewUseCase';
+export type {
+  GetDashboardOverviewInput,
+  GetDashboardOverviewOutput,
+  AggregatedKpis,
+  DailyMetrics,
+  SpendByCampaign,
+} from './GetDashboardOverviewUseCase';
+export { GetCampaignPerformanceUseCase } from './GetCampaignPerformanceUseCase';
+export type {
+  GetCampaignPerformanceInput,
+  GetCampaignPerformanceOutput,
+  CampaignPerformanceItem,
+} from './GetCampaignPerformanceUseCase';

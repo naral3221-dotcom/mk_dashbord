@@ -5,15 +5,15 @@
 
 ---
 
-## 📍 Last Updated
+## Last Updated
 - **날짜**: 2026-02-10
-- **시간**: Sprint 3 완료
-- **작업 상태**: Sprint 3 완료, Sprint 4 대기
+- **시간**: Sprint 4 완료
+- **작업 상태**: Sprint 4 완료, Sprint 5 대기
 
 ---
 
-## 🎯 Current Sprint
-**Sprint 3: META Integration** ✅ 완료
+## Current Sprint
+**Sprint 4: Dashboard Visualization** ✅ 완료
 
 ### Sprint 0 완료 (✅)
 - [x] 0.1 Next.js 14 프로젝트 초기화
@@ -56,35 +56,51 @@
 - [x] 3.5 백그라운드 동기화 Job (cron/sync-meta route)
 - [x] 3.6 데이터 캐싱 전략 (InMemoryCacheService)
 
-### Sprint 4 대기 중
-- [ ] 4.1 레이아웃 (사이드바, 헤더)
-- [ ] 4.2 대시보드 홈 (KPI 카드)
-- [ ] 4.3 캠페인 목록 페이지
-- [ ] 4.4 캠페인 상세 페이지
-- [ ] 4.5 차트 컴포넌트 (Tremor)
-- [ ] 4.6 날짜 필터 구현
-- [ ] 4.7 데이터 테이블 (정렬, 필터)
+### Sprint 4 완료 (✅)
+- [x] 4.1 GetDashboardOverview UseCase (14 tests, KPI 집계 + 일별 추이 + 캠페인별 지출)
+- [x] 4.2 GetCampaignPerformance UseCase (10 tests, 캠페인별 성과 집계)
+- [x] 4.3 DashboardDTO + DashboardService (8 tests)
+- [x] 4.4 Formatters (15 tests: currency, number, percent, ratio, compact, date)
+- [x] 4.5 DateRangeFilter + useDateRange Hook (21 tests: 7d/30d/90d/custom)
+- [x] 4.6 KPI Cards (9 tests: 5개 포맷 지원)
+- [x] 4.7 Charts - SpendTrend/CampaignComparison/SpendDistribution (13 tests, Recharts)
+- [x] 4.8 CampaignPerformanceTable (10 tests, 클라이언트 정렬)
+- [x] 4.9 DashboardContent + useDashboardData (16 tests, 병렬 fetch)
+- [x] 4.10 API Routes - dashboard/overview, dashboard/campaigns (lazy init)
+
+### Sprint 5 대기 중
+- [ ] 5.1 Platform Adapter 패턴 구현
+- [ ] 5.2 Google Ads 연동
+- [ ] 5.3 TikTok Ads 연동
+- [ ] 5.4 Naver 검색광고 연동
+- [ ] 5.5 통합 대시보드 뷰
 
 ---
 
-## 📁 Key Files (참조용)
+## Key Files (참조용)
 ```
 dashboard/
 ├── CLAUDE.md                    # 메인 가이드라인
 ├── .claude/
 │   ├── CONTEXT.md               # 현재 파일 (컨텍스트)
+│   ├── STATUS.md                # 전체 진행 상황
 │   ├── ROADMAP.md               # 로드맵
+│   ├── ORCHESTRATOR.md          # 오케스트레이터 가이드
+│   ├── PROMPT_GUIDE.md          # 프롬프트 가이드
 │   └── logs/                    # 작업 로그
 ├── src/
-│   ├── domain/                  # 6 entities, 7 repos, 10 use cases, 4 service interfaces
-│   ├── application/             # 6 services, 4 DTOs
+│   ├── domain/                  # 6 entities, 7 repos, 12 use cases, 4 service interfaces
+│   ├── application/             # 7 services, 5 DTOs
 │   ├── infrastructure/          # 6 Prisma repos, NextAuth, META client, encryption, cache
-│   └── app/                     # 22 routes (16 Sprint 2 + 6 META), UI components
+│   ├── lib/                     # formatters
+│   ├── hooks/                   # useDateRange, useDashboardData
+│   ├── components/dashboard/    # KpiCard, DateRangeFilter, Charts(3), Table, DashboardContent
+│   └── app/                     # 24+ routes (Sprint 2 + META + Dashboard), UI components
 ```
 
 ---
 
-## 💭 Important Decisions Made
+## Important Decisions Made
 1. **기술 스택**: Next.js 14 + TypeScript + PostgreSQL + Prisma + NextAuth.js + Stripe
 2. **아키텍처**: Clean Architecture (domain/application/infrastructure/presentation)
 3. **개발 방법론**: TDD (Red-Green-Refactor)
@@ -92,25 +108,29 @@ dashboard/
 5. **세션 전략**: JWT (DB 세션 불필요, token에 userId/role/orgId 포함)
 6. **Prisma Adapter 미사용**: 기존 Repository 패턴 유지 (Clean Architecture)
 7. **organizationId nullable**: 회원가입 → 온보딩(조직 생성) 플로우 지원
+8. **Chart Library**: Recharts (경량, React 19 호환, Tremor 대신 선택)
+9. **Prisma v7 lazy init**: API route에서 `require()` 패턴 사용 (빌드 시 PrismaClient 초기화 방지)
 
 ---
 
-## 🔄 Session Handoff Notes
+## Session Handoff Notes
 새 세션 시작 시 읽어야 할 파일 순서:
 1. `CLAUDE.md` - 프로젝트 규칙 확인
 2. `.claude/CONTEXT.md` - 현재 상태 확인 (이 파일)
-3. `.claude/logs/YYYY-MM-DD.md` - 최근 작업 로그 확인
+3. `.claude/STATUS.md` - 전체 진행 상황
+4. `.claude/ROADMAP.md` - 로드맵 확인
+5. `.claude/logs/YYYY-MM-DD.md` - 최근 작업 로그 확인
 
 ---
 
-## 🚨 Active Blockers
+## Active Blockers
 ```
 없음
 ```
 
 ---
 
-## 📝 Pending User Decisions
+## Pending User Decisions
 ```
-없음 - Sprint 4 시작 대기 중
+없음 - Sprint 5 시작 대기 중
 ```

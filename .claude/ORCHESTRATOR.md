@@ -320,48 +320,103 @@ if (!exists(logFile)) {
 
 **Repository**: `https://github.com/naral3221-dotcom/mk_dashbord.git`
 
-### 작업 완료 시 자동 커밋 & 푸시
-```bash
-# 1. 변경 파일 스테이징
-git add [changed files]
+### 커밋 레벨 (2단계)
 
-# 2. 커밋 (컨벤션 준수)
+#### Level 1: 태스크 커밋 (Sprint 진행 중 개별 기능 완료 시)
+```bash
+# 1. 검증
+npx vitest run
+npx tsc --noEmit
+
+# 2. 스테이징 (변경 파일만 명시적으로)
+git add [changed source files]
+git add .claude/CONTEXT.md .claude/STATUS.md .claude/ROADMAP.md .claude/logs/
+
+# 3. 커밋
 git commit -m "feat(scope): description
 
-- 상세 내용 1
-- 상세 내용 2
+- 상세 내용
+
+Task: X.Y
+Co-Authored-By: Claude <noreply@anthropic.com>"
+
+# 4. 푸시 (선택 - Sprint 완료 시 한번에 해도 됨)
+```
+
+#### Level 2: 🚀 Sprint 완료 배포 (Sprint 모든 태스크 완료 시 - 필수)
+Sprint의 모든 태스크가 ✅ Done이면 반드시 실행:
+
+```bash
+# 1. 최종 검증 (3가지 모두 통과 필수)
+npx vitest run          # 전체 테스트 통과
+npx tsc --noEmit        # TypeScript 에러 0
+npm run build           # 빌드 성공
+
+# 2. 문서 최종 확인
+#    - .claude/CONTEXT.md 최신 상태인가?
+#    - .claude/STATUS.md 최신 상태인가?
+#    - .claude/ROADMAP.md Sprint 전체 ✅ Done인가?
+#    - .claude/logs/YYYY-MM-DD.md 작성되었는가?
+
+# 3. 전체 스테이징
+git add -A
+
+# 4. Sprint 완료 커밋
+git commit -m "feat(sprint-N): complete Sprint N - Title
+
+## Summary
+- Total tests: XXX (YYY new)
+- New files: ZZ
+- TypeScript: 0 errors
+- Build: passing
+
+## Key Deliverables
+- deliverable 1
+- deliverable 2
 
 Co-Authored-By: Claude <noreply@anthropic.com>"
 
-# 3. 푸시
+# 5. 푸시 (필수)
+git push origin main
+
+# 6. 푸시 실패 시
+git pull --rebase origin main
 git push origin main
 ```
 
-### 커밋 타이밍 (모든 작업 완료 시)
-1. **단일 태스크 완료**: 즉시 커밋 & 푸시
-2. **여러 관련 태스크**: 묶어서 하나의 커밋
-3. **문서 변경**: 별도 커밋 (`docs:` prefix)
+### Sprint 완료 판별 기준
+아래 조건을 **모두** 만족하면 Sprint 완료 배포 실행:
+1. 현재 Sprint의 **모든 태스크**가 ✅ Done
+2. `npx vitest run` → ALL PASSED
+3. `npx tsc --noEmit` → 0 errors
+4. `npm run build` → 성공
+5. 문서 4종 업데이트 완료 (CONTEXT, STATUS, ROADMAP, logs)
 
 ### 커밋 체크리스트
 ```
-커밋 전:
-[ ] 테스트 통과 확인
-[ ] ESLint 에러 없음
-[ ] 빌드 성공
+커밋 전 확인:
+[ ] 테스트 전체 통과
+[ ] TypeScript 에러 없음
+[ ] 빌드 성공 (Sprint 완료 시)
+[ ] CONTEXT.md 업데이트됨
+[ ] STATUS.md 업데이트됨
 [ ] ROADMAP.md 업데이트됨
 [ ] 로그 파일 업데이트됨
+[ ] 민감 정보 없음 (.env, credentials 등)
 ```
 
-### 커밋 메시지 예시
+### 커밋 메시지 컨벤션
 ```
+# 태스크 단위
 feat(domain): add Campaign entity with tests
+fix(auth): resolve session expiration bug
+refactor(meta): consolidate API error handling
 
-- Campaign entity with id, name, spend properties
-- ICampaignRepository interface
-- Unit tests (5 passing)
-
-Task: 1.4
-Co-Authored-By: Claude <noreply@anthropic.com>
+# Sprint 완료
+feat(sprint-1): complete Sprint 1 - Core Domain
+feat(sprint-2): complete Sprint 2 - Auth & Multi-tenancy
+feat(sprint-3): complete Sprint 3 - META Integration
+feat(sprint-4): complete Sprint 4 - Dashboard Visualization
 ```
 
 ### 브랜치 전략

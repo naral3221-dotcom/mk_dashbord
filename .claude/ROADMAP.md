@@ -1,21 +1,21 @@
 # Implementation Roadmap
 
 > **마지막 수정**: 2026-02-10
-> **현재 단계**: Sprint 3 - META Integration ✅ 완료
+> **현재 단계**: Sprint 4 - Dashboard Visualization ✅ 완료
 
 ---
 
-## 📍 Overall Timeline
+## Overall Timeline
 
 ```
-Sprint 0: Project Setup ──────────────────── Week 1
-Sprint 1: Core Domain ────────────────────── Week 2
-Sprint 2: Authentication & Multi-tenancy ─── Week 3
-Sprint 3: META Integration ───────────────── Week 4
-Sprint 4: Dashboard UI ───────────────────── Week 5-6
-Sprint 5: Additional Platforms ───────────── Week 7
-Sprint 6: Billing & SaaS Features ────────── Week 8
-Sprint 7: Production & Polish ────────────── Week 9-10
+Sprint 0: Project Setup ──────────────────── ✅ Complete
+Sprint 1: Core Domain ────────────────────── ✅ Complete
+Sprint 2: Authentication & Multi-tenancy ─── ✅ Complete
+Sprint 3: META Integration ───────────────── ✅ Complete
+Sprint 4: Dashboard Visualization ─────────── ✅ Complete
+Sprint 5: Additional Platforms ───────────── ⬜ Next
+Sprint 6: Billing & SaaS Features ────────── ⬜ Planned
+Sprint 7: Production & Polish ────────────── ⬜ Planned
 ```
 
 ---
@@ -86,16 +86,16 @@ NextAuth.js v5 인증 및 멀티테넌트 구조 구현
 
 | # | Task | Status | Agent | Commit |
 |---|------|--------|-------|--------|
-| 2.1 | NextAuth.js v5 설정 (JWT + Credentials + Google) | ✅ Done | implementer | - |
-| 2.2 | Organization 생성 플로우 | ✅ Done | test-writer → implementer | - |
-| 2.3 | 사용자 초대 기능 | ✅ Done | test-writer → implementer | - |
-| 2.4 | Role 기반 접근 제어 | ✅ Done | test-writer → implementer | - |
-| 2.5 | 멀티테넌트 미들웨어 | ✅ Done | implementer | - |
-| 2.6 | 보호된 라우트 설정 | ✅ Done | implementer | - |
-| 2.7 | Prisma Repository 구현체 (User, Org, Invitation) | ✅ Done | test-writer → implementer | - |
-| 2.8 | RegisterUserUseCase (자체 회원가입) | ✅ Done | test-writer → implementer | - |
-| 2.9 | Application Services (4개) | ✅ Done | test-writer → implementer | - |
-| 2.10 | Full UI (Sign-in/up, Onboarding, Dashboard, Settings) | ✅ Done | implementer | - |
+| 2.1 | NextAuth.js v5 설정 (JWT + Credentials + Google) | ✅ Done | implementer | 2ec9369 |
+| 2.2 | Organization 생성 플로우 | ✅ Done | test-writer → implementer | 2ec9369 |
+| 2.3 | 사용자 초대 기능 | ✅ Done | test-writer → implementer | 2ec9369 |
+| 2.4 | Role 기반 접근 제어 | ✅ Done | test-writer → implementer | 2ec9369 |
+| 2.5 | 멀티테넌트 미들웨어 | ✅ Done | implementer | 2ec9369 |
+| 2.6 | 보호된 라우트 설정 | ✅ Done | implementer | 2ec9369 |
+| 2.7 | Prisma Repository 구현체 (User, Org, Invitation) | ✅ Done | test-writer → implementer | 2ec9369 |
+| 2.8 | RegisterUserUseCase (자체 회원가입) | ✅ Done | test-writer → implementer | 2ec9369 |
+| 2.9 | Application Services (4개) | ✅ Done | test-writer → implementer | 2ec9369 |
+| 2.10 | Full UI (Sign-in/up, Onboarding, Dashboard, Settings) | ✅ Done | implementer | 2ec9369 |
 
 ### Deliverables
 - [x] 로그인/회원가입 동작 (NextAuth.js)
@@ -120,12 +120,12 @@ META (Facebook/Instagram) 광고 API 연동
 
 | # | Task | Status | Agent | Commit |
 |---|------|--------|-------|--------|
-| 3.1 | META OAuth 연동 | ✅ Done | api-integrator | - |
-| 3.2 | Ad Account 연결 플로우 | ✅ Done | test-writer → implementer | - |
-| 3.3 | Campaign 동기화 UseCase | ✅ Done | test-writer → implementer | - |
-| 3.4 | Insights 데이터 수집 | ✅ Done | api-integrator → implementer | - |
-| 3.5 | 백그라운드 동기화 Job | ✅ Done | implementer | - |
-| 3.6 | 데이터 캐싱 전략 | ✅ Done | architect → implementer | - |
+| 3.1 | META OAuth 연동 | ✅ Done | api-integrator | a8dc1bf |
+| 3.2 | Ad Account 연결 플로우 | ✅ Done | test-writer → implementer | a8dc1bf |
+| 3.3 | Campaign 동기화 UseCase | ✅ Done | test-writer → implementer | a8dc1bf |
+| 3.4 | Insights 데이터 수집 | ✅ Done | api-integrator → implementer | a8dc1bf |
+| 3.5 | 백그라운드 동기화 Job | ✅ Done | implementer | a8dc1bf |
+| 3.6 | 데이터 캐싱 전략 | ✅ Done | architect → implementer | a8dc1bf |
 
 ### Deliverables
 - [x] META 계정 연결 가능
@@ -145,31 +145,46 @@ META (Facebook/Instagram) 광고 API 연동
 
 ---
 
-## Sprint 4: Dashboard UI ⬅️ CURRENT
+## Sprint 4: Dashboard Visualization ✅ COMPLETED
 
 ### 목표
-핵심 대시보드 UI 구현
+동기화된 광고 성과 데이터를 대시보드에 시각화
 
 ### Tasks
 
 | # | Task | Status | Agent | Commit |
 |---|------|--------|-------|--------|
-| 4.1 | 레이아웃 (사이드바, 헤더) | ⬜ Todo | implementer | |
-| 4.2 | 대시보드 홈 (KPI 카드) | ⬜ Todo | implementer | |
-| 4.3 | 캠페인 목록 페이지 | ⬜ Todo | implementer | |
-| 4.4 | 캠페인 상세 페이지 | ⬜ Todo | implementer | |
-| 4.5 | 차트 컴포넌트 (Tremor) | ⬜ Todo | implementer | |
-| 4.6 | 날짜 필터 구현 | ⬜ Todo | implementer | |
-| 4.7 | 데이터 테이블 (정렬, 필터) | ⬜ Todo | implementer | |
+| 4.1 | GetDashboardOverview UseCase | ✅ Done | test-writer → implementer | - |
+| 4.2 | GetCampaignPerformance UseCase | ✅ Done | test-writer → implementer | - |
+| 4.3 | DashboardDTO + DashboardService | ✅ Done | test-writer → implementer | - |
+| 4.4 | Formatters (currency/number/percent/ratio/compact/date) | ✅ Done | test-writer → implementer | - |
+| 4.5 | DateRangeFilter + useDateRange Hook | ✅ Done | implementer | - |
+| 4.6 | KPI Cards | ✅ Done | implementer | - |
+| 4.7 | Charts (SpendTrend, CampaignComparison, SpendDistribution) | ✅ Done | implementer | - |
+| 4.8 | CampaignPerformanceTable (정렬 가능) | ✅ Done | implementer | - |
+| 4.9 | DashboardContent + useDashboardData Hook | ✅ Done | implementer | - |
+| 4.10 | API Routes (dashboard/overview, dashboard/campaigns) | ✅ Done | implementer | - |
 
 ### Deliverables
-- [ ] 반응형 대시보드 UI
-- [ ] 핵심 차트 및 KPI
-- [ ] 필터링 기능
+- [x] 반응형 대시보드 UI (KPI 카드 4개 + 차트 3개 + 테이블)
+- [x] 날짜 필터 (7d/30d/90d/custom)
+- [x] Recharts 차트 (Line/Bar/Pie)
+- [x] 클라이언트 사이드 정렬 테이블
+- [x] 병렬 데이터 fetch
+
+### Results
+- **585 tests total (469 Sprint 1-3 + 116 Sprint 4), ALL PASSED**
+- 2 domain use cases: GetDashboardOverview, GetCampaignPerformance
+- 1 app service: DashboardService
+- 1 utility: formatters (6 functions)
+- 2 hooks: useDateRange, useDashboardData
+- 7 UI components: KpiCard, DateRangeFilter, SpendTrendChart, CampaignComparisonChart, SpendDistributionChart, CampaignPerformanceTable, DashboardContent
+- 2 API routes: dashboard/overview, dashboard/campaigns
+- TypeScript zero errors, build successful
 
 ---
 
-## Sprint 5: Additional Platforms
+## Sprint 5: Additional Platforms ⬅️ NEXT
 
 ### 목표
 Google Ads, TikTok, Naver 연동
@@ -236,7 +251,7 @@ Stripe 결제 및 SaaS 기능
 
 ---
 
-## 📋 Changelog
+## Changelog
 
 ### 2026-02-10
 - Sprint 1 완료: 6 엔티티 + 6 Repository 인터페이스 (174 tests)
@@ -245,7 +260,10 @@ Stripe 결제 및 SaaS 기능
 - Sprint 3 완료: META Integration (469 tests, 147 new)
   - 3 domain service interfaces, 4 use cases, 2 app services
   - 6 API routes, 3 UI components, META API client + token encryption + cache
-- Sprint 4로 이동
+- Sprint 4 완료: Dashboard Visualization (585 tests, 116 new)
+  - 2 domain use cases, 1 app service, 6 formatters
+  - 2 hooks, 7 UI components (Recharts), 2 API routes
+  - 커맨드 문서 업데이트 루틴 추가 (/new-feature, /fix-bug, /refactor)
 
 ### 2026-02-09
 - 초기 로드맵 작성
