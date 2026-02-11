@@ -24,8 +24,8 @@ export interface CampaignComparisonData {
 type ComparisonMetric = 'spend' | 'conversions' | 'roas';
 
 const metricConfig: Record<ComparisonMetric, { label: string; color: string }> = {
-  spend: { label: 'Spend', color: '#8b5cf6' },
-  conversions: { label: 'Conversions', color: '#f59e0b' },
+  spend: { label: '지출', color: '#8b5cf6' },
+  conversions: { label: '전환수', color: '#f59e0b' },
   roas: { label: 'ROAS', color: '#10b981' },
 };
 
@@ -40,11 +40,11 @@ export function CampaignComparisonChart({ data }: CampaignComparisonChartProps) 
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Campaign Comparison</CardTitle>
+          <CardTitle>캠페인 비교</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex h-[300px] items-center justify-center text-muted-foreground" data-testid="empty-comparison">
-            No data available
+            데이터 없음
           </div>
         </CardContent>
       </Card>
@@ -55,7 +55,7 @@ export function CampaignComparisonChart({ data }: CampaignComparisonChartProps) 
     <Card>
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle>Campaign Comparison</CardTitle>
+          <CardTitle>캠페인 비교</CardTitle>
           <div className="flex gap-1">
             {(Object.keys(metricConfig) as ComparisonMetric[]).map((key) => (
               <button

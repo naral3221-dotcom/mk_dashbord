@@ -1,7 +1,7 @@
 import { BillingService } from '@/application/services/BillingService';
 
 export function getBillingService(): BillingService {
-  const { getPrisma } = require('@/infrastructure/database/prisma');
+  const getPrisma = require('@/infrastructure/database/prisma').default;
   const { PrismaOrganizationRepository } = require('@/infrastructure/repositories/PrismaOrganizationRepository');
   const { PrismaUserRepository } = require('@/infrastructure/repositories/PrismaUserRepository');
   const { PrismaSubscriptionRepository } = require('@/infrastructure/repositories/PrismaSubscriptionRepository');

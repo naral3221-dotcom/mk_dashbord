@@ -44,6 +44,13 @@ const statusBadge: Record<string, string> = {
   DELETED: 'bg-red-100 text-red-800',
 };
 
+const statusLabel: Record<string, string> = {
+  ACTIVE: '활성',
+  PAUSED: '일시중지',
+  ARCHIVED: '보관',
+  DELETED: '삭제',
+};
+
 export function CampaignPerformanceTable({ data, loading }: CampaignPerformanceTableProps) {
   const [sortKey, setSortKey] = useState<SortKey>('spend');
   const [sortDir, setSortDir] = useState<SortDir>('desc');
@@ -79,11 +86,11 @@ export function CampaignPerformanceTable({ data, loading }: CampaignPerformanceT
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Campaign Performance</CardTitle>
+          <CardTitle>캠페인 성과</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex h-[200px] items-center justify-center text-muted-foreground" data-testid="table-loading">
-            Loading...
+            로딩 중...
           </div>
         </CardContent>
       </Card>
@@ -94,11 +101,11 @@ export function CampaignPerformanceTable({ data, loading }: CampaignPerformanceT
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Campaign Performance</CardTitle>
+          <CardTitle>캠페인 성과</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex h-[200px] items-center justify-center text-muted-foreground" data-testid="table-empty">
-            No campaigns found
+            캠페인을 찾을 수 없습니다
           </div>
         </CardContent>
       </Card>
@@ -108,7 +115,7 @@ export function CampaignPerformanceTable({ data, loading }: CampaignPerformanceT
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Campaign Performance</CardTitle>
+        <CardTitle>캠페인 성과</CardTitle>
       </CardHeader>
       <CardContent>
         <Table>
@@ -116,34 +123,34 @@ export function CampaignPerformanceTable({ data, loading }: CampaignPerformanceT
             <TableRow>
               <TableHead>
                 <button type="button" onClick={() => handleSort('campaignName')} data-testid="sort-name">
-                  Name{sortIndicator('campaignName')}
+                  이름{sortIndicator('campaignName')}
                 </button>
               </TableHead>
-              <TableHead>Platform</TableHead>
-              <TableHead>Status</TableHead>
+              <TableHead>플랫폼</TableHead>
+              <TableHead>상태</TableHead>
               <TableHead>
                 <button type="button" onClick={() => handleSort('spend')} data-testid="sort-spend">
-                  Spend{sortIndicator('spend')}
+                  지출{sortIndicator('spend')}
                 </button>
               </TableHead>
               <TableHead>
                 <button type="button" onClick={() => handleSort('impressions')} data-testid="sort-impressions">
-                  Impressions{sortIndicator('impressions')}
+                  노출수{sortIndicator('impressions')}
                 </button>
               </TableHead>
               <TableHead>
                 <button type="button" onClick={() => handleSort('clicks')} data-testid="sort-clicks">
-                  Clicks{sortIndicator('clicks')}
+                  클릭수{sortIndicator('clicks')}
                 </button>
               </TableHead>
               <TableHead>
                 <button type="button" onClick={() => handleSort('conversions')} data-testid="sort-conversions">
-                  Conv.{sortIndicator('conversions')}
+                  전환수{sortIndicator('conversions')}
                 </button>
               </TableHead>
               <TableHead>
                 <button type="button" onClick={() => handleSort('revenue')} data-testid="sort-revenue">
-                  Revenue{sortIndicator('revenue')}
+                  매출{sortIndicator('revenue')}
                 </button>
               </TableHead>
               <TableHead>
@@ -172,7 +179,7 @@ export function CampaignPerformanceTable({ data, loading }: CampaignPerformanceT
                 </TableCell>
                 <TableCell>
                   <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${statusBadge[row.status] ?? 'bg-gray-100'}`}>
-                    {row.status}
+                    {statusLabel[row.status] ?? row.status}
                   </span>
                 </TableCell>
                 <TableCell>{formatCurrency(row.spend)}</TableCell>

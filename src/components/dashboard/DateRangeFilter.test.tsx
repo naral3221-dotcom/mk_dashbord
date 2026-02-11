@@ -14,9 +14,9 @@ describe('DateRangeFilter', () => {
   it('should render all preset buttons', () => {
     render(<DateRangeFilter {...defaultProps} />);
 
-    expect(screen.getByText('Last 7 days')).toBeInTheDocument();
-    expect(screen.getByText('Last 30 days')).toBeInTheDocument();
-    expect(screen.getByText('Last 90 days')).toBeInTheDocument();
+    expect(screen.getByText('최근 7일')).toBeInTheDocument();
+    expect(screen.getByText('최근 30일')).toBeInTheDocument();
+    expect(screen.getByText('최근 90일')).toBeInTheDocument();
   });
 
   it('should highlight active preset button', () => {

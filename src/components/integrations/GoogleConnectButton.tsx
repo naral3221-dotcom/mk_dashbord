@@ -19,7 +19,7 @@ export function GoogleConnectButton() {
       };
 
       if (!response.ok) {
-        setError(data.error || 'Failed to initiate Google Ads connection');
+        setError(data.error || 'Google Ads 연결을 시작하지 못했습니다');
         return;
       }
 
@@ -27,7 +27,7 @@ export function GoogleConnectButton() {
         window.location.href = data.url;
       }
     } catch {
-      setError('Failed to connect to Google Ads');
+      setError('Google Ads에 연결하지 못했습니다');
     } finally {
       setLoading(false);
     }
@@ -45,7 +45,7 @@ export function GoogleConnectButton() {
         ) : (
           <ExternalLink className="h-4 w-4" />
         )}
-        {loading ? 'Connecting...' : 'Connect Google Ads'}
+        {loading ? '연결 중...' : 'Google Ads 연결'}
       </button>
       {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
     </div>

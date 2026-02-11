@@ -3,7 +3,7 @@ import { auth } from '@/infrastructure/auth/nextauth.config';
 import { handleApiError } from '@/lib/apiErrorHandler';
 
 function getService() {
-  const { getPrisma } = require('@/infrastructure/database/prisma');
+  const getPrisma = require('@/infrastructure/database/prisma').default;
   const { PrismaAdAccountRepository } = require('@/infrastructure/repositories/PrismaAdAccountRepository');
   const { PrismaCampaignRepository } = require('@/infrastructure/repositories/PrismaCampaignRepository');
   const { MetaApiClient } = require('@/infrastructure/external/meta/MetaApiClient');

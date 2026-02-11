@@ -23,14 +23,14 @@ describe('CampaignComparisonChart', () => {
   it('should render chart with data', () => {
     render(<CampaignComparisonChart data={sampleData} />);
 
-    expect(screen.getByText('Campaign Comparison')).toBeInTheDocument();
+    expect(screen.getByText('캠페인 비교')).toBeInTheDocument();
     expect(screen.getByTestId('comparison-chart')).toBeInTheDocument();
   });
 
   it('should render empty state when no data', () => {
     render(<CampaignComparisonChart data={[]} />);
 
-    expect(screen.getByTestId('empty-comparison')).toHaveTextContent('No data available');
+    expect(screen.getByTestId('empty-comparison')).toHaveTextContent('데이터 없음');
   });
 
   it('should render metric toggle buttons', () => {

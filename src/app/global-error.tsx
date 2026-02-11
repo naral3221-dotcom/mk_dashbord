@@ -19,9 +19,9 @@ export default function GlobalError({
       <body>
         <div style={{ display: 'flex', minHeight: '100vh', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ textAlign: 'center' }}>
-            <h1 style={{ fontSize: '2rem', fontWeight: 'bold' }}>Something went wrong</h1>
+            <h1 style={{ fontSize: '2rem', fontWeight: 'bold' }}>문제가 발생했습니다</h1>
             <p style={{ marginTop: '1rem', color: '#666' }}>
-              An unexpected error occurred. Our team has been notified.
+              예기치 않은 오류가 발생했습니다. 담당 팀에 알림이 전달되었습니다.
             </p>
             <button
               onClick={reset}
@@ -35,7 +35,7 @@ export default function GlobalError({
                 cursor: 'pointer',
               }}
             >
-              Try again
+              다시 시도
             </button>
           </div>
         </div>

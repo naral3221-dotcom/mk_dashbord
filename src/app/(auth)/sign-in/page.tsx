@@ -27,13 +27,13 @@ function SignInForm() {
       });
 
       if (result?.error) {
-        setError('Invalid email or password');
+        setError('이메일 또는 비밀번호가 올바르지 않습니다');
       } else {
         router.push(callbackUrl);
         router.refresh();
       }
     } catch {
-      setError('Something went wrong');
+      setError('오류가 발생했습니다');
     } finally {
       setLoading(false);
     }
@@ -46,16 +46,16 @@ function SignInForm() {
   return (
     <div className="w-full max-w-md rounded-lg border bg-white p-8 shadow-sm">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold">Sign In</h1>
+        <h1 className="text-2xl font-bold">로그인</h1>
         <p className="mt-2 text-sm text-gray-600">
-          Sign in to your marketing analytics account
+          마케팅 애널리틱스 계정에 로그인하세요
         </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-            Email
+            이메일
           </label>
           <input
             id="email"
@@ -70,7 +70,7 @@ function SignInForm() {
 
         <div>
           <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-            Password
+            비밀번호
           </label>
           <input
             id="password"
@@ -78,7 +78,7 @@ function SignInForm() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-            placeholder="Enter your password"
+            placeholder="비밀번호를 입력하세요"
             required
           />
         </div>
@@ -90,7 +90,7 @@ function SignInForm() {
           disabled={loading}
           className="w-full rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
         >
-          {loading ? 'Signing in...' : 'Sign In'}
+          {loading ? '로그인 중...' : '로그인'}
         </button>
       </form>
 
@@ -100,7 +100,7 @@ function SignInForm() {
             <div className="w-full border-t border-gray-300" />
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="bg-white px-2 text-gray-500">Or continue with</span>
+            <span className="bg-white px-2 text-gray-500">또는</span>
           </div>
         </div>
 
@@ -108,14 +108,14 @@ function SignInForm() {
           onClick={handleGoogleSignIn}
           className="mt-4 w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
         >
-          Google
+          Google 계정으로 로그인
         </button>
       </div>
 
       <p className="mt-6 text-center text-sm text-gray-600">
-        Don&apos;t have an account?{' '}
+        계정이 없으신가요?{' '}
         <Link href="/sign-up" className="text-blue-600 hover:underline">
-          Sign up
+          회원가입
         </Link>
       </p>
     </div>

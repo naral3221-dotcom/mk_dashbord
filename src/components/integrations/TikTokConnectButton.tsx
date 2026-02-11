@@ -20,7 +20,7 @@ export function TikTokConnectButton() {
       };
 
       if (!response.ok) {
-        setError(data.error || 'Failed to initiate TikTok connection');
+        setError(data.error || 'TikTok Ads 연결을 시작하지 못했습니다');
         return;
       }
 
@@ -28,7 +28,7 @@ export function TikTokConnectButton() {
         window.location.href = data.url;
       }
     } catch {
-      setError('Failed to connect to TikTok Ads');
+      setError('TikTok Ads에 연결하지 못했습니다');
     } finally {
       setLoading(false);
     }
@@ -46,7 +46,7 @@ export function TikTokConnectButton() {
         ) : (
           <ExternalLink className="h-4 w-4" />
         )}
-        {loading ? 'Connecting...' : 'Connect TikTok Ads'}
+        {loading ? '연결 중...' : 'TikTok Ads 연결'}
       </button>
       {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
     </div>

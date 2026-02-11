@@ -19,9 +19,9 @@ export default async function InvitePage({ params }: InvitePageProps) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50">
       <div className="w-full max-w-md rounded-lg border bg-white p-8 shadow-sm text-center space-y-4">
-        <h1 className="text-2xl font-bold">You have been invited!</h1>
+        <h1 className="text-2xl font-bold">초대를 받으셨습니다!</h1>
         <p className="text-sm text-gray-600">
-          Click below to accept the invitation and join the organization.
+          아래 버튼을 클릭하여 초대를 수락하고 조직에 참여하세요.
         </p>
         <AcceptInvitationButton token={token} />
       </div>

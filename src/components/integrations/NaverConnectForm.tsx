@@ -14,7 +14,7 @@ export function NaverConnectForm() {
     e.preventDefault();
 
     if (!apiKey || !apiSecret || !customerId) {
-      setError('All fields are required');
+      setError('모든 필드를 입력해주세요');
       return;
     }
 
@@ -31,7 +31,7 @@ export function NaverConnectForm() {
 
       if (!res.ok) {
         const data = (await res.json()) as { error?: string };
-        throw new Error(data.error || 'Failed to connect');
+        throw new Error(data.error || '연결에 실패했습니다');
       }
 
       setSuccess(true);
@@ -39,7 +39,7 @@ export function NaverConnectForm() {
       setApiSecret('');
       setCustomerId('');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Connection failed');
+      setError(err instanceof Error ? err.message : '연결에 실패했습니다');
     } finally {
       setLoading(false);
     }
@@ -49,7 +49,7 @@ export function NaverConnectForm() {
     <form onSubmit={handleSubmit} className="space-y-4" data-testid="naver-connect-form">
       <div>
         <label htmlFor="naver-api-key" className="block text-sm font-medium text-gray-700">
-          API Key
+          API 키
         </label>
         <input
           id="naver-api-key"
@@ -57,12 +57,12 @@ export function NaverConnectForm() {
           value={apiKey}
           onChange={(e) => setApiKey(e.target.value)}
           className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
-          placeholder="Enter API Key"
+          placeholder="API 키를 입력하세요"
         />
       </div>
       <div>
         <label htmlFor="naver-api-secret" className="block text-sm font-medium text-gray-700">
-          API Secret
+          API 시크릿
         </label>
         <input
           id="naver-api-secret"
@@ -70,12 +70,12 @@ export function NaverConnectForm() {
           value={apiSecret}
           onChange={(e) => setApiSecret(e.target.value)}
           className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
-          placeholder="Enter API Secret"
+          placeholder="API 시크릿을 입력하세요"
         />
       </div>
       <div>
         <label htmlFor="naver-customer-id" className="block text-sm font-medium text-gray-700">
-          Customer ID
+          고객 ID
         </label>
         <input
           id="naver-customer-id"
@@ -83,7 +83,7 @@ export function NaverConnectForm() {
           value={customerId}
           onChange={(e) => setCustomerId(e.target.value)}
           className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
-          placeholder="Enter Customer ID"
+          placeholder="고객 ID를 입력하세요"
         />
       </div>
       {error && (
@@ -93,7 +93,7 @@ export function NaverConnectForm() {
       )}
       {success && (
         <p className="text-sm text-green-600" data-testid="naver-success">
-          Connected successfully!
+          연결에 성공했습니다!
         </p>
       )}
       <button
@@ -102,7 +102,7 @@ export function NaverConnectForm() {
         className="rounded-lg bg-green-600 px-4 py-2 text-white hover:bg-green-700 disabled:opacity-50"
         data-testid="naver-submit-button"
       >
-        {loading ? 'Connecting...' : 'Connect Naver Ads'}
+        {loading ? '연결 중...' : 'Naver Ads 연결'}
       </button>
     </form>
   );

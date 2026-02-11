@@ -10,14 +10,14 @@ describe('PlatformFilter', () => {
     );
 
     expect(screen.getByTestId('platform-filter')).toBeInTheDocument();
-    expect(screen.getByText('All Platforms')).toBeInTheDocument();
+    expect(screen.getByText('전체 플랫폼')).toBeInTheDocument();
     expect(screen.getByText('META')).toBeInTheDocument();
     expect(screen.getByText('Google Ads')).toBeInTheDocument();
     expect(screen.getByText('TikTok Ads')).toBeInTheDocument();
     expect(screen.getByText('Naver Ads')).toBeInTheDocument();
   });
 
-  it('should highlight the selected "All Platforms" button when platform is null', () => {
+  it('should highlight the selected "전체 플랫폼" button when platform is null', () => {
     render(
       <PlatformFilter selectedPlatform={null} onPlatformChange={vi.fn()} />,
     );
@@ -57,13 +57,13 @@ describe('PlatformFilter', () => {
     expect(handleChange).toHaveBeenCalledWith(Platform.META);
   });
 
-  it('should call onPlatformChange with null when "All Platforms" clicked', () => {
+  it('should call onPlatformChange with null when "전체 플랫폼" clicked', () => {
     const handleChange = vi.fn();
     render(
       <PlatformFilter selectedPlatform={Platform.GOOGLE} onPlatformChange={handleChange} />,
     );
 
-    fireEvent.click(screen.getByText('All Platforms'));
+    fireEvent.click(screen.getByText('전체 플랫폼'));
 
     expect(handleChange).toHaveBeenCalledTimes(1);
     expect(handleChange).toHaveBeenCalledWith(null);

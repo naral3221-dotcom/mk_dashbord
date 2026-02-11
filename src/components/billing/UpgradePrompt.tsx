@@ -18,7 +18,7 @@ export function UpgradePrompt({ message, onUpgrade }: UpgradePromptProps) {
           onClick={onUpgrade}
           className="ml-4 rounded-lg bg-amber-600 px-4 py-2 text-sm font-medium text-white hover:bg-amber-700"
         >
-          Upgrade Plan
+          플랜 업그레이드
         </button>
       )}
     </div>

@@ -102,41 +102,41 @@ describe('DashboardContent', () => {
   it('should render dashboard title', () => {
     render(<DashboardContent />);
 
-    expect(screen.getByText('Dashboard')).toBeInTheDocument();
+    expect(screen.getByText('대시보드')).toBeInTheDocument();
   });
 
   it('should render KPI cards with overview data', () => {
     mockUseDashboardData.overview = getMockOverview();
     render(<DashboardContent />);
 
-    expect(screen.getByText('Total Spend')).toBeInTheDocument();
-    expect(screen.getByText('Impressions')).toBeInTheDocument();
-    expect(screen.getByText('Clicks')).toBeInTheDocument();
+    expect(screen.getByText('총 지출')).toBeInTheDocument();
+    expect(screen.getByText('노출수')).toBeInTheDocument();
+    expect(screen.getByText('클릭수')).toBeInTheDocument();
     expect(screen.getByText('ROAS')).toBeInTheDocument();
   });
 
   it('should render date range filter', () => {
     render(<DashboardContent />);
 
-    expect(screen.getByText('Last 7 days')).toBeInTheDocument();
-    expect(screen.getByText('Last 30 days')).toBeInTheDocument();
-    expect(screen.getByText('Last 90 days')).toBeInTheDocument();
+    expect(screen.getByText('최근 7일')).toBeInTheDocument();
+    expect(screen.getByText('최근 30일')).toBeInTheDocument();
+    expect(screen.getByText('최근 90일')).toBeInTheDocument();
   });
 
   it('should render chart sections', () => {
     mockUseDashboardData.overview = getMockOverview();
     render(<DashboardContent />);
 
-    expect(screen.getByText('Daily Trend')).toBeInTheDocument();
-    expect(screen.getByText('Campaign Comparison')).toBeInTheDocument();
-    expect(screen.getByText('Spend Distribution')).toBeInTheDocument();
+    expect(screen.getByText('일별 추이')).toBeInTheDocument();
+    expect(screen.getByText('캠페인 비교')).toBeInTheDocument();
+    expect(screen.getByText('지출 분포')).toBeInTheDocument();
   });
 
   it('should render campaign table', () => {
     mockUseDashboardData.campaigns = getMockCampaigns();
     render(<DashboardContent />);
 
-    expect(screen.getByText('Campaign Performance')).toBeInTheDocument();
+    expect(screen.getByText('캠페인 성과')).toBeInTheDocument();
     expect(screen.getByText('Test Campaign')).toBeInTheDocument();
   });
 
@@ -158,6 +158,6 @@ describe('DashboardContent', () => {
     render(<DashboardContent />);
 
     // KPI cards should render with 0 values
-    expect(screen.getByText('Total Spend')).toBeInTheDocument();
+    expect(screen.getByText('총 지출')).toBeInTheDocument();
   });
 });

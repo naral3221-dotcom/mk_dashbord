@@ -13,13 +13,20 @@ const planColors: Record<Plan, string> = {
   [Plan.ENTERPRISE]: 'bg-amber-100 text-amber-700',
 };
 
+const planDisplayNames: Record<Plan, string> = {
+  [Plan.FREE]: '무료',
+  [Plan.STARTER]: '스타터',
+  [Plan.PRO]: '프로',
+  [Plan.ENTERPRISE]: '엔터프라이즈',
+};
+
 export function CurrentPlanBadge({ plan }: CurrentPlanBadgeProps) {
   return (
     <span
       data-testid="current-plan-badge"
       className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-medium ${planColors[plan]}`}
     >
-      {plan}
+      {planDisplayNames[plan]}
     </span>
   );
 }

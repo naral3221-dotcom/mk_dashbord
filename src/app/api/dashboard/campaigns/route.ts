@@ -4,7 +4,7 @@ import { Platform } from '@/domain/entities/types';
 import { handleApiError } from '@/lib/apiErrorHandler';
 
 function getService() {
-  const { getPrisma } = require('@/infrastructure/database/prisma');
+  const getPrisma = require('@/infrastructure/database/prisma').default;
   const { PrismaAdAccountRepository } = require('@/infrastructure/repositories/PrismaAdAccountRepository');
   const { PrismaCampaignRepository } = require('@/infrastructure/repositories/PrismaCampaignRepository');
   const { PrismaCampaignInsightRepository } = require('@/infrastructure/repositories/PrismaCampaignInsightRepository');

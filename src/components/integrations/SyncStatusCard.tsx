@@ -34,13 +34,13 @@ export function SyncStatusCard({ adAccountId, accountName }: Props) {
       const data = await response.json() as SyncResult & { error?: string };
 
       if (!response.ok) {
-        setError(data.error || 'Sync failed');
+        setError(data.error || '동기화에 실패했습니다');
         return;
       }
 
       setResult(data);
     } catch {
-      setError('Sync failed');
+      setError('동기화에 실패했습니다');
     } finally {
       setSyncing(false);
     }
@@ -60,14 +60,14 @@ export function SyncStatusCard({ adAccountId, accountName }: Props) {
           ) : (
             <RefreshCw className="h-3 w-3" />
           )}
-          {syncing ? 'Syncing...' : 'Sync Now'}
+          {syncing ? '동기화 중...' : '지금 동기화'}
         </button>
       </div>
 
       {result && (
         <div className="mt-3 rounded-md bg-green-50 p-3 text-xs">
           <p className="font-medium text-green-800">
-            Synced {result.synced} campaigns ({result.created} new, {result.updated} updated)
+            {result.synced}개 캠페인 동기화 완료 (신규 {result.created}개, 업데이트 {result.updated}개)
           </p>
           {result.errors.length > 0 && (
             <div className="mt-1 text-red-600">

@@ -20,10 +20,10 @@ export default function PricingPage() {
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="text-center">
           <h1 className="text-4xl font-bold tracking-tight text-gray-900">
-            Simple, transparent pricing
+            간단하고 투명한 요금제
           </h1>
           <p className="mt-4 text-lg text-gray-600">
-            Choose the plan that fits your marketing analytics needs
+            마케팅 분석 요구에 맞는 플랜을 선택하세요
           </p>
         </div>
         <div className="mt-16">

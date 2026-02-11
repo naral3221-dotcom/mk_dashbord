@@ -28,11 +28,11 @@ export function SpendDistributionChart({ data }: SpendDistributionChartProps) {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Spend Distribution</CardTitle>
+          <CardTitle>지출 분포</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex h-[300px] items-center justify-center text-muted-foreground" data-testid="empty-distribution">
-            No data available
+            데이터 없음
           </div>
         </CardContent>
       </Card>
@@ -42,7 +42,7 @@ export function SpendDistributionChart({ data }: SpendDistributionChartProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Spend Distribution</CardTitle>
+        <CardTitle>지출 분포</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="h-[300px]" data-testid="distribution-chart">

@@ -24,14 +24,14 @@ describe('SpendTrendChart', () => {
   it('should render chart with data', () => {
     render(<SpendTrendChart data={sampleData} />);
 
-    expect(screen.getByText('Daily Trend')).toBeInTheDocument();
+    expect(screen.getByText('일별 추이')).toBeInTheDocument();
     expect(screen.getByTestId('trend-chart')).toBeInTheDocument();
   });
 
   it('should render empty state when no data', () => {
     render(<SpendTrendChart data={[]} />);
 
-    expect(screen.getByTestId('empty-trend')).toHaveTextContent('No data available');
+    expect(screen.getByTestId('empty-trend')).toHaveTextContent('데이터 없음');
   });
 
   it('should render metric toggle buttons', () => {

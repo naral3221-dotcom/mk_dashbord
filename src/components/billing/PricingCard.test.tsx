@@ -27,7 +27,7 @@ describe('PricingCard', () => {
   it('should show "Current Plan" badge when isCurrentPlan is true', () => {
     render(<PricingCard {...defaultProps} isCurrentPlan={true} />);
 
-    expect(screen.getByTestId('current-plan-badge')).toHaveTextContent('Current Plan');
+    expect(screen.getByTestId('current-plan-badge')).toHaveTextContent('현재 플랜');
     expect(screen.queryByTestId('pricing-cta')).not.toBeInTheDocument();
   });
 

@@ -26,9 +26,9 @@ export interface DailyMetricsData {
 type MetricKey = 'spend' | 'impressions' | 'clicks';
 
 const metricConfig: Record<MetricKey, { label: string; color: string }> = {
-  spend: { label: 'Spend', color: '#8b5cf6' },
-  impressions: { label: 'Impressions', color: '#3b82f6' },
-  clicks: { label: 'Clicks', color: '#10b981' },
+  spend: { label: '지출', color: '#8b5cf6' },
+  impressions: { label: '노출수', color: '#3b82f6' },
+  clicks: { label: '클릭수', color: '#10b981' },
 };
 
 export interface SpendTrendChartProps {
@@ -42,11 +42,11 @@ export function SpendTrendChart({ data }: SpendTrendChartProps) {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Daily Trend</CardTitle>
+          <CardTitle>일별 추이</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex h-[300px] items-center justify-center text-muted-foreground" data-testid="empty-trend">
-            No data available
+            데이터 없음
           </div>
         </CardContent>
       </Card>
@@ -57,7 +57,7 @@ export function SpendTrendChart({ data }: SpendTrendChartProps) {
     <Card>
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle>Daily Trend</CardTitle>
+          <CardTitle>일별 추이</CardTitle>
           <div className="flex gap-1">
             {(Object.keys(metricConfig) as MetricKey[]).map((key) => (
               <button

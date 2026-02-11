@@ -14,9 +14,9 @@ describe('NaverConnectForm', () => {
   it('should render form with 3 input fields', () => {
     render(<NaverConnectForm />);
 
-    expect(screen.getByLabelText('API Key')).toBeInTheDocument();
-    expect(screen.getByLabelText('API Secret')).toBeInTheDocument();
-    expect(screen.getByLabelText('Customer ID')).toBeInTheDocument();
+    expect(screen.getByLabelText('API 키')).toBeInTheDocument();
+    expect(screen.getByLabelText('API 시크릿')).toBeInTheDocument();
+    expect(screen.getByLabelText('고객 ID')).toBeInTheDocument();
   });
 
   it('should show error when submitting empty form', async () => {
@@ -26,7 +26,7 @@ describe('NaverConnectForm', () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByTestId('naver-error')).toHaveTextContent('All fields are required');
+      expect(screen.getByTestId('naver-error')).toHaveTextContent('모든 필드를 입력해주세요');
     });
 
     // Fetch should not be called
@@ -41,13 +41,13 @@ describe('NaverConnectForm', () => {
 
     render(<NaverConnectForm />);
 
-    fireEvent.change(screen.getByLabelText('API Key'), {
+    fireEvent.change(screen.getByLabelText('API 키'), {
       target: { value: 'test-api-key' },
     });
-    fireEvent.change(screen.getByLabelText('API Secret'), {
+    fireEvent.change(screen.getByLabelText('API 시크릿'), {
       target: { value: 'test-api-secret' },
     });
-    fireEvent.change(screen.getByLabelText('Customer ID'), {
+    fireEvent.change(screen.getByLabelText('고객 ID'), {
       target: { value: 'test-customer-id' },
     });
 
@@ -75,13 +75,13 @@ describe('NaverConnectForm', () => {
 
     render(<NaverConnectForm />);
 
-    fireEvent.change(screen.getByLabelText('API Key'), {
+    fireEvent.change(screen.getByLabelText('API 키'), {
       target: { value: 'key' },
     });
-    fireEvent.change(screen.getByLabelText('API Secret'), {
+    fireEvent.change(screen.getByLabelText('API 시크릿'), {
       target: { value: 'secret' },
     });
-    fireEvent.change(screen.getByLabelText('Customer ID'), {
+    fireEvent.change(screen.getByLabelText('고객 ID'), {
       target: { value: 'cust-1' },
     });
 
@@ -89,7 +89,7 @@ describe('NaverConnectForm', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('naver-success')).toHaveTextContent(
-        'Connected successfully!',
+        '연결에 성공했습니다!',
       );
     });
   });
@@ -102,13 +102,13 @@ describe('NaverConnectForm', () => {
 
     render(<NaverConnectForm />);
 
-    fireEvent.change(screen.getByLabelText('API Key'), {
+    fireEvent.change(screen.getByLabelText('API 키'), {
       target: { value: 'bad-key' },
     });
-    fireEvent.change(screen.getByLabelText('API Secret'), {
+    fireEvent.change(screen.getByLabelText('API 시크릿'), {
       target: { value: 'bad-secret' },
     });
-    fireEvent.change(screen.getByLabelText('Customer ID'), {
+    fireEvent.change(screen.getByLabelText('고객 ID'), {
       target: { value: 'bad-cust' },
     });
 
@@ -131,13 +131,13 @@ describe('NaverConnectForm', () => {
 
     render(<NaverConnectForm />);
 
-    fireEvent.change(screen.getByLabelText('API Key'), {
+    fireEvent.change(screen.getByLabelText('API 키'), {
       target: { value: 'key' },
     });
-    fireEvent.change(screen.getByLabelText('API Secret'), {
+    fireEvent.change(screen.getByLabelText('API 시크릿'), {
       target: { value: 'secret' },
     });
-    fireEvent.change(screen.getByLabelText('Customer ID'), {
+    fireEvent.change(screen.getByLabelText('고객 ID'), {
       target: { value: 'cust' },
     });
 
@@ -146,7 +146,7 @@ describe('NaverConnectForm', () => {
     await waitFor(() => {
       const button = screen.getByTestId('naver-submit-button');
       expect(button).toBeDisabled();
-      expect(button).toHaveTextContent('Connecting...');
+      expect(button).toHaveTextContent('연결 중...');
     });
 
     // Resolve to clean up
@@ -159,9 +159,9 @@ describe('NaverConnectForm', () => {
   it('should update input fields correctly', () => {
     render(<NaverConnectForm />);
 
-    const apiKeyInput = screen.getByLabelText('API Key') as HTMLInputElement;
-    const apiSecretInput = screen.getByLabelText('API Secret') as HTMLInputElement;
-    const customerIdInput = screen.getByLabelText('Customer ID') as HTMLInputElement;
+    const apiKeyInput = screen.getByLabelText('API 키') as HTMLInputElement;
+    const apiSecretInput = screen.getByLabelText('API 시크릿') as HTMLInputElement;
+    const customerIdInput = screen.getByLabelText('고객 ID') as HTMLInputElement;
 
     fireEvent.change(apiKeyInput, { target: { value: 'my-api-key' } });
     fireEvent.change(apiSecretInput, { target: { value: 'my-api-secret' } });
@@ -175,7 +175,7 @@ describe('NaverConnectForm', () => {
   it('should use password type for API Secret field', () => {
     render(<NaverConnectForm />);
 
-    const apiSecretInput = screen.getByLabelText('API Secret') as HTMLInputElement;
+    const apiSecretInput = screen.getByLabelText('API 시크릿') as HTMLInputElement;
     expect(apiSecretInput.type).toBe('password');
   });
 });

@@ -29,12 +29,12 @@ export function OnboardingForm() {
 
       if (!res.ok) {
         const data = await res.json();
-        throw new Error(data.error || 'Failed to create organization');
+        throw new Error(data.error || '조직 생성에 실패했습니다');
       }
 
       router.push('/dashboard');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong');
+      setError(err instanceof Error ? err.message : '오류가 발생했습니다');
     } finally {
       setLoading(false);
     }
@@ -44,7 +44,7 @@ export function OnboardingForm() {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-          Organization Name
+          조직 이름
         </label>
         <input
           id="name"
@@ -52,13 +52,13 @@ export function OnboardingForm() {
           value={name}
           onChange={(e) => handleNameChange(e.target.value)}
           className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-          placeholder="My Company"
+          placeholder="회사 이름"
           required
         />
       </div>
       <div>
         <label htmlFor="slug" className="block text-sm font-medium text-gray-700">
-          URL Slug
+          URL 슬러그
         </label>
         <input
           id="slug"
@@ -76,7 +76,7 @@ export function OnboardingForm() {
         disabled={loading}
         className="w-full rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
       >
-        {loading ? 'Creating...' : 'Create Organization'}
+        {loading ? '생성 중...' : '조직 만들기'}
       </button>
     </form>
   );

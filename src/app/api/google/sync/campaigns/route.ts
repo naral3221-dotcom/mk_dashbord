@@ -39,9 +39,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Lazy imports to avoid build-time issues
-    const { getPrisma } = require(
-      '@/infrastructure/database/prisma',
-    ) as typeof import('@/infrastructure/database/prisma');
+    const getPrisma = require('@/infrastructure/database/prisma').default;
     const { AesTokenEncryption } = require(
       '@/infrastructure/encryption/AesTokenEncryption',
     ) as typeof import('@/infrastructure/encryption/AesTokenEncryption');

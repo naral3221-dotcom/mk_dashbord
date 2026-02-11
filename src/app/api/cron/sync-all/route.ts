@@ -4,7 +4,7 @@ import { handleApiError } from '@/lib/apiErrorHandler';
 import { getLogger } from '@/infrastructure/logging';
 
 function getMetaService() {
-  const { getPrisma } = require('@/infrastructure/database/prisma');
+  const getPrisma = require('@/infrastructure/database/prisma').default;
   const { PrismaAdAccountRepository } = require('@/infrastructure/repositories/PrismaAdAccountRepository');
   const { PrismaCampaignRepository } = require('@/infrastructure/repositories/PrismaCampaignRepository');
   const { PrismaCampaignInsightRepository } = require('@/infrastructure/repositories/PrismaCampaignInsightRepository');

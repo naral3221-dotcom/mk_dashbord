@@ -8,7 +8,7 @@ describe('CurrentPlanBadge', () => {
     render(<CurrentPlanBadge plan={Plan.STARTER} />);
 
     const badge = screen.getByTestId('current-plan-badge');
-    expect(badge).toHaveTextContent('STARTER');
+    expect(badge).toHaveTextContent('스타터');
   });
 
   it('should apply correct color for FREE plan', () => {

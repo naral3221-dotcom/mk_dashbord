@@ -3,9 +3,7 @@ import { auth } from '@/infrastructure/auth/nextauth.config';
 import { handleApiError } from '@/lib/apiErrorHandler';
 
 function getService() {
-  const { getPrisma } = require('@/infrastructure/database/prisma') as {
-    getPrisma: () => unknown;
-  };
+  const getPrisma = require('@/infrastructure/database/prisma').default;
   const { PrismaAdAccountRepository } = require('@/infrastructure/repositories/PrismaAdAccountRepository') as {
     PrismaAdAccountRepository: new (prisma: unknown) => unknown;
   };

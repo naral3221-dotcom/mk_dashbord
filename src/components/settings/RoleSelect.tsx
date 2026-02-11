@@ -12,9 +12,9 @@ export function RoleSelect({ currentRole, onChange }: RoleSelectProps) {
       onChange={(e) => onChange(e.target.value)}
       className="rounded-md border border-gray-300 px-2 py-1 text-xs"
     >
-      <option value="ADMIN">Admin</option>
-      <option value="MEMBER">Member</option>
-      <option value="VIEWER">Viewer</option>
+      <option value="ADMIN">관리자</option>
+      <option value="MEMBER">멤버</option>
+      <option value="VIEWER">뷰어</option>
     </select>
   );
 }

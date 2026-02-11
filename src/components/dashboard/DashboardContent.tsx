@@ -25,7 +25,7 @@ export function DashboardContent() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Dashboard</h1>
+        <h1 className="text-2xl font-bold">대시보드</h1>
         <div className="flex items-center gap-4">
           <PlatformFilter
             selectedPlatform={selectedPlatform}
@@ -50,17 +50,17 @@ export function DashboardContent() {
       {/* KPI Cards */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <KpiCard
-          label="Total Spend"
+          label="총 지출"
           value={overview?.kpis.totalSpend ?? 0}
           format="currency"
         />
         <KpiCard
-          label="Impressions"
+          label="노출수"
           value={overview?.kpis.totalImpressions ?? 0}
           format="compact"
         />
         <KpiCard
-          label="Clicks"
+          label="클릭수"
           value={overview?.kpis.totalClicks ?? 0}
           format="compact"
         />

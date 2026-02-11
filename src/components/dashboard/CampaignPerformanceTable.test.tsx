@@ -49,7 +49,7 @@ describe('CampaignPerformanceTable', () => {
   it('should render table with campaign data', () => {
     render(<CampaignPerformanceTable data={sampleData} />);
 
-    expect(screen.getByText('Campaign Performance')).toBeInTheDocument();
+    expect(screen.getByText('캠페인 성과')).toBeInTheDocument();
     expect(screen.getByText('Alpha Campaign')).toBeInTheDocument();
     expect(screen.getByText('Beta Campaign')).toBeInTheDocument();
     expect(screen.getByText('Gamma Campaign')).toBeInTheDocument();
@@ -59,7 +59,7 @@ describe('CampaignPerformanceTable', () => {
     render(<CampaignPerformanceTable data={sampleData} />);
 
     expect(screen.getByTestId('sort-name')).toBeInTheDocument();
-    expect(screen.getByText('Status')).toBeInTheDocument();
+    expect(screen.getByText('상태')).toBeInTheDocument();
     expect(screen.getByTestId('sort-spend')).toBeInTheDocument();
     expect(screen.getByTestId('sort-impressions')).toBeInTheDocument();
     expect(screen.getByTestId('sort-clicks')).toBeInTheDocument();
@@ -83,9 +83,9 @@ describe('CampaignPerformanceTable', () => {
   it('should render status badges', () => {
     render(<CampaignPerformanceTable data={sampleData} />);
 
-    expect(screen.getByText('ACTIVE')).toHaveClass('bg-green-100');
-    expect(screen.getByText('PAUSED')).toHaveClass('bg-yellow-100');
-    expect(screen.getByText('ARCHIVED')).toHaveClass('bg-gray-100');
+    expect(screen.getByText('활성')).toHaveClass('bg-green-100');
+    expect(screen.getByText('일시중지')).toHaveClass('bg-yellow-100');
+    expect(screen.getByText('보관')).toHaveClass('bg-gray-100');
   });
 
   it('should sort by spend descending by default', () => {
@@ -122,18 +122,18 @@ describe('CampaignPerformanceTable', () => {
   it('should show loading state', () => {
     render(<CampaignPerformanceTable data={[]} loading />);
 
-    expect(screen.getByTestId('table-loading')).toHaveTextContent('Loading...');
+    expect(screen.getByTestId('table-loading')).toHaveTextContent('로딩 중...');
   });
 
   it('should show empty state when no data', () => {
     render(<CampaignPerformanceTable data={[]} />);
 
-    expect(screen.getByTestId('table-empty')).toHaveTextContent('No campaigns found');
+    expect(screen.getByTestId('table-empty')).toHaveTextContent('캠페인을 찾을 수 없습니다');
   });
 
   it('should show sort indicator on active column', () => {
     render(<CampaignPerformanceTable data={sampleData} />);
 
-    expect(screen.getByTestId('sort-spend')).toHaveTextContent('Spend ↓');
+    expect(screen.getByTestId('sort-spend')).toHaveTextContent('지출 ↓');
   });
 });

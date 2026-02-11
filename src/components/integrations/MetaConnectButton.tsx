@@ -16,7 +16,7 @@ export function MetaConnectButton() {
       const data = await response.json() as { authUrl?: string; error?: string };
 
       if (!response.ok) {
-        setError(data.error || 'Failed to initiate META connection');
+        setError(data.error || 'META 연결을 시작하지 못했습니다');
         return;
       }
 
@@ -24,7 +24,7 @@ export function MetaConnectButton() {
         window.location.href = data.authUrl;
       }
     } catch {
-      setError('Failed to connect to META');
+      setError('META에 연결하지 못했습니다');
     } finally {
       setLoading(false);
     }
@@ -42,7 +42,7 @@ export function MetaConnectButton() {
         ) : (
           <ExternalLink className="h-4 w-4" />
         )}
-        {loading ? 'Connecting...' : 'Connect META Account'}
+        {loading ? '연결 중...' : 'META 계정 연결'}
       </button>
       {error && (
         <p className="mt-2 text-sm text-red-600">{error}</p>

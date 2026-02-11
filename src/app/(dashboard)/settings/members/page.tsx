@@ -9,14 +9,14 @@ export default async function MembersPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6">Team Members</h1>
+      <h1 className="text-2xl font-bold mb-6">멤버 관리</h1>
       <div className="space-y-6">
         <div className="rounded-lg border bg-white p-6">
-          <h2 className="text-lg font-semibold mb-4">Invite New Member</h2>
+          <h2 className="text-lg font-semibold mb-4">새 멤버 초대</h2>
           <InviteForm organizationId={user.organizationId!} />
         </div>
         <div className="rounded-lg border bg-white p-6">
-          <h2 className="text-lg font-semibold mb-4">Current Members</h2>
+          <h2 className="text-lg font-semibold mb-4">현재 멤버</h2>
           <MemberList organizationId={user.organizationId!} currentUserId={user.userId} />
         </div>
       </div>

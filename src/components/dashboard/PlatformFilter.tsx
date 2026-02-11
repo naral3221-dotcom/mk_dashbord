@@ -8,7 +8,7 @@ export interface PlatformFilterProps {
 }
 
 const PLATFORM_OPTIONS: { value: Platform | null; label: string }[] = [
-  { value: null, label: 'All Platforms' },
+  { value: null, label: '전체 플랫폼' },
   { value: Platform.META, label: 'META' },
   { value: Platform.GOOGLE, label: 'Google Ads' },
   { value: Platform.TIKTOK, label: 'TikTok Ads' },

@@ -8,13 +8,13 @@ const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] });
 const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Marketing Analytics',
-  description: 'Multi-tenant marketing analytics dashboard',
+  title: '마케팅 애널리틱스',
+  description: '멀티테넌트 마케팅 애널리틱스 대시보드',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="ko">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <QueryProvider>
           <AuthSessionProvider>

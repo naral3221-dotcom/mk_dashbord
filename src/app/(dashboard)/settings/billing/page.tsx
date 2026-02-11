@@ -72,7 +72,7 @@ export default function BillingPage() {
   if (subLoading || usageLoading) {
     return (
       <div className="space-y-6">
-        <h1 className="text-2xl font-bold">Billing</h1>
+        <h1 className="text-2xl font-bold">결제</h1>
         <div className="animate-pulse space-y-4">
           <div className="h-32 rounded-lg bg-gray-200" />
           <div className="h-48 rounded-lg bg-gray-200" />
@@ -84,7 +84,7 @@ export default function BillingPage() {
   if (subError || usageError) {
     return (
       <div className="space-y-6">
-        <h1 className="text-2xl font-bold">Billing</h1>
+        <h1 className="text-2xl font-bold">결제</h1>
         <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-red-800">
           {subError || usageError}
         </div>
@@ -99,13 +99,13 @@ export default function BillingPage() {
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Billing</h1>
+        <h1 className="text-2xl font-bold">결제</h1>
         {!isFreePlan && (
           <button
             onClick={handleManageSubscription}
             className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium hover:bg-gray-50"
           >
-            Manage Subscription
+            구독 관리
           </button>
         )}
       </div>
@@ -114,15 +114,15 @@ export default function BillingPage() {
       <div className="rounded-lg border bg-white p-6">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-semibold">Current Plan</h2>
+            <h2 className="text-lg font-semibold">현재 플랜</h2>
             <div className="mt-2">
               <CurrentPlanBadge plan={currentPlan} />
             </div>
             {subscription?.subscription && (
               <p className="mt-2 text-sm text-gray-500">
                 {subscription.subscription.cancelAtPeriodEnd
-                  ? `Cancels on ${new Date(subscription.subscription.currentPeriodEnd).toLocaleDateString()}`
-                  : `Renews on ${new Date(subscription.subscription.currentPeriodEnd).toLocaleDateString()}`}
+                  ? `${new Date(subscription.subscription.currentPeriodEnd).toLocaleDateString()}에 해지 예정`
+                  : `${new Date(subscription.subscription.currentPeriodEnd).toLocaleDateString()}에 갱신 예정`}
               </p>
             )}
           </div>
@@ -131,18 +131,18 @@ export default function BillingPage() {
 
       {/* Usage */}
       <div className="rounded-lg border bg-white p-6">
-        <h2 className="mb-4 text-lg font-semibold">Usage</h2>
+        <h2 className="mb-4 text-lg font-semibold">사용량</h2>
         <div className="space-y-4">
           {adAccountFeature && (
             <UsageMeter
-              label="Ad Accounts"
+              label="광고 계정"
               current={adAccountFeature.currentUsage ?? 0}
               limit={adAccountFeature.limit ?? -1}
             />
           )}
           {userFeature && (
             <UsageMeter
-              label="Team Members"
+              label="팀 멤버"
               current={userFeature.currentUsage ?? 0}
               limit={userFeature.limit ?? -1}
             />
@@ -153,7 +153,7 @@ export default function BillingPage() {
       {/* Upgrade prompt */}
       {hasLimitReached && (
         <UpgradePrompt
-          message="You've reached some limits on your current plan. Upgrade to unlock more features."
+          message="현재 플랜의 일부 제한에 도달했습니다. 업그레이드하여 더 많은 기능을 사용하세요."
           onUpgrade={() => router.push('#plans')}
         />
       )}
@@ -161,7 +161,7 @@ export default function BillingPage() {
       {/* Pricing */}
       {isFreePlan && (
         <div id="plans">
-          <h2 className="mb-4 text-lg font-semibold">Upgrade Your Plan</h2>
+          <h2 className="mb-4 text-lg font-semibold">플랜 업그레이드</h2>
           <PricingTable currentPlan={currentPlan} onSelectPlan={handleUpgrade} />
         </div>
       )}

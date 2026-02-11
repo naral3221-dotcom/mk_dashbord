@@ -14,7 +14,7 @@ describe('UpgradePrompt', () => {
     const onUpgrade = vi.fn();
     render(<UpgradePrompt message="Upgrade needed" onUpgrade={onUpgrade} />);
 
-    expect(screen.getByTestId('upgrade-button')).toHaveTextContent('Upgrade Plan');
+    expect(screen.getByTestId('upgrade-button')).toHaveTextContent('플랜 업그레이드');
   });
 
   it('should call onUpgrade when button is clicked', () => {

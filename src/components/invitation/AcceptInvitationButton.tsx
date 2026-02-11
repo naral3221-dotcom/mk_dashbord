@@ -23,12 +23,12 @@ export function AcceptInvitationButton({ token }: AcceptInvitationButtonProps) {
 
       if (!res.ok) {
         const data = await res.json();
-        throw new Error(data.error || 'Failed to accept invitation');
+        throw new Error(data.error || '초대 수락에 실패했습니다');
       }
 
       router.push('/dashboard');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong');
+      setError(err instanceof Error ? err.message : '문제가 발생했습니다');
     } finally {
       setLoading(false);
     }
@@ -41,7 +41,7 @@ export function AcceptInvitationButton({ token }: AcceptInvitationButtonProps) {
         disabled={loading}
         className="w-full rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
       >
-        {loading ? 'Accepting...' : 'Accept Invitation'}
+        {loading ? '수락 중...' : '초대 수락'}
       </button>
       {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
     </div>

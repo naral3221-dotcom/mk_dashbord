@@ -22,7 +22,7 @@ export function PricingCard({
   features,
   isCurrentPlan,
   onSelect,
-  ctaText = 'Get Started',
+  ctaText = '시작하기',
   highlighted = false,
 }: PricingCardProps) {
   return (
@@ -51,7 +51,7 @@ export function PricingCard({
             data-testid="current-plan-badge"
             className="inline-block w-full rounded-lg bg-gray-100 py-2 text-center text-sm font-medium text-gray-600"
           >
-            Current Plan
+            현재 플랜
           </span>
         ) : (
           <button

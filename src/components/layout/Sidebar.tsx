@@ -5,12 +5,11 @@ import { usePathname } from 'next/navigation';
 import { BarChart3, Settings, Users, Home, Plug, CreditCard } from 'lucide-react';
 
 const navItems = [
-  { href: '/dashboard', label: 'Dashboard', icon: Home },
-  { href: '/dashboard/campaigns', label: 'Campaigns', icon: BarChart3 },
-  { href: '/integrations', label: 'Integrations', icon: Plug },
-  { href: '/settings', label: 'Settings', icon: Settings },
-  { href: '/settings/members', label: 'Members', icon: Users },
-  { href: '/settings/billing', label: 'Billing', icon: CreditCard },
+  { href: '/dashboard', label: '대시보드', icon: Home },
+  { href: '/integrations', label: '연동 관리', icon: Plug },
+  { href: '/settings', label: '설정', icon: Settings },
+  { href: '/settings/members', label: '멤버 관리', icon: Users },
+  { href: '/settings/billing', label: '결제', icon: CreditCard },
 ];
 
 export function Sidebar() {
@@ -19,7 +18,7 @@ export function Sidebar() {
   return (
     <aside className="flex h-screen w-64 flex-col border-r bg-white">
       <div className="flex h-16 items-center border-b px-6">
-        <h1 className="text-lg font-bold">Marketing Analytics</h1>
+        <h1 className="text-lg font-bold">마케팅 애널리틱스</h1>
       </div>
       <nav className="flex-1 space-y-1 p-4">
         {navItems.map((item) => {

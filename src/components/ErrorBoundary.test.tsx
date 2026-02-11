@@ -36,9 +36,9 @@ describe('ErrorBoundary', () => {
       </ErrorBoundary>,
     );
 
-    expect(screen.getByText('Something went wrong')).toBeDefined();
+    expect(screen.getByText('문제가 발생했습니다')).toBeDefined();
     expect(screen.getByText('Test error message')).toBeDefined();
-    expect(screen.getByText('Try again')).toBeDefined();
+    expect(screen.getByText('다시 시도')).toBeDefined();
   });
 
   it('should render custom fallback when provided', () => {
@@ -58,12 +58,12 @@ describe('ErrorBoundary', () => {
       </ErrorBoundary>,
     );
 
-    expect(screen.getByText('Something went wrong')).toBeDefined();
+    expect(screen.getByText('문제가 발생했습니다')).toBeDefined();
 
     // After clicking "Try again", the boundary resets but the child will throw again
-    fireEvent.click(screen.getByText('Try again'));
+    fireEvent.click(screen.getByText('다시 시도'));
 
     // It will re-render and re-throw, so we still see the error
-    expect(screen.getByText('Something went wrong')).toBeDefined();
+    expect(screen.getByText('문제가 발생했습니다')).toBeDefined();
   });
 });

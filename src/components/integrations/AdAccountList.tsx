@@ -69,13 +69,13 @@ export function AdAccountList({ organizationId, platform }: Props) {
       const data = await response.json() as { accounts?: AdAccountItem[]; error?: string };
 
       if (!response.ok) {
-        setError(data.error || 'Failed to fetch accounts');
+        setError(data.error || '계정을 불러오지 못했습니다');
         return;
       }
 
       setAccounts(data.accounts || []);
     } catch {
-      setError('Failed to fetch accounts');
+      setError('계정을 불러오지 못했습니다');
     } finally {
       setLoading(false);
     }
@@ -102,14 +102,14 @@ export function AdAccountList({ organizationId, platform }: Props) {
       const data = await response.json() as { synced?: number; error?: string };
 
       if (!response.ok) {
-        setError(data.error || 'Sync failed');
+        setError(data.error || '동기화에 실패했습니다');
         return;
       }
 
       // Refresh account list after sync
       await fetchAccounts();
     } catch {
-      setError('Sync failed');
+      setError('동기화에 실패했습니다');
     } finally {
       setSyncing(null);
     }
@@ -119,7 +119,7 @@ export function AdAccountList({ organizationId, platform }: Props) {
     return (
       <div className="flex items-center gap-2 py-8 text-sm text-gray-500">
         <Loader2 className="h-4 w-4 animate-spin" />
-        Loading accounts...
+        계정 로딩 중...
       </div>
     );
   }
@@ -128,7 +128,7 @@ export function AdAccountList({ organizationId, platform }: Props) {
     const platformLabel = platform ? PLATFORM_LABELS[platform] ?? platform : '';
     return (
       <p className="py-8 text-center text-sm text-gray-500">
-        No {platformLabel} accounts connected yet.
+        연결된 {platformLabel} 계정이 없습니다.
       </p>
     );
   }
@@ -157,7 +157,7 @@ export function AdAccountList({ organizationId, platform }: Props) {
               <p className="text-xs text-gray-500">ID: {account.accountId}</p>
               {account.tokenExpiresAt && (
                 <p className="text-xs text-gray-400">
-                  Token expires: {new Date(account.tokenExpiresAt).toLocaleDateString()}
+                  토큰 만료일: {new Date(account.tokenExpiresAt).toLocaleDateString()}
                 </p>
               )}
             </div>
@@ -172,7 +172,7 @@ export function AdAccountList({ organizationId, platform }: Props) {
             ) : (
               <RefreshCw className="h-3 w-3" />
             )}
-            Sync
+            동기화
           </button>
         </div>
       ))}

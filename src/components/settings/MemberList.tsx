@@ -51,17 +51,17 @@ export function MemberList({ organizationId, currentUserId }: MemberListProps) {
     }
   };
 
-  if (loading) return <p className="text-sm text-gray-500">Loading members...</p>;
+  if (loading) return <p className="text-sm text-gray-500">멤버 로딩 중...</p>;
 
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
         <thead>
           <tr className="border-b text-left">
-            <th className="pb-2 font-medium">Name</th>
-            <th className="pb-2 font-medium">Email</th>
-            <th className="pb-2 font-medium">Role</th>
-            <th className="pb-2 font-medium">Actions</th>
+            <th className="pb-2 font-medium">이름</th>
+            <th className="pb-2 font-medium">이메일</th>
+            <th className="pb-2 font-medium">역할</th>
+            <th className="pb-2 font-medium">작업</th>
           </tr>
         </thead>
         <tbody>

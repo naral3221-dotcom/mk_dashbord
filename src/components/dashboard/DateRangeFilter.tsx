@@ -11,9 +11,9 @@ export interface DateRangeFilterProps {
 }
 
 const presetLabels: Record<Exclude<DatePreset, 'custom'>, string> = {
-  '7d': 'Last 7 days',
-  '30d': 'Last 30 days',
-  '90d': 'Last 90 days',
+  '7d': '최근 7일',
+  '30d': '최근 30일',
+  '90d': '최근 90일',
 };
 
 function toDateInputValue(date: Date): string {

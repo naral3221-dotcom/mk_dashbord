@@ -26,7 +26,7 @@ export function Header({ organizationName }: HeaderProps) {
               onClick={() => signOut({ callbackUrl: '/sign-in' })}
               className="rounded-md bg-gray-100 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-200"
             >
-              Sign out
+              로그아웃
             </button>
           </>
         )}

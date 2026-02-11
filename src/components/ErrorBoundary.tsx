@@ -35,15 +35,15 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
       return (
         <div className="flex items-center justify-center p-8">
           <div className="text-center">
-            <h3 className="text-lg font-semibold text-gray-900">Something went wrong</h3>
+            <h3 className="text-lg font-semibold text-gray-900">문제가 발생했습니다</h3>
             <p className="mt-1 text-sm text-gray-600">
-              {this.state.error?.message || 'An unexpected error occurred'}
+              {this.state.error?.message || '예기치 않은 오류가 발생했습니다'}
             </p>
             <button
               onClick={this.reset}
               className="mt-3 rounded-md bg-blue-600 px-3 py-1.5 text-sm text-white hover:bg-blue-700"
             >
-              Try again
+              다시 시도
             </button>
           </div>
         </div>

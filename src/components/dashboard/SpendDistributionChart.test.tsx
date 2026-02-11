@@ -28,14 +28,14 @@ describe('SpendDistributionChart', () => {
   it('should render chart with data', () => {
     render(<SpendDistributionChart data={sampleData} />);
 
-    expect(screen.getByText('Spend Distribution')).toBeInTheDocument();
+    expect(screen.getByText('지출 분포')).toBeInTheDocument();
     expect(screen.getByTestId('distribution-chart')).toBeInTheDocument();
   });
 
   it('should render empty state when no data', () => {
     render(<SpendDistributionChart data={[]} />);
 
-    expect(screen.getByTestId('empty-distribution')).toHaveTextContent('No data available');
+    expect(screen.getByTestId('empty-distribution')).toHaveTextContent('데이터 없음');
   });
 
   it('should render pie segments for each campaign', () => {

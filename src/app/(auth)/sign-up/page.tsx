@@ -29,7 +29,7 @@ function SignUpForm() {
 
       if (!res.ok) {
         const data = await res.json();
-        throw new Error(data.error || 'Registration failed');
+        throw new Error(data.error || '회원가입에 실패했습니다');
       }
 
       const signInResult = await signIn('credentials', {
@@ -39,13 +39,13 @@ function SignUpForm() {
       });
 
       if (signInResult?.error) {
-        throw new Error('Sign in failed after registration');
+        throw new Error('회원가입 후 로그인에 실패했습니다');
       }
 
       router.push(redirectUrl ?? '/onboarding');
       router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong');
+      setError(err instanceof Error ? err.message : '오류가 발생했습니다');
     } finally {
       setLoading(false);
     }
@@ -58,16 +58,16 @@ function SignUpForm() {
   return (
     <div className="w-full max-w-md rounded-lg border bg-white p-8 shadow-sm">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold">Sign Up</h1>
+        <h1 className="text-2xl font-bold">회원가입</h1>
         <p className="mt-2 text-sm text-gray-600">
-          Create your marketing analytics account
+          마케팅 애널리틱스 계정을 만드세요
         </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-            Name
+            이름
           </label>
           <input
             id="name"
@@ -75,13 +75,13 @@ function SignUpForm() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-            placeholder="Your name"
+            placeholder="이름을 입력하세요"
           />
         </div>
 
         <div>
           <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-            Email
+            이메일
           </label>
           <input
             id="email"
@@ -96,7 +96,7 @@ function SignUpForm() {
 
         <div>
           <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-            Password
+            비밀번호
           </label>
           <input
             id="password"
@@ -104,7 +104,7 @@ function SignUpForm() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-            placeholder="Min 8 chars, uppercase, lowercase, number"
+            placeholder="8자 이상, 대소문자, 숫자 포함"
             required
             minLength={8}
           />
@@ -117,7 +117,7 @@ function SignUpForm() {
           disabled={loading}
           className="w-full rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
         >
-          {loading ? 'Creating account...' : 'Create Account'}
+          {loading ? '계정 생성 중...' : '계정 만들기'}
         </button>
       </form>
 
@@ -127,7 +127,7 @@ function SignUpForm() {
             <div className="w-full border-t border-gray-300" />
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="bg-white px-2 text-gray-500">Or continue with</span>
+            <span className="bg-white px-2 text-gray-500">또는</span>
           </div>
         </div>
 
@@ -135,14 +135,14 @@ function SignUpForm() {
           onClick={handleGoogleSignUp}
           className="mt-4 w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
         >
-          Google
+          Google 계정으로 가입
         </button>
       </div>
 
       <p className="mt-6 text-center text-sm text-gray-600">
-        Already have an account?{' '}
+        이미 계정이 있으신가요?{' '}
         <Link href="/sign-in" className="text-blue-600 hover:underline">
-          Sign in
+          로그인
         </Link>
       </p>
     </div>
