@@ -6,14 +6,31 @@
 ---
 
 ## Last Updated
-- **날짜**: 2026-02-10
-- **시간**: Sprint 6 완료
-- **작업 상태**: Sprint 6 완료, Sprint 7 대기
+- **날짜**: 2026-02-11
+- **시간**: 한국어 패치 완료
+- **작업 상태**: Sprint 7 + 한국어 패치 완료, Sprint 8 (배포 & 실데이터) 대기
 
 ---
 
 ## Current Sprint
-**Sprint 6: Billing & SaaS** ✅ 완료, **Sprint 7** 대기
+**Sprint 8: 배포 & 실데이터** — 대기 중
+
+### 다음 작업 (우선순위 순)
+1. Supabase 프로젝트 생성 → `DATABASE_URL` 받기
+2. Prisma 마이그레이션 실행 (`prisma migrate deploy`)
+3. Seed 데이터 작성 (`prisma/seed.ts`)
+4. `npm run dev` 로컬 실데이터 테스트
+5. Vercel 배포 연결 + 환경변수 설정
+6. 외부 API 연동 (META, Google, TikTok, Naver 개발자 앱)
+7. Stripe 테스트 모드 설정
+8. 상위 프로젝트 모노레포 통합 (향후)
+
+### 상위 프로젝트 통합 계획
+- **상위 프로젝트**: 클라이언트 모집용 (포트폴리오, 블로그, 서비스 신청)
+- **스택**: Next.js 16 + React 19 + Tailwind 4 + next-intl (ko/en)
+- **통합 방식**: 모노레포 (Turborepo)
+- **인증**: 현재 독립 (NextAuth.js), 향후 공유 가능
+- **DB**: Supabase PostgreSQL 공유 예정
 
 ### Sprint 0 완료 (✅)
 - [x] 0.1 Next.js 14 프로젝트 초기화
@@ -88,14 +105,19 @@
 - [x] 6.6 Feature gating (PlanLimits 확장, ConnectAdAccount limits, cron FREE skip)
 - [x] 6.7 Billing UI (5 components + 2 hooks + 2 pages + sidebar)
 
-### Sprint 7 대기 중
-- [ ] 7.1 에러 처리 강화
-- [ ] 7.2 로깅 시스템
-- [ ] 7.3 성능 최적화
-- [ ] 7.4 E2E 테스트
-- [ ] 7.5 Vercel 배포 설정
-- [ ] 7.6 모니터링 설정
-- [ ] 7.7 문서화
+### Sprint 7 완료 (✅)
+- [x] 7.1 에러 처리 강화 (DomainError 계층 + handleApiError)
+- [x] 7.2 로깅 시스템 (ILogger → PinoLogger)
+- [x] 7.3 성능 최적화 (React Query, loading skeletons)
+- [x] 7.4 E2E 테스트 (Playwright, 26 tests)
+- [x] 7.5 배포 준비 (/api/health, requireEnv, 보안 헤더)
+- [x] 7.6 모니터링 설정 (Sentry client/server/edge)
+- [x] 7.7 문서화 (API docs, ADRs, README)
+
+### 한국어 패치 완료 (✅)
+- [x] 전체 UI 한국어 번역 (45개 파일, html lang="ko")
+- [x] 테스트 assertion 업데이트 (12개 테스트 파일)
+- [x] 플랫폼명/KPI약어 영어 유지, 역할/상태명 한국어 변환
 
 ---
 
@@ -131,7 +153,7 @@ dashboard/
 ---
 
 ## Important Decisions Made
-1. **기술 스택**: Next.js 14 + TypeScript + PostgreSQL + Prisma + NextAuth.js + Stripe
+1. **기술 스택**: Next.js 16 + TypeScript 5 + PostgreSQL + Prisma v7 + NextAuth.js v5 + Stripe
 2. **아키텍처**: Clean Architecture (domain/application/infrastructure/presentation)
 3. **개발 방법론**: TDD (Red-Green-Refactor)
 4. **인증**: NextAuth.js v5 (Clerk에서 마이그레이션 - 비용 절감)
@@ -139,13 +161,17 @@ dashboard/
 6. **Prisma Adapter 미사용**: 기존 Repository 패턴 유지 (Clean Architecture)
 7. **organizationId nullable**: 회원가입 → 온보딩(조직 생성) 플로우 지원
 8. **Chart Library**: Recharts (경량, React 19 호환, Tremor 대신 선택)
-9. **Prisma v7 lazy init**: API route에서 `require()` 패턴 사용 (빌드 시 PrismaClient 초기화 방지)
+9. **Prisma v7 lazy init**: API route에서 `getPrisma()` 패턴 (빌드 시 PrismaClient 초기화 방지)
 10. **Platform Adapter Pattern**: IAdPlatformClient + IPlatformAdapterRegistry로 멀티 플랫폼 추상화
 11. **PlatformAdapterRegistry**: Map-based factory, 플랫폼별 어댑터 동적 등록/조회
 12. **Stripe Checkout (redirect)**: PCI 컴플라이언스 자동, Customer Portal로 구독 관리 위임
 13. **IPaymentGateway 도메인 인터페이스**: Stripe 직접 의존 없이 Clean Architecture 유지
 14. **Webhook 멱등성**: BillingEvent 테이블, stripeEventId unique 체크로 중복 처리 방지
 15. **Organization 단위 구독**: 개별 사용자 아닌 조직 단위 결제/구독
+16. **한국어 UI**: 인라인 교체 방식 (i18n 라이브러리 미사용), 상위 프로젝트 통합 시 next-intl 전환 고려
+17. **DB 호스팅**: Supabase 추천 (상위 프로젝트와 DB 공유 가능, Vercel serverless 최적화)
+18. **배포**: Vercel (상위 프로젝트와 동일)
+19. **모노레포**: 상위 프로젝트(포트폴리오)에 하위 기능으로 통합 예정 (Turborepo)
 
 ---
 
@@ -161,12 +187,15 @@ dashboard/
 
 ## Active Blockers
 ```
-없음
+- Supabase DATABASE_URL 필요 (사용자가 프로젝트 생성 후 제공 예정)
 ```
 
 ---
 
 ## Pending User Decisions
 ```
-없음 - Sprint 7 시작 대기 중
+- Supabase 프로젝트 생성 → DATABASE_URL 제공
+- 외부 API 개발자 앱 생성 (META, Google, TikTok, Naver)
+- Stripe 계정 설정
+- Vercel 배포 설정
 ```

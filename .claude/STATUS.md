@@ -15,7 +15,9 @@
 | Sprint 4: Dashboard Visualization | ✅ Completed | 100% |
 | Sprint 5: Additional Platforms | ✅ Completed | 100% |
 | Sprint 6: Billing & SaaS | ✅ Completed | 100% |
-| Sprint 7: Production & Polish | ⚪ Not Started | 0% |
+| Sprint 7: Production & Polish | ✅ Completed | 100% |
+| 한국어 패치 | ✅ Completed | 100% |
+| Sprint 8: 배포 & 실데이터 | ⚪ Not Started | 0% |
 
 ---
 
@@ -151,20 +153,67 @@
 
 ---
 
+## Sprint 7: Production & Polish ✅
+
+### Tasks
+| Task | Status | Agent | Notes |
+|------|--------|-------|-------|
+| 도메인 에러 시스템 | ✅ Done | implementer | DomainError 계층 (7개 에러 타입) |
+| API 에러 핸들러 | ✅ Done | implementer | handleApiError() + Sentry + Pino |
+| 로깅 시스템 | ✅ Done | implementer | ILogger → PinoLogger |
+| React Query 성능 최적화 | ✅ Done | implementer | staleTime 30s, gcTime 5min |
+| Sentry 모니터링 | ✅ Done | implementer | client/server/edge configs |
+| E2E 테스트 | ✅ Done | test-writer | Playwright, 26 E2E tests |
+| 배포 준비 | ✅ Done | implementer | /api/health, requireEnv(), 보안 헤더 |
+| 문서화 | ✅ Done | implementer | API docs, ADRs, README |
+
+**Results**: 1057 tests total (+61 unit, +26 E2E), ALL PASSED
+
+---
+
+## 한국어 패치 ✅
+
+### Tasks
+| Task | Status | Agent | Notes |
+|------|--------|-------|-------|
+| 전체 UI 한국어 번역 | ✅ Done | 6개 병렬 에이전트 | 45개 UI 파일 |
+| 테스트 assertion 업데이트 | ✅ Done | 2개 병렬 에이전트 | 12개 테스트 파일 |
+
+**Results**: 1057 tests, ALL PASSED, Build 성공
+
+---
+
+## Sprint 8: 배포 & 실데이터 (다음 작업)
+
+### Tasks
+| Task | Status | Notes |
+|------|--------|-------|
+| Supabase 프로젝트 생성 | ⬜ | DATABASE_URL 받기 |
+| Prisma 마이그레이션 실행 | ⬜ | prisma migrate deploy |
+| Seed 데이터 작성 | ⬜ | prisma/seed.ts |
+| 로컬 실데이터 테스트 | ⬜ | npm run dev |
+| Vercel 배포 연결 | ⬜ | GitHub 연동 + 환경변수 |
+| 외부 API 연동 | ⬜ | META, Google, TikTok, Naver 개발자 앱 |
+| Stripe 테스트 모드 | ⬜ | 결제 테스트 |
+| 상위 프로젝트 모노레포 통합 | ⬜ | Turborepo + 공유 패키지 |
+
+---
+
 ## Key Metrics
 
 ```
-총 테스트: 996 (all passing), 83 test files
-총 Sprint 완료: 7 (Sprint 0-6)
+총 테스트: 1057 (all passing), 90 test files + 26 E2E
+총 Sprint 완료: 8 (Sprint 0-7 + 한국어패치)
 도메인 엔티티: 8 (6 + Subscription, BillingEvent)
 유스케이스: 21 (12 + 4 generalized + 5 billing)
 앱 서비스: 10
 Prisma 리포지토리: 8 (6 + Subscription, BillingEvent)
-API Routes: 35
-UI 컴포넌트: 30+
+API Routes: 35+
+UI 컴포넌트: 30+ (전체 한국어)
 플랫폼: 4 (META, Google Ads, TikTok Ads, Naver Search Ads)
 TypeScript errors: 0
 Build: ✅ Passing
+언어: 한국어 (html lang="ko")
 ```
 
 ---
@@ -180,10 +229,12 @@ Build: ✅ Passing
 2026-02-10: Sprint 4 완료 (585 tests)
 2026-02-10: Sprint 5 완료 (814 tests)
 2026-02-10: Sprint 6 완료 (996 tests)
+2026-02-10: Sprint 7 완료 (1057 tests + 26 E2E)
+2026-02-11: 한국어 패치 완료 (68개 파일)
 ```
 
 ---
 
 ## Version
-- Current: v0.6.0 (Sprint 6 완료)
-- Next: v0.7.0 (Sprint 7 완료 시)
+- Current: v0.8.0 (Sprint 7 + 한국어 패치 완료)
+- Next: v0.9.0 (Sprint 8: 배포 & 실데이터)
