@@ -8,6 +8,7 @@ import { IAdAccountRepository } from '../repositories/IAdAccountRepository';
 import { IUserRepository } from '../repositories/IUserRepository';
 import { Organization } from '../entities/Organization';
 import { Plan, Platform } from '../entities/types';
+import { NotFoundError } from '../errors';
 
 describe('CheckFeatureAccessUseCase', () => {
   let useCase: CheckFeatureAccessUseCase;
@@ -326,6 +327,13 @@ describe('CheckFeatureAccessUseCase', () => {
         feature: 'maxAdAccounts',
       }),
     ).rejects.toThrow('Organization not found');
+
+    await expect(
+      useCase.execute({
+        organizationId: 'non-existent',
+        feature: 'maxAdAccounts',
+      }),
+    ).rejects.toBeInstanceOf(NotFoundError);
 
     expect(
       mockAdAccountRepo.countByOrganizationId,

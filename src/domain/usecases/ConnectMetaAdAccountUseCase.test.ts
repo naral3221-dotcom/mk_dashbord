@@ -10,6 +10,7 @@ import { ITokenEncryption } from '../services/ITokenEncryption';
 import { User } from '../entities/User';
 import { AdAccount } from '../entities/AdAccount';
 import { Role, Platform } from '../entities/types';
+import { NotFoundError } from '../errors';
 
 describe('ConnectMetaAdAccountUseCase', () => {
   let useCase: ConnectMetaAdAccountUseCase;
@@ -195,6 +196,7 @@ describe('ConnectMetaAdAccountUseCase', () => {
     vi.mocked(mockUserRepo.findById).mockResolvedValue(null);
 
     await expect(useCase.execute(validInput)).rejects.toThrow('User not found');
+    await expect(useCase.execute(validInput)).rejects.toBeInstanceOf(NotFoundError);
   });
 
   it('should throw when user does not belong to organization', async () => {

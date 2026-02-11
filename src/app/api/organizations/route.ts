@@ -5,6 +5,7 @@ import { PrismaUserRepository } from '@/infrastructure/repositories/PrismaUserRe
 import { CreateOrganizationUseCase } from '@/domain/usecases/CreateOrganizationUseCase';
 import { OrganizationService } from '@/application/services/OrganizationService';
 import { auth } from '@/infrastructure/auth/nextauth.config';
+import { handleApiError } from '@/lib/apiErrorHandler';
 
 function getOrgService() {
   const prisma = getPrisma();
@@ -32,7 +33,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(result, { status: 201 });
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Internal server error';
-    return NextResponse.json({ error: message }, { status: 400 });
+    const { body, status } = handleApiError(error);
+    return NextResponse.json(body, { status });
   }
 }

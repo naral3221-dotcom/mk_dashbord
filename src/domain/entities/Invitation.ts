@@ -1,4 +1,5 @@
 import { Role } from './types';
+import { ValidationError } from '../errors';
 
 export interface InvitationProps {
   readonly id: string;
@@ -30,24 +31,24 @@ export class Invitation {
   ): Invitation {
     const trimmedEmail = props.email?.trim() ?? '';
     if (!trimmedEmail || !Invitation.isValidEmail(trimmedEmail)) {
-      throw new Error('Invalid email format');
+      throw new ValidationError('Invalid email format');
     }
 
     if (!props.organizationId) {
-      throw new Error('Organization ID is required');
+      throw new ValidationError('Organization ID is required');
     }
 
     if (!props.invitedById) {
-      throw new Error('Inviter ID is required');
+      throw new ValidationError('Inviter ID is required');
     }
 
     const trimmedToken = props.token?.trim() ?? '';
     if (!trimmedToken) {
-      throw new Error('Token is required');
+      throw new ValidationError('Token is required');
     }
 
     if (props.expiresAt.getTime() <= Date.now()) {
-      throw new Error('Expiration date must be in the future');
+      throw new ValidationError('Expiration date must be in the future');
     }
 
     const now = new Date();
@@ -107,11 +108,11 @@ export class Invitation {
 
   accept(): Invitation {
     if (this.props.acceptedAt) {
-      throw new Error('Invitation has already been accepted');
+      throw new ValidationError('Invitation has already been accepted');
     }
 
     if (this.isExpired()) {
-      throw new Error('Invitation has expired');
+      throw new ValidationError('Invitation has expired');
     }
 
     return new Invitation({

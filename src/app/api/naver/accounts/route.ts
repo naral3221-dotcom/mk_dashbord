@@ -10,6 +10,7 @@ import { PlatformAdapterRegistry } from '@/infrastructure/external/PlatformAdapt
 import { ConnectAdAccountUseCase } from '@/domain/usecases/ConnectAdAccountUseCase';
 import { Platform } from '@/domain/entities/types';
 import { requireAuth } from '@/lib/auth';
+import { handleApiError } from '@/lib/apiErrorHandler';
 
 function getUseCase() {
   const prisma = getPrisma();
@@ -44,9 +45,8 @@ export async function GET() {
       })),
     );
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Internal server error';
-    const status = message === 'Unauthorized' ? 401 : 500;
-    return NextResponse.json({ error: message }, { status });
+    const { body, status } = handleApiError(error);
+    return NextResponse.json(body, { status });
   }
 }
 
@@ -116,13 +116,7 @@ export async function POST(request: NextRequest) {
       { status: result.isNewAccount ? 201 : 200 },
     );
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Internal server error';
-    const status =
-      message === 'Unauthorized'
-        ? 401
-        : message.includes('permission')
-          ? 403
-          : 500;
-    return NextResponse.json({ error: message }, { status });
+    const { body, status } = handleApiError(error);
+    return NextResponse.json(body, { status });
   }
 }

@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { AdAccount } from './AdAccount';
 import { Platform } from './types';
+import { ValidationError } from '../errors';
 
 describe('AdAccount Entity', () => {
   const validProps = {
@@ -56,6 +57,10 @@ describe('AdAccount Entity', () => {
       expect(() =>
         AdAccount.create({ ...validProps, accountId: '' })
       ).toThrow('Account ID is required');
+    });
+
+    it('should throw ValidationError instance on validation failure', () => {
+      expect(() => AdAccount.create({ ...validProps, accountId: '' })).toThrow(ValidationError);
     });
 
     it('should throw on whitespace-only accountId', () => {

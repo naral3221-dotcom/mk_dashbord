@@ -5,6 +5,7 @@ import { IOrganizationRepository } from '../repositories/IOrganizationRepository
 import { IUserRepository } from '../repositories/IUserRepository';
 import { IPlatformAdapterRegistry } from '../services/IPlatformAdapterRegistry';
 import { ITokenEncryption } from '../services/ITokenEncryption';
+import { NotFoundError, ForbiddenError, ValidationError, PlanLimitError, ExternalServiceError } from '../errors';
 
 export interface ConnectAdAccountInput {
   userId: string;
@@ -39,30 +40,30 @@ export class ConnectAdAccountUseCase {
     // 1. Find user and verify permissions
     const user = await this.userRepo.findById(input.userId);
     if (!user) {
-      throw new Error('User not found');
+      throw new NotFoundError('User');
     }
     if (user.organizationId !== input.organizationId) {
-      throw new Error('User does not belong to this organization');
+      throw new ValidationError('User does not belong to this organization');
     }
     if (!RolePermissions[user.role].canManageAdAccounts) {
-      throw new Error('Insufficient permissions to manage ad accounts');
+      throw new ForbiddenError('Insufficient permissions to manage ad accounts');
     }
 
     // 1.5 Check plan limits
     const org = await this.orgRepo.findById(input.organizationId);
     if (!org) {
-      throw new Error('Organization not found');
+      throw new NotFoundError('Organization');
     }
     const planLimits = PlanLimits[org.plan];
 
     // Check platform allowed
     if (!(planLimits.allowedPlatforms as readonly Platform[]).includes(input.platform)) {
-      throw new Error(`Platform ${input.platform} is not available on the ${org.plan} plan`);
+      throw new PlanLimitError(`Platform ${input.platform} is not available on the ${org.plan} plan`, 'platform');
     }
 
     // 2. Get the platform adapter
     if (!this.platformRegistry.hasAdapter(input.platform)) {
-      throw new Error(`Platform ${input.platform} is not supported`);
+      throw new ExternalServiceError(input.platform, 'Platform is not supported');
     }
     const adapter = this.platformRegistry.getAdapter(input.platform);
 
@@ -74,10 +75,10 @@ export class ConnectAdAccountUseCase {
     if (adapter.authType === 'oauth') {
       // OAuth flow: exchange auth code for tokens
       if (!input.authCode) {
-        throw new Error('Auth code is required for OAuth platforms');
+        throw new ValidationError('Auth code is required for OAuth platforms');
       }
       if (!input.redirectUri) {
-        throw new Error('Redirect URI is required for OAuth platforms');
+        throw new ValidationError('Redirect URI is required for OAuth platforms');
       }
 
       const tokenResult = await adapter.exchangeCodeForToken(input.authCode, input.redirectUri);
@@ -91,10 +92,10 @@ export class ConnectAdAccountUseCase {
     } else {
       // API Key flow: store credentials as JSON for platform adapters
       if (!input.apiKey) {
-        throw new Error('API key is required for API Key platforms');
+        throw new ValidationError('API key is required for API Key platforms');
       }
       if (!input.apiSecret) {
-        throw new Error('API secret is required for API Key platforms');
+        throw new ValidationError('API secret is required for API Key platforms');
       }
 
       const credentials = JSON.stringify({
@@ -136,7 +137,7 @@ export class ConnectAdAccountUseCase {
       if (planLimits.maxAdAccounts !== -1) {
         const accountCount = await this.adAccountRepo.countByOrganizationId(input.organizationId);
         if (accountCount >= planLimits.maxAdAccounts) {
-          throw new Error('Ad account limit reached for your current plan');
+          throw new PlanLimitError('Ad account limit reached for your current plan', 'adAccounts');
         }
       }
 

@@ -8,6 +8,7 @@ import { AcceptInvitationUseCase } from '@/domain/usecases/AcceptInvitationUseCa
 import { InvitationService } from '@/application/services/InvitationService';
 import { requireAuth } from '@/lib/auth';
 import { Role } from '@/domain/entities/types';
+import { handleApiError } from '@/lib/apiErrorHandler';
 
 function getInvitationService() {
   const prisma = getPrisma();
@@ -28,9 +29,8 @@ export async function GET() {
     const invitations = await getInvitationService().listPendingInvitations(user.organizationId);
     return NextResponse.json(invitations);
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Internal server error';
-    const status = message === 'Unauthorized' ? 401 : 400;
-    return NextResponse.json({ error: message }, { status });
+    const { body, status } = handleApiError(error);
+    return NextResponse.json(body, { status });
   }
 }
 
@@ -51,8 +51,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(result, { status: 201 });
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Internal server error';
-    const status = message === 'Unauthorized' ? 401 : 400;
-    return NextResponse.json({ error: message }, { status });
+    const { body, status } = handleApiError(error);
+    return NextResponse.json(body, { status });
   }
 }

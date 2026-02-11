@@ -13,6 +13,7 @@ import { User } from '../entities/User';
 import { AdAccount } from '../entities/AdAccount';
 import { Organization } from '../entities/Organization';
 import { Role, Platform, Plan } from '../entities/types';
+import { NotFoundError } from '../errors';
 
 describe('ConnectAdAccountUseCase', () => {
   let useCase: ConnectAdAccountUseCase;
@@ -286,6 +287,7 @@ describe('ConnectAdAccountUseCase', () => {
     vi.mocked(mockUserRepo.findById).mockResolvedValue(null);
 
     await expect(useCase.execute(validOAuthInput)).rejects.toThrow('User not found');
+    await expect(useCase.execute(validOAuthInput)).rejects.toBeInstanceOf(NotFoundError);
   });
 
   it('should throw "User does not belong to this organization" for wrong org', async () => {
@@ -313,7 +315,7 @@ describe('ConnectAdAccountUseCase', () => {
     };
 
     await expect(useCase.execute(inputWithUnsupportedPlatform)).rejects.toThrow(
-      'Platform TIKTOK is not supported',
+      'TIKTOK: Platform is not supported',
     );
   });
 

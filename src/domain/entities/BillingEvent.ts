@@ -1,3 +1,5 @@
+import { ValidationError } from '../errors';
+
 export interface BillingEventProps {
   readonly id: string;
   readonly organizationId: string;
@@ -22,15 +24,15 @@ export class BillingEvent {
     id: string = crypto.randomUUID()
   ): BillingEvent {
     if (!props.organizationId || props.organizationId.trim().length === 0) {
-      throw new Error('Organization ID is required');
+      throw new ValidationError('Organization ID is required');
     }
 
     if (!props.eventType || props.eventType.trim().length === 0) {
-      throw new Error('Event type is required');
+      throw new ValidationError('Event type is required');
     }
 
     if (!props.stripeEventId || props.stripeEventId.trim().length === 0) {
-      throw new Error('Stripe event ID is required');
+      throw new ValidationError('Stripe event ID is required');
     }
 
     const now = new Date();

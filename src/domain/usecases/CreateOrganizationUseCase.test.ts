@@ -7,6 +7,7 @@ import { IOrganizationRepository } from '../repositories/IOrganizationRepository
 import { IUserRepository } from '../repositories/IUserRepository';
 import { User } from '../entities/User';
 import { Plan, Role } from '../entities/types';
+import { ConflictError } from '../errors';
 
 describe('CreateOrganizationUseCase', () => {
   let useCase: CreateOrganizationUseCase;
@@ -95,6 +96,7 @@ describe('CreateOrganizationUseCase', () => {
     await expect(useCase.execute(validInput)).rejects.toThrow(
       'Organization slug already exists'
     );
+    await expect(useCase.execute(validInput)).rejects.toBeInstanceOf(ConflictError);
   });
 
   it('should throw if user not found', async () => {

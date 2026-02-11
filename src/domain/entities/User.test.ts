@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { User } from './User';
 import { Role } from './types';
+import { ValidationError } from '../errors';
 
 describe('User Entity', () => {
   const validProps = {
@@ -62,6 +63,10 @@ describe('User Entity', () => {
       expect(() => User.create({ ...validProps, email: 'invalid' })).toThrow(
         'Invalid email format'
       );
+    });
+
+    it('should throw ValidationError instance on validation failure', () => {
+      expect(() => User.create({ ...validProps, email: 'invalid' })).toThrow(ValidationError);
     });
 
     it('should throw on empty email', () => {

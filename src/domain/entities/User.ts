@@ -1,4 +1,5 @@
 import { Role } from './types';
+import { ValidationError } from '../errors';
 
 export interface UserProps {
   readonly id: string;
@@ -34,11 +35,11 @@ export class User {
   ): User {
     const trimmedEmail = props.email?.trim() ?? '';
     if (!trimmedEmail || !User.isValidEmail(trimmedEmail)) {
-      throw new Error('Invalid email format');
+      throw new ValidationError('Invalid email format');
     }
 
     if (props.name && props.name.length > 100) {
-      throw new Error('Name must be less than 100 characters');
+      throw new ValidationError('Name must be less than 100 characters');
     }
 
     const now = new Date();
@@ -108,7 +109,7 @@ export class User {
 
   updateName(name: string | null): User {
     if (name && name.length > 100) {
-      throw new Error('Name must be less than 100 characters');
+      throw new ValidationError('Name must be less than 100 characters');
     }
 
     return new User({
@@ -140,7 +141,7 @@ export class User {
 
   updateProfile(data: { name?: string | null; image?: string | null }): User {
     if (data.name && data.name.length > 100) {
-      throw new Error('Name must be less than 100 characters');
+      throw new ValidationError('Name must be less than 100 characters');
     }
 
     return new User({

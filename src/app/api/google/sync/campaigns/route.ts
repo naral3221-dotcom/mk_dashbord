@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/infrastructure/auth/nextauth.config';
+import { handleApiError } from '@/lib/apiErrorHandler';
 
 function getGoogleAdsClient() {
   const { GoogleAdsApiClient } = require(
@@ -126,12 +127,8 @@ export async function POST(request: NextRequest) {
       created,
       updated,
     });
-  } catch (err) {
-    return NextResponse.json(
-      {
-        error: err instanceof Error ? err.message : 'Internal server error',
-      },
-      { status: 500 },
-    );
+  } catch (error) {
+    const { body, status } = handleApiError(error);
+    return NextResponse.json(body, { status });
   }
 }

@@ -15,6 +15,7 @@ import { AdAccount } from '../entities/AdAccount';
 import { Campaign } from '../entities/Campaign';
 import { CampaignInsight } from '../entities/CampaignInsight';
 import { Platform, CampaignStatus } from '../entities/types';
+import { NotFoundError } from '../errors';
 
 describe('SyncInsightsUseCase', () => {
   let useCase: SyncInsightsUseCase;
@@ -273,6 +274,7 @@ describe('SyncInsightsUseCase', () => {
     vi.mocked(mockCampaignRepo.findById).mockResolvedValue(null);
 
     await expect(useCase.execute(validInput)).rejects.toThrow('Campaign not found');
+    await expect(useCase.execute(validInput)).rejects.toBeInstanceOf(NotFoundError);
   });
 
   it('should throw when ad account not found', async () => {

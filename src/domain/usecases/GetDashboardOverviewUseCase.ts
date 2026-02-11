@@ -3,6 +3,7 @@ import { ICampaignRepository } from '../repositories/ICampaignRepository';
 import { ICampaignInsightRepository, DateRange } from '../repositories/ICampaignInsightRepository';
 import { CampaignInsight } from '../entities/CampaignInsight';
 import { Platform } from '../entities/types';
+import { ValidationError } from '../errors';
 
 export interface GetDashboardOverviewInput {
   organizationId: string;
@@ -58,11 +59,11 @@ export class GetDashboardOverviewUseCase {
   async execute(input: GetDashboardOverviewInput): Promise<GetDashboardOverviewOutput> {
     // 1. Validate inputs
     if (!input.organizationId || input.organizationId.trim().length === 0) {
-      throw new Error('Organization ID is required');
+      throw new ValidationError('Organization ID is required');
     }
 
     if (input.startDate >= input.endDate) {
-      throw new Error('Start date must be before end date');
+      throw new ValidationError('Start date must be before end date');
     }
 
     // 2. Find ad accounts (filter by platform if specified)

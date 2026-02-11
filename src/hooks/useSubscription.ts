@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import type { SubscriptionResponse } from '@/application/dto/BillingDTO';
 
 export interface UseSubscriptionReturn {
@@ -10,49 +10,29 @@ export interface UseSubscriptionReturn {
   refetch: () => void;
 }
 
+async function fetchSubscription(): Promise<SubscriptionResponse> {
+  const res = await fetch('/api/billing/subscription');
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.error || `Request failed: ${res.status}`);
+  }
+  return res.json();
+}
+
 export function useSubscription(): UseSubscriptionReturn {
-  const [subscription, setSubscription] = useState<SubscriptionResponse | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [fetchCount, setFetchCount] = useState(0);
+  const queryClient = useQueryClient();
 
-  const refetch = useCallback(() => {
-    setFetchCount((c) => c + 1);
-  }, []);
+  const query = useQuery({
+    queryKey: ['subscription'],
+    queryFn: fetchSubscription,
+  });
 
-  useEffect(() => {
-    let cancelled = false;
-
-    async function fetchSubscription() {
-      setLoading(true);
-      setError(null);
-
-      try {
-        const res = await fetch('/api/billing/subscription');
-        if (!res.ok) {
-          const body = await res.json().catch(() => ({}));
-          throw new Error(body.error || `Request failed: ${res.status}`);
-        }
-        const data = await res.json();
-        if (!cancelled) {
-          setSubscription(data);
-        }
-      } catch (err) {
-        if (!cancelled) {
-          setError(err instanceof Error ? err.message : 'Failed to fetch subscription');
-        }
-      } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
-      }
-    }
-
-    fetchSubscription();
-    return () => {
-      cancelled = true;
-    };
-  }, [fetchCount]);
-
-  return { subscription, loading, error, refetch };
+  return {
+    subscription: query.data ?? null,
+    loading: query.isLoading,
+    error: query.error?.message ?? null,
+    refetch: () => {
+      queryClient.invalidateQueries({ queryKey: ['subscription'] });
+    },
+  };
 }

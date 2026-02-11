@@ -2,6 +2,7 @@ import { AdAccount } from '../entities/AdAccount';
 import { IAdAccountRepository } from '../repositories/IAdAccountRepository';
 import { IMetaApiClient } from '../services/IMetaApiClient';
 import { ITokenEncryption } from '../services/ITokenEncryption';
+import { NotFoundError, ValidationError } from '../errors';
 
 export interface RefreshMetaTokenInput {
   adAccountId: string;
@@ -25,11 +26,11 @@ export class RefreshMetaTokenUseCase {
     // 1. Find ad account
     const adAccount = await this.adAccountRepo.findById(input.adAccountId);
     if (!adAccount) {
-      throw new Error('Ad account not found');
+      throw new NotFoundError('Ad account');
     }
 
     if (!adAccount.accessToken) {
-      throw new Error('Ad account has no access token');
+      throw new ValidationError('Ad account has no access token');
     }
 
     // 2. Decrypt the stored token

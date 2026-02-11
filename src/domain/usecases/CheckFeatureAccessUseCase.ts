@@ -2,6 +2,7 @@ import { Platform, PlanLimits } from '../entities/types';
 import { IOrganizationRepository } from '../repositories/IOrganizationRepository';
 import { IAdAccountRepository } from '../repositories/IAdAccountRepository';
 import { IUserRepository } from '../repositories/IUserRepository';
+import { NotFoundError, ValidationError } from '../errors';
 
 export type FeatureKey =
   | 'maxAdAccounts'
@@ -36,7 +37,7 @@ export class CheckFeatureAccessUseCase {
     // 1. Find organization
     const org = await this.orgRepo.findById(input.organizationId);
     if (!org) {
-      throw new Error('Organization not found');
+      throw new NotFoundError('Organization');
     }
 
     // 2. Get plan limits
@@ -80,7 +81,7 @@ export class CheckFeatureAccessUseCase {
 
       case 'allowedPlatforms': {
         if (!input.platform) {
-          throw new Error(
+          throw new ValidationError(
             'Platform is required for allowedPlatforms check',
           );
         }

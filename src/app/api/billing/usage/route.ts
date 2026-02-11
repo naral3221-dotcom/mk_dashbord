@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/infrastructure/auth/nextauth.config';
 import { getBillingService } from '../_shared/getBillingService';
+import { handleApiError } from '@/lib/apiErrorHandler';
 
 export async function GET(_request: NextRequest) {
   const session = await auth();
@@ -17,10 +18,8 @@ export async function GET(_request: NextRequest) {
     const service = getBillingService();
     const result = await service.getUsage(organizationId);
     return NextResponse.json(result);
-  } catch (err) {
-    return NextResponse.json(
-      { error: err instanceof Error ? err.message : 'Internal server error' },
-      { status: 500 },
-    );
+  } catch (error) {
+    const { body, status } = handleApiError(error);
+    return NextResponse.json(body, { status });
   }
 }

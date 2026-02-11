@@ -5,6 +5,7 @@ import { ICampaignInsightRepository } from '../repositories/ICampaignInsightRepo
 import { IPlatformAdapterRegistry } from '../services/IPlatformAdapterRegistry';
 import { ITokenEncryption } from '../services/ITokenEncryption';
 import { ICacheService } from '../services/ICacheService';
+import { NotFoundError, ValidationError } from '../errors';
 
 export interface SyncInsightsInput {
   campaignId: string;
@@ -38,15 +39,15 @@ export class SyncInsightsUseCase {
     // 1. Find campaign and its ad account
     const campaign = await this.campaignRepo.findById(input.campaignId);
     if (!campaign) {
-      throw new Error('Campaign not found');
+      throw new NotFoundError('Campaign');
     }
 
     const adAccount = await this.adAccountRepo.findById(campaign.adAccountId);
     if (!adAccount) {
-      throw new Error('Ad account not found');
+      throw new NotFoundError('Ad account');
     }
     if (!adAccount.accessToken) {
-      throw new Error('Ad account has no access token');
+      throw new ValidationError('Ad account has no access token');
     }
 
     // 2. Check cache (includes platform in key)

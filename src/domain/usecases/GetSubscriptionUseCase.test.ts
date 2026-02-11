@@ -8,6 +8,7 @@ import { IOrganizationRepository } from '../repositories/IOrganizationRepository
 import { Organization } from '../entities/Organization';
 import { Subscription } from '../entities/Subscription';
 import { Plan, SubscriptionStatus } from '../entities/types';
+import { NotFoundError } from '../errors';
 
 describe('GetSubscriptionUseCase', () => {
   let useCase: GetSubscriptionUseCase;
@@ -168,6 +169,9 @@ describe('GetSubscriptionUseCase', () => {
     await expect(
       useCase.execute({ organizationId: 'non-existent' }),
     ).rejects.toThrow('Organization not found');
+    await expect(
+      useCase.execute({ organizationId: 'non-existent' }),
+    ).rejects.toBeInstanceOf(NotFoundError);
 
     expect(
       mockSubscriptionRepo.findByOrganizationId,

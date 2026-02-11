@@ -1,4 +1,5 @@
 import { Plan, SubscriptionStatus } from './types';
+import { ValidationError } from '../errors';
 
 export interface SubscriptionProps {
   readonly id: string;
@@ -33,19 +34,19 @@ export class Subscription {
     id: string = crypto.randomUUID()
   ): Subscription {
     if (!props.organizationId || props.organizationId.trim().length === 0) {
-      throw new Error('Organization ID is required');
+      throw new ValidationError('Organization ID is required');
     }
 
     if (!props.stripeSubscriptionId || props.stripeSubscriptionId.trim().length === 0) {
-      throw new Error('Stripe subscription ID is required');
+      throw new ValidationError('Stripe subscription ID is required');
     }
 
     if (!props.stripePriceId || props.stripePriceId.trim().length === 0) {
-      throw new Error('Stripe price ID is required');
+      throw new ValidationError('Stripe price ID is required');
     }
 
     if (props.currentPeriodEnd <= props.currentPeriodStart) {
-      throw new Error('Current period end must be after current period start');
+      throw new ValidationError('Current period end must be after current period start');
     }
 
     const now = new Date();
@@ -140,7 +141,7 @@ export class Subscription {
 
   updatePeriod(start: Date, end: Date): Subscription {
     if (end <= start) {
-      throw new Error('Current period end must be after current period start');
+      throw new ValidationError('Current period end must be after current period start');
     }
 
     return new Subscription({
@@ -170,7 +171,7 @@ export class Subscription {
 
   changePlan(newPlan: Plan, newPriceId: string): Subscription {
     if (!newPriceId || newPriceId.trim().length === 0) {
-      throw new Error('Stripe price ID is required');
+      throw new ValidationError('Stripe price ID is required');
     }
 
     return new Subscription({

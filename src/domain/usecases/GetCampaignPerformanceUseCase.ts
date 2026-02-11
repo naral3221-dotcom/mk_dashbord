@@ -2,6 +2,7 @@ import { CampaignStatus, Platform } from '../entities/types';
 import { IAdAccountRepository } from '../repositories/IAdAccountRepository';
 import { ICampaignRepository } from '../repositories/ICampaignRepository';
 import { ICampaignInsightRepository } from '../repositories/ICampaignInsightRepository';
+import { ValidationError } from '../errors';
 
 export interface GetCampaignPerformanceInput {
   organizationId: string;
@@ -42,11 +43,11 @@ export class GetCampaignPerformanceUseCase {
   async execute(input: GetCampaignPerformanceInput): Promise<GetCampaignPerformanceOutput> {
     // 1. Validate inputs
     if (!input.organizationId || input.organizationId.trim().length === 0) {
-      throw new Error('Organization ID is required');
+      throw new ValidationError('Organization ID is required');
     }
 
     if (input.startDate >= input.endDate) {
-      throw new Error('Start date must be before end date');
+      throw new ValidationError('Start date must be before end date');
     }
 
     // 2. Find ad accounts (filter by platform if specified)

@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/infrastructure/auth/nextauth.config';
+import { handleApiError } from '@/lib/apiErrorHandler';
 
 function getService() {
-  const { PrismaClient } = require('@/generated/prisma');
+  const { getPrisma } = require('@/infrastructure/database/prisma');
   const { PrismaAdAccountRepository } = require('@/infrastructure/repositories/PrismaAdAccountRepository');
   const { PrismaCampaignRepository } = require('@/infrastructure/repositories/PrismaCampaignRepository');
   const { PrismaCampaignInsightRepository } = require('@/infrastructure/repositories/PrismaCampaignInsightRepository');
@@ -13,7 +14,7 @@ function getService() {
   const { SyncMetaInsightsUseCase } = require('@/domain/usecases/SyncMetaInsightsUseCase');
   const { MetaSyncService } = require('@/application/services/MetaSyncService');
 
-  const prisma = new PrismaClient();
+  const prisma = getPrisma();
   const adAccountRepo = new PrismaAdAccountRepository(prisma);
   const campaignRepo = new PrismaCampaignRepository(prisma);
   const insightRepo = new PrismaCampaignInsightRepository(prisma);
@@ -87,10 +88,8 @@ export async function POST(request: NextRequest) {
     const service = getService();
     const result = await service.syncInsights(body.campaignId, startDate, endDate);
     return NextResponse.json(result);
-  } catch (err) {
-    return NextResponse.json(
-      { error: err instanceof Error ? err.message : 'Internal server error' },
-      { status: 500 },
-    );
+  } catch (error) {
+    const { body, status } = handleApiError(error);
+    return NextResponse.json(body, { status });
   }
 }

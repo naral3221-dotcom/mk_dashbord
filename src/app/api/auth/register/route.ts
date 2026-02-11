@@ -3,6 +3,7 @@ import { getPrisma } from '@/infrastructure/database/prisma';
 import { PrismaUserRepository } from '@/infrastructure/repositories/PrismaUserRepository';
 import { BcryptPasswordHasher } from '@/infrastructure/auth/BcryptPasswordHasher';
 import { RegisterUserUseCase } from '@/domain/usecases/RegisterUserUseCase';
+import { handleApiError } from '@/lib/apiErrorHandler';
 
 function getRegisterUseCase() {
   const prisma = getPrisma();
@@ -35,8 +36,7 @@ export async function POST(req: NextRequest) {
       { status: 201 },
     );
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Registration failed';
-    const status = message === 'Email already registered' ? 409 : 400;
-    return NextResponse.json({ error: message }, { status });
+    const { body, status } = handleApiError(error);
+    return NextResponse.json(body, { status });
   }
 }

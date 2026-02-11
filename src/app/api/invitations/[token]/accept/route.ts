@@ -4,6 +4,7 @@ import { PrismaInvitationRepository } from '@/infrastructure/repositories/Prisma
 import { PrismaUserRepository } from '@/infrastructure/repositories/PrismaUserRepository';
 import { AcceptInvitationUseCase } from '@/domain/usecases/AcceptInvitationUseCase';
 import { auth } from '@/infrastructure/auth/nextauth.config';
+import { handleApiError } from '@/lib/apiErrorHandler';
 
 function getAcceptUseCase() {
   const prisma = getPrisma();
@@ -30,7 +31,7 @@ export async function POST(
 
     return NextResponse.json({ success: true, userId: user.id });
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Internal server error';
-    return NextResponse.json({ error: message }, { status: 400 });
+    const { body, status } = handleApiError(error);
+    return NextResponse.json(body, { status });
   }
 }

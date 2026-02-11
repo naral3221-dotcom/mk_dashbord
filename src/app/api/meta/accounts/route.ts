@@ -7,6 +7,7 @@ import { AesTokenEncryption } from '@/infrastructure/encryption/AesTokenEncrypti
 import { ConnectMetaAdAccountUseCase } from '@/domain/usecases/ConnectMetaAdAccountUseCase';
 import { MetaAdAccountService } from '@/application/services/MetaAdAccountService';
 import { requireAuth } from '@/lib/auth';
+import { handleApiError } from '@/lib/apiErrorHandler';
 
 function getService() {
   const prisma = getPrisma();
@@ -37,9 +38,8 @@ export async function GET() {
     const result = await service.getAdAccounts(user.organizationId);
     return NextResponse.json(result);
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Internal server error';
-    const status = message === 'Unauthorized' ? 401 : 500;
-    return NextResponse.json({ error: message }, { status });
+    const { body, status } = handleApiError(error);
+    return NextResponse.json(body, { status });
   }
 }
 
@@ -74,10 +74,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(result, { status: result.isNew ? 201 : 200 });
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Internal server error';
-    const status =
-      message === 'Unauthorized' ? 401 :
-      message.includes('permission') ? 403 : 500;
-    return NextResponse.json({ error: message }, { status });
+    const { body, status } = handleApiError(error);
+    return NextResponse.json(body, { status });
   }
 }

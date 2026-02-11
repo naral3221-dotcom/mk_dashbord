@@ -11,6 +11,7 @@ import { ITokenEncryption } from '../services/ITokenEncryption';
 import { AdAccount } from '../entities/AdAccount';
 import { Campaign } from '../entities/Campaign';
 import { Platform, CampaignStatus } from '../entities/types';
+import { NotFoundError } from '../errors';
 
 describe('SyncCampaignsUseCase', () => {
   let useCase: SyncCampaignsUseCase;
@@ -234,6 +235,7 @@ describe('SyncCampaignsUseCase', () => {
     vi.mocked(mockAdAccountRepo.findById).mockResolvedValue(null);
 
     await expect(useCase.execute(validInput)).rejects.toThrow('Ad account not found');
+    await expect(useCase.execute(validInput)).rejects.toBeInstanceOf(NotFoundError);
   });
 
   it('should throw "Ad account is not active" when account is inactive', async () => {

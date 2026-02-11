@@ -11,6 +11,7 @@ import { AdAccount } from '../entities/AdAccount';
 import { Campaign } from '../entities/Campaign';
 import { CampaignInsight } from '../entities/CampaignInsight';
 import { Platform, CampaignStatus } from '../entities/types';
+import { ValidationError } from '../errors';
 
 describe('GetDashboardOverviewUseCase', () => {
   let useCase: GetDashboardOverviewUseCase;
@@ -443,6 +444,7 @@ describe('GetDashboardOverviewUseCase', () => {
     };
 
     await expect(useCase.execute(invalidInput)).rejects.toThrow('Organization ID is required');
+    await expect(useCase.execute(invalidInput)).rejects.toBeInstanceOf(ValidationError);
   });
 
   it('should throw when startDate >= endDate', async () => {

@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { Organization } from './Organization';
 import { Plan } from './types';
+import { ValidationError } from '../errors';
 
 describe('Organization Entity', () => {
   const validProps = {
@@ -49,6 +50,10 @@ describe('Organization Entity', () => {
       expect(() => Organization.create({ ...validProps, name: '' })).toThrow(
         'Organization name is required'
       );
+    });
+
+    it('should throw ValidationError instance on validation failure', () => {
+      expect(() => Organization.create({ ...validProps, name: '' })).toThrow(ValidationError);
     });
 
     it('should throw on whitespace-only name', () => {

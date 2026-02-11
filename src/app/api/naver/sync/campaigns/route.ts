@@ -7,6 +7,7 @@ import { NaverAdsApiClient } from '@/infrastructure/external/naver/NaverAdsApiCl
 import { NaverAdsPlatformAdapter } from '@/infrastructure/external/naver/NaverAdsPlatformAdapter';
 import { AesTokenEncryption } from '@/infrastructure/encryption/AesTokenEncryption';
 import { Platform } from '@/domain/entities/types';
+import { handleApiError } from '@/lib/apiErrorHandler';
 
 function getServices() {
   const prisma = getPrisma();
@@ -94,10 +95,8 @@ export async function POST(request: NextRequest) {
       total: normalizedCampaigns.length,
       adAccountId: body.adAccountId,
     });
-  } catch (err) {
-    return NextResponse.json(
-      { error: err instanceof Error ? err.message : 'Internal server error' },
-      { status: 500 },
-    );
+  } catch (error) {
+    const { body, status } = handleApiError(error);
+    return NextResponse.json(body, { status });
   }
 }

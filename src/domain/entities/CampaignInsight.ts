@@ -1,3 +1,5 @@
+import { ValidationError } from '../errors';
+
 export interface CampaignInsightProps {
   readonly id: string;
   readonly date: Date;
@@ -29,38 +31,38 @@ export class CampaignInsight {
     id: string = crypto.randomUUID()
   ): CampaignInsight {
     if (!props.date) {
-      throw new Error('Date is required');
+      throw new ValidationError('Date is required');
     }
 
     if (!props.campaignId) {
-      throw new Error('Campaign ID is required');
+      throw new ValidationError('Campaign ID is required');
     }
 
     if (props.spend < 0) {
-      throw new Error('Spend cannot be negative');
+      throw new ValidationError('Spend cannot be negative');
     }
 
     if (props.impressions < 0) {
-      throw new Error('Impressions cannot be negative');
+      throw new ValidationError('Impressions cannot be negative');
     }
 
     if (props.clicks < 0) {
-      throw new Error('Clicks cannot be negative');
+      throw new ValidationError('Clicks cannot be negative');
     }
 
     if (props.conversions < 0) {
-      throw new Error('Conversions cannot be negative');
+      throw new ValidationError('Conversions cannot be negative');
     }
 
     if (props.revenue < 0) {
-      throw new Error('Revenue cannot be negative');
+      throw new ValidationError('Revenue cannot be negative');
     }
 
     const flooredImpressions = Math.floor(props.impressions);
     const flooredClicks = Math.floor(props.clicks);
 
     if (flooredClicks > flooredImpressions) {
-      throw new Error('Clicks cannot exceed impressions');
+      throw new ValidationError('Clicks cannot exceed impressions');
     }
 
     const now = new Date();
@@ -145,7 +147,7 @@ export class CampaignInsight {
     };
 
     if (newProps.clicks > newProps.impressions) {
-      throw new Error('Clicks cannot exceed impressions');
+      throw new ValidationError('Clicks cannot exceed impressions');
     }
 
     return new CampaignInsight(newProps);

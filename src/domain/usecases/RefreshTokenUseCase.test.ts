@@ -8,6 +8,7 @@ import { IAdPlatformClient, TokenExchangeResult } from '../services/IAdPlatformC
 import { ITokenEncryption } from '../services/ITokenEncryption';
 import { AdAccount } from '../entities/AdAccount';
 import { Platform } from '../entities/types';
+import { NotFoundError } from '../errors';
 
 describe('RefreshTokenUseCase', () => {
   let useCase: RefreshTokenUseCase;
@@ -206,6 +207,7 @@ describe('RefreshTokenUseCase', () => {
     await expect(useCase.execute({ adAccountId: 'nonexistent' })).rejects.toThrow(
       'Ad account not found',
     );
+    await expect(useCase.execute({ adAccountId: 'nonexistent' })).rejects.toBeInstanceOf(NotFoundError);
   });
 
   it('should throw "Ad account has no access token" when accessToken is null', async () => {

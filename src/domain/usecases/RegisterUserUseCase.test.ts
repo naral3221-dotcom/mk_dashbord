@@ -3,6 +3,7 @@ import { RegisterUserUseCase, RegisterUserInput } from './RegisterUserUseCase';
 import { User } from '../entities/User';
 import { IUserRepository } from '../repositories/IUserRepository';
 import { IPasswordHasher } from '../services/IPasswordHasher';
+import { ConflictError } from '../errors';
 
 describe('RegisterUserUseCase', () => {
   let useCase: RegisterUserUseCase;
@@ -70,6 +71,7 @@ describe('RegisterUserUseCase', () => {
     vi.mocked(mockUserRepo.findByEmail).mockResolvedValue(existingUser);
 
     await expect(useCase.execute(validInput)).rejects.toThrow('Email already registered');
+    await expect(useCase.execute(validInput)).rejects.toBeInstanceOf(ConflictError);
   });
 
   it('should throw if password missing for credentials provider', async () => {

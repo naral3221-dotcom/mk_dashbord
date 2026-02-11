@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth';
+import { handleApiError } from '@/lib/apiErrorHandler';
 
 function getGoogleAdsClient() {
   const { GoogleAdsApiClient } = require(
@@ -40,10 +41,8 @@ export async function GET(request: NextRequest) {
     const accounts = await adapter.getAdAccounts(accessToken);
     return NextResponse.json({ accounts });
   } catch (error) {
-    const message =
-      error instanceof Error ? error.message : 'Internal server error';
-    const status = message === 'Unauthorized' ? 401 : 500;
-    return NextResponse.json({ error: message }, { status });
+    const { body, status } = handleApiError(error);
+    return NextResponse.json(body, { status });
   }
 }
 
@@ -130,14 +129,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ account: adAccount, isNew: true }, { status: 201 });
   } catch (error) {
-    const message =
-      error instanceof Error ? error.message : 'Internal server error';
-    const status =
-      message === 'Unauthorized'
-        ? 401
-        : message.includes('permission')
-          ? 403
-          : 500;
-    return NextResponse.json({ error: message }, { status });
+    const { body, status } = handleApiError(error);
+    return NextResponse.json(body, { status });
   }
 }

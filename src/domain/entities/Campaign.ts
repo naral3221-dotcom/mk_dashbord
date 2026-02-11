@@ -1,4 +1,5 @@
 import { CampaignStatus } from './types';
+import { ValidationError } from '../errors';
 
 export interface CampaignProps {
   readonly id: string;
@@ -25,15 +26,15 @@ export class Campaign {
     id: string = crypto.randomUUID()
   ): Campaign {
     if (!props.externalId || props.externalId.trim().length === 0) {
-      throw new Error('External campaign ID is required');
+      throw new ValidationError('External campaign ID is required');
     }
 
     if (!props.name || props.name.trim().length === 0) {
-      throw new Error('Campaign name is required');
+      throw new ValidationError('Campaign name is required');
     }
 
     if (!props.adAccountId) {
-      throw new Error('Ad account ID is required');
+      throw new ValidationError('Ad account ID is required');
     }
 
     const now = new Date();
@@ -63,7 +64,7 @@ export class Campaign {
 
   updateName(name: string): Campaign {
     if (!name || name.trim().length === 0) {
-      throw new Error('Campaign name is required');
+      throw new ValidationError('Campaign name is required');
     }
 
     return new Campaign({
@@ -79,7 +80,7 @@ export class Campaign {
     }
 
     if (this.props.status === CampaignStatus.DELETED) {
-      throw new Error('Cannot change status of deleted campaign');
+      throw new ValidationError('Cannot change status of deleted campaign');
     }
 
     return new Campaign({

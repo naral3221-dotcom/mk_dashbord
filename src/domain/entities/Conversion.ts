@@ -1,3 +1,5 @@
+import { ValidationError } from '../errors';
+
 export interface ConversionProps {
   readonly id: string;
   readonly timestamp: Date;
@@ -33,20 +35,20 @@ export class Conversion {
     id: string = crypto.randomUUID()
   ): Conversion {
     if (!props.timestamp) {
-      throw new Error('Timestamp is required');
+      throw new ValidationError('Timestamp is required');
     }
 
     if (!props.organizationId) {
-      throw new Error('Organization ID is required');
+      throw new ValidationError('Organization ID is required');
     }
 
     const value = props.value ?? 0;
     if (value < 0) {
-      throw new Error('Conversion value cannot be negative');
+      throw new ValidationError('Conversion value cannot be negative');
     }
 
     if (props.timestamp > new Date()) {
-      throw new Error('Conversion timestamp cannot be in the future');
+      throw new ValidationError('Conversion timestamp cannot be in the future');
     }
 
     const now = new Date();

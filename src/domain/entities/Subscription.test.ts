@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { Subscription } from './Subscription';
 import { Plan, SubscriptionStatus } from './types';
+import { ValidationError } from '../errors';
 
 describe('Subscription Entity', () => {
   const validProps = {
@@ -43,6 +44,10 @@ describe('Subscription Entity', () => {
       expect(() =>
         Subscription.create({ ...validProps, organizationId: '' })
       ).toThrow('Organization ID is required');
+    });
+
+    it('should throw ValidationError instance on validation failure', () => {
+      expect(() => Subscription.create({ ...validProps, organizationId: '' })).toThrow(ValidationError);
     });
 
     it('should throw if stripeSubscriptionId is empty', () => {

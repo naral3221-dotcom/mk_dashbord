@@ -3,6 +3,7 @@ import { User } from '../entities/User';
 import { Plan, Role } from '../entities/types';
 import { IOrganizationRepository } from '../repositories/IOrganizationRepository';
 import { IUserRepository } from '../repositories/IUserRepository';
+import { ConflictError, NotFoundError } from '../errors';
 
 export interface CreateOrganizationInput {
   name: string;
@@ -26,13 +27,13 @@ export class CreateOrganizationUseCase {
     // 1. Check slug uniqueness
     const slugExists = await this.organizationRepo.existsBySlug(input.slug);
     if (slugExists) {
-      throw new Error('Organization slug already exists');
+      throw new ConflictError('Organization slug already exists', 'Organization');
     }
 
     // 2. Find existing user by userId
     const user = await this.userRepo.findById(input.userId);
     if (!user) {
-      throw new Error('User not found');
+      throw new NotFoundError('User');
     }
 
     // 3. Create Organization with Plan.FREE

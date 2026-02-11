@@ -1,4 +1,5 @@
 import { Plan } from './types';
+import { ValidationError } from '../errors';
 
 export interface OrganizationProps {
   readonly id: string;
@@ -24,15 +25,15 @@ export class Organization {
     id: string = crypto.randomUUID()
   ): Organization {
     if (!props.name || props.name.trim().length === 0) {
-      throw new Error('Organization name is required');
+      throw new ValidationError('Organization name is required');
     }
 
     if (props.name.length > 100) {
-      throw new Error('Organization name must be less than 100 characters');
+      throw new ValidationError('Organization name must be less than 100 characters');
     }
 
     if (!props.slug || !Organization.isValidSlug(props.slug.toLowerCase())) {
-      throw new Error('Invalid organization slug format');
+      throw new ValidationError('Invalid organization slug format');
     }
 
     const now = new Date();
@@ -82,11 +83,11 @@ export class Organization {
 
   updateName(name: string): Organization {
     if (!name || name.trim().length === 0) {
-      throw new Error('Organization name is required');
+      throw new ValidationError('Organization name is required');
     }
 
     if (name.length > 100) {
-      throw new Error('Organization name must be less than 100 characters');
+      throw new ValidationError('Organization name must be less than 100 characters');
     }
 
     return new Organization({
@@ -98,7 +99,7 @@ export class Organization {
 
   upgradePlan(newPlan: Plan): Organization {
     if (!Organization.canUpgradeTo(this.props.plan, newPlan)) {
-      throw new Error(`Cannot upgrade from ${this.props.plan} to ${newPlan}`);
+      throw new ValidationError(`Cannot upgrade from ${this.props.plan} to ${newPlan}`);
     }
 
     return new Organization({
@@ -118,7 +119,7 @@ export class Organization {
 
   setStripeCustomerId(customerId: string): Organization {
     if (!customerId || customerId.trim().length === 0) {
-      throw new Error('Stripe customer ID is required');
+      throw new ValidationError('Stripe customer ID is required');
     }
 
     return new Organization({

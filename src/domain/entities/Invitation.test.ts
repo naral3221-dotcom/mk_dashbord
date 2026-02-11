@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { Invitation } from './Invitation';
 import { Role } from './types';
+import { ValidationError } from '../errors';
 
 describe('Invitation Entity', () => {
   const validProps = {
@@ -54,6 +55,10 @@ describe('Invitation Entity', () => {
       expect(() => Invitation.create({ ...validProps, email: '' })).toThrow(
         'Invalid email format'
       );
+    });
+
+    it('should throw ValidationError instance on validation failure', () => {
+      expect(() => Invitation.create({ ...validProps, email: '' })).toThrow(ValidationError);
     });
 
     it('should throw on invalid email format', () => {

@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { Campaign } from './Campaign';
 import { CampaignStatus } from './types';
+import { ValidationError } from '../errors';
 
 describe('Campaign Entity', () => {
   const validProps = {
@@ -52,6 +53,10 @@ describe('Campaign Entity', () => {
       expect(() =>
         Campaign.create({ ...validProps, externalId: '' })
       ).toThrow('External campaign ID is required');
+    });
+
+    it('should throw ValidationError instance on validation failure', () => {
+      expect(() => Campaign.create({ ...validProps, externalId: '' })).toThrow(ValidationError);
     });
 
     it('should throw on whitespace-only externalId', () => {

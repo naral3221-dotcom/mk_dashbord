@@ -3,6 +3,7 @@ import { getPrisma } from '@/infrastructure/database/prisma';
 import { PrismaUserRepository } from '@/infrastructure/repositories/PrismaUserRepository';
 import { AuthService } from '@/application/services/AuthService';
 import { AuthenticatedUser } from '@/application/dto/AuthDTO';
+import { UnauthorizedError, ForbiddenError } from '@/domain/errors';
 
 function getAuthService() {
   const prisma = getPrisma();
@@ -19,7 +20,7 @@ export async function getAuthUser(): Promise<AuthenticatedUser | null> {
 export async function requireAuth(): Promise<AuthenticatedUser> {
   const user = await getAuthUser();
   if (!user) {
-    throw new Error('Unauthorized');
+    throw new UnauthorizedError('Authentication required');
   }
   return user;
 }
@@ -29,7 +30,7 @@ export async function requirePermission(
 ): Promise<AuthenticatedUser> {
   const user = await requireAuth();
   if (!user.permissions[permission]) {
-    throw new Error('Forbidden');
+    throw new ForbiddenError('Insufficient permissions');
   }
   return user;
 }

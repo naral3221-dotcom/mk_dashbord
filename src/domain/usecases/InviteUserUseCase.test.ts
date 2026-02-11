@@ -4,6 +4,7 @@ import { User } from '../entities/User';
 import { Organization } from '../entities/Organization';
 import { Invitation } from '../entities/Invitation';
 import { Role, Plan } from '../entities/types';
+import { NotFoundError } from '../errors';
 
 const mockInvitationRepo = {
   findById: vi.fn(),
@@ -104,7 +105,8 @@ describe('InviteUserUseCase', () => {
   it('should throw if inviter not found', async () => {
     vi.mocked(mockUserRepo.findById).mockResolvedValue(null);
 
-    await expect(useCase.execute(defaultInput)).rejects.toThrow('Inviter not found');
+    await expect(useCase.execute(defaultInput)).rejects.toThrow('User not found');
+    await expect(useCase.execute(defaultInput)).rejects.toBeInstanceOf(NotFoundError);
   });
 
   it('should throw if inviter lacks canManageUsers permission (VIEWER role)', async () => {

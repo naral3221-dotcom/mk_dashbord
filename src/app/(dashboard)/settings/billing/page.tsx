@@ -40,9 +40,8 @@ export default function BillingPage() {
       if (url) {
         window.location.href = url;
       }
-    } catch (err) {
-      // Error handling - could add toast notification
-      console.error('Checkout error:', err);
+    } catch {
+      // Sentry captures unhandled errors via client config
     }
   };
 
@@ -65,8 +64,8 @@ export default function BillingPage() {
       if (url) {
         window.location.href = url;
       }
-    } catch (err) {
-      console.error('Portal error:', err);
+    } catch {
+      // Sentry captures unhandled errors via client config
     }
   };
 

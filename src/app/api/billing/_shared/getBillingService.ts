@@ -1,7 +1,7 @@
 import { BillingService } from '@/application/services/BillingService';
 
 export function getBillingService(): BillingService {
-  const { PrismaClient } = require('@/generated/prisma');
+  const { getPrisma } = require('@/infrastructure/database/prisma');
   const { PrismaOrganizationRepository } = require('@/infrastructure/repositories/PrismaOrganizationRepository');
   const { PrismaUserRepository } = require('@/infrastructure/repositories/PrismaUserRepository');
   const { PrismaSubscriptionRepository } = require('@/infrastructure/repositories/PrismaSubscriptionRepository');
@@ -15,7 +15,7 @@ export function getBillingService(): BillingService {
   const { GetSubscriptionUseCase } = require('@/domain/usecases/GetSubscriptionUseCase');
   const { CheckFeatureAccessUseCase } = require('@/domain/usecases/CheckFeatureAccessUseCase');
 
-  const prisma = new PrismaClient();
+  const prisma = getPrisma();
   const orgRepo = new PrismaOrganizationRepository(prisma);
   const userRepo = new PrismaUserRepository(prisma);
   const subscriptionRepo = new PrismaSubscriptionRepository(prisma);

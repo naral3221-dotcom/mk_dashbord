@@ -1,4 +1,5 @@
 import { Platform } from './types';
+import { ValidationError } from '../errors';
 
 export interface AdAccountProps {
   readonly id: string;
@@ -32,19 +33,19 @@ export class AdAccount {
     id: string = crypto.randomUUID()
   ): AdAccount {
     if (!props.platform) {
-      throw new Error('Platform is required');
+      throw new ValidationError('Platform is required');
     }
 
     if (!props.accountId || props.accountId.trim().length === 0) {
-      throw new Error('Account ID is required');
+      throw new ValidationError('Account ID is required');
     }
 
     if (!props.accountName || props.accountName.trim().length === 0) {
-      throw new Error('Account name is required');
+      throw new ValidationError('Account name is required');
     }
 
     if (!props.organizationId) {
-      throw new Error('Organization ID is required');
+      throw new ValidationError('Organization ID is required');
     }
 
     const now = new Date();
@@ -86,7 +87,7 @@ export class AdAccount {
     expiresAt: Date
   ): AdAccount {
     if (!accessToken) {
-      throw new Error('Access token is required');
+      throw new ValidationError('Access token is required');
     }
 
     return new AdAccount({
@@ -123,7 +124,7 @@ export class AdAccount {
 
   updateAccountName(name: string): AdAccount {
     if (!name || name.trim().length === 0) {
-      throw new Error('Account name is required');
+      throw new ValidationError('Account name is required');
     }
 
     return new AdAccount({

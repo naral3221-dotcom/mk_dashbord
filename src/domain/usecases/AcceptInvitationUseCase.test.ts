@@ -3,6 +3,7 @@ import { AcceptInvitationUseCase } from './AcceptInvitationUseCase';
 import { Invitation } from '../entities/Invitation';
 import { User } from '../entities/User';
 import { Role } from '../entities/types';
+import { NotFoundError } from '../errors';
 
 describe('AcceptInvitationUseCase', () => {
   const mockInvitationRepo = {
@@ -90,6 +91,7 @@ describe('AcceptInvitationUseCase', () => {
     mockInvitationRepo.findByToken.mockResolvedValue(null);
 
     await expect(useCase.execute(validInput)).rejects.toThrow('Invitation not found');
+    await expect(useCase.execute(validInput)).rejects.toBeInstanceOf(NotFoundError);
   });
 
   it('should throw if invitation is expired', async () => {

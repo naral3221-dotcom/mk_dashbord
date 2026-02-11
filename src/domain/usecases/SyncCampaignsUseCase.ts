@@ -3,6 +3,7 @@ import { IAdAccountRepository } from '../repositories/IAdAccountRepository';
 import { ICampaignRepository } from '../repositories/ICampaignRepository';
 import { IPlatformAdapterRegistry } from '../services/IPlatformAdapterRegistry';
 import { ITokenEncryption } from '../services/ITokenEncryption';
+import { NotFoundError, ValidationError } from '../errors';
 
 export interface SyncCampaignsInput {
   adAccountId: string;
@@ -29,13 +30,13 @@ export class SyncCampaignsUseCase {
     // 1. Find ad account
     const adAccount = await this.adAccountRepo.findById(input.adAccountId);
     if (!adAccount) {
-      throw new Error('Ad account not found');
+      throw new NotFoundError('Ad account');
     }
     if (!adAccount.isActive) {
-      throw new Error('Ad account is not active');
+      throw new ValidationError('Ad account is not active');
     }
     if (!adAccount.accessToken) {
-      throw new Error('Ad account has no access token');
+      throw new ValidationError('Ad account has no access token');
     }
 
     // 2. Get platform adapter

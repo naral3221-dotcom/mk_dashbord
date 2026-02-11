@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth';
+import { handleApiError } from '@/lib/apiErrorHandler';
 
 function getService() {
   const { getPrisma } = require('@/infrastructure/database/prisma') as {
@@ -58,10 +59,8 @@ export async function GET(request: NextRequest) {
       })),
     });
   } catch (error) {
-    const message =
-      error instanceof Error ? error.message : 'Internal server error';
-    const status = message === 'Unauthorized' ? 401 : 500;
-    return NextResponse.json({ error: message }, { status });
+    const { body, status } = handleApiError(error);
+    return NextResponse.json(body, { status });
   }
 }
 
@@ -104,14 +103,7 @@ export async function POST(request: NextRequest) {
       { status: 201 },
     );
   } catch (error) {
-    const message =
-      error instanceof Error ? error.message : 'Internal server error';
-    const status =
-      message === 'Unauthorized'
-        ? 401
-        : message.includes('permission')
-          ? 403
-          : 500;
-    return NextResponse.json({ error: message }, { status });
+    const { body, status } = handleApiError(error);
+    return NextResponse.json(body, { status });
   }
 }

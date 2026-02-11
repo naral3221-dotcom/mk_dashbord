@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/infrastructure/auth/nextauth.config';
 import { getBillingService } from '../_shared/getBillingService';
+import { handleApiError } from '@/lib/apiErrorHandler';
 
 export async function POST(request: NextRequest) {
   const session = await auth();
@@ -28,9 +29,8 @@ export async function POST(request: NextRequest) {
     const service = getBillingService();
     const result = await service.createPortalSession(userId, organizationId, { returnUrl });
     return NextResponse.json(result);
-  } catch (err) {
-    const message = err instanceof Error ? err.message : 'Internal server error';
-    const status = message.includes('permission') || message.includes('owners') ? 403 : 500;
-    return NextResponse.json({ error: message }, { status });
+  } catch (error) {
+    const { body, status } = handleApiError(error);
+    return NextResponse.json(body, { status });
   }
 }

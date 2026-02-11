@@ -9,6 +9,7 @@ import {
   IPaymentGateway,
   SubscriptionData,
 } from '../services/IPaymentGateway';
+import { NotFoundError, ValidationError } from '../errors';
 
 export interface HandleStripeWebhookInput {
   payload: string;
@@ -100,13 +101,13 @@ export class HandleStripeWebhookUseCase {
     const organizationId = metadata?.organizationId;
 
     if (!subscription || !customer || !organizationId) {
-      throw new Error('Missing required checkout session data');
+      throw new ValidationError('Missing required checkout session data');
     }
 
     // Find organization
     const org = await this.orgRepo.findById(organizationId);
     if (!org) {
-      throw new Error('Organization not found');
+      throw new NotFoundError('Organization');
     }
 
     // Get subscription data from Stripe

@@ -3,6 +3,7 @@ import { ChangeUserRoleUseCase, ChangeUserRoleInput } from './ChangeUserRoleUseC
 import { IUserRepository } from '../repositories/IUserRepository';
 import { User } from '../entities/User';
 import { Role } from '../entities/types';
+import { NotFoundError } from '../errors';
 
 describe('ChangeUserRoleUseCase', () => {
   let useCase: ChangeUserRoleUseCase;
@@ -96,7 +97,8 @@ describe('ChangeUserRoleUseCase', () => {
       newRole: Role.VIEWER,
     };
 
-    await expect(useCase.execute(input)).rejects.toThrow('Actor not found');
+    await expect(useCase.execute(input)).rejects.toThrow('User not found');
+    await expect(useCase.execute(input)).rejects.toBeInstanceOf(NotFoundError);
   });
 
   it('should throw if target not found', async () => {
@@ -110,7 +112,7 @@ describe('ChangeUserRoleUseCase', () => {
       newRole: Role.VIEWER,
     };
 
-    await expect(useCase.execute(input)).rejects.toThrow('Target user not found');
+    await expect(useCase.execute(input)).rejects.toThrow('User not found');
   });
 
   it('should throw if users are in different organizations', async () => {

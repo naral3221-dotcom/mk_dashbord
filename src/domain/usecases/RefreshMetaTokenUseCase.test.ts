@@ -7,6 +7,7 @@ import { IMetaApiClient } from '../services/IMetaApiClient';
 import { ITokenEncryption } from '../services/ITokenEncryption';
 import { AdAccount } from '../entities/AdAccount';
 import { Platform } from '../entities/types';
+import { NotFoundError } from '../errors';
 
 describe('RefreshMetaTokenUseCase', () => {
   let useCase: RefreshMetaTokenUseCase;
@@ -123,6 +124,7 @@ describe('RefreshMetaTokenUseCase', () => {
     await expect(useCase.execute({ adAccountId: 'nonexistent' })).rejects.toThrow(
       'Ad account not found',
     );
+    await expect(useCase.execute({ adAccountId: 'nonexistent' })).rejects.toBeInstanceOf(NotFoundError);
   });
 
   it('should throw when ad account has no access token', async () => {

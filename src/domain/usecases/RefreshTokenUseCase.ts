@@ -2,6 +2,7 @@ import { AdAccount } from '../entities/AdAccount';
 import { IAdAccountRepository } from '../repositories/IAdAccountRepository';
 import { IPlatformAdapterRegistry } from '../services/IPlatformAdapterRegistry';
 import { ITokenEncryption } from '../services/ITokenEncryption';
+import { NotFoundError, ValidationError } from '../errors';
 
 export interface RefreshTokenInput {
   adAccountId: string;
@@ -26,11 +27,11 @@ export class RefreshTokenUseCase {
     // 1. Find ad account and validate
     const adAccount = await this.adAccountRepo.findById(input.adAccountId);
     if (!adAccount) {
-      throw new Error('Ad account not found');
+      throw new NotFoundError('Ad account');
     }
 
     if (!adAccount.accessToken) {
-      throw new Error('Ad account has no access token');
+      throw new ValidationError('Ad account has no access token');
     }
 
     // 2. Get the platform adapter

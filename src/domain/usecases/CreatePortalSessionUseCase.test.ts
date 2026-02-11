@@ -9,6 +9,7 @@ import { IPaymentGateway } from '../services/IPaymentGateway';
 import { User } from '../entities/User';
 import { Organization } from '../entities/Organization';
 import { Plan, Role } from '../entities/types';
+import { NotFoundError } from '../errors';
 
 describe('CreatePortalSessionUseCase', () => {
   let useCase: CreatePortalSessionUseCase;
@@ -135,6 +136,7 @@ describe('CreatePortalSessionUseCase', () => {
     await expect(useCase.execute(defaultInput)).rejects.toThrow(
       'User not found',
     );
+    await expect(useCase.execute(defaultInput)).rejects.toBeInstanceOf(NotFoundError);
 
     expect(mockOrgRepo.findById).not.toHaveBeenCalled();
     expect(mockPaymentGateway.createPortalSession).not.toHaveBeenCalled();

@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { BillingEvent } from './BillingEvent';
+import { ValidationError } from '../errors';
 
 describe('BillingEvent Entity', () => {
   const validProps = {
@@ -35,6 +36,10 @@ describe('BillingEvent Entity', () => {
       expect(() =>
         BillingEvent.create({ ...validProps, organizationId: '' })
       ).toThrow('Organization ID is required');
+    });
+
+    it('should throw ValidationError instance on validation failure', () => {
+      expect(() => BillingEvent.create({ ...validProps, organizationId: '' })).toThrow(ValidationError);
     });
 
     it('should throw if organizationId is whitespace only', () => {

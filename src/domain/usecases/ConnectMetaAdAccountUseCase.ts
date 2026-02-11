@@ -4,6 +4,7 @@ import { IAdAccountRepository } from '../repositories/IAdAccountRepository';
 import { IUserRepository } from '../repositories/IUserRepository';
 import { IMetaApiClient } from '../services/IMetaApiClient';
 import { ITokenEncryption } from '../services/ITokenEncryption';
+import { NotFoundError, ForbiddenError, ValidationError } from '../errors';
 
 export interface ConnectMetaAdAccountInput {
   userId: string;
@@ -30,13 +31,13 @@ export class ConnectMetaAdAccountUseCase {
     // 1. Find user and verify permissions
     const user = await this.userRepo.findById(input.userId);
     if (!user) {
-      throw new Error('User not found');
+      throw new NotFoundError('User');
     }
     if (user.organizationId !== input.organizationId) {
-      throw new Error('User does not belong to this organization');
+      throw new ValidationError('User does not belong to this organization');
     }
     if (!RolePermissions[user.role].canManageAdAccounts) {
-      throw new Error('Insufficient permissions to manage ad accounts');
+      throw new ForbiddenError('Insufficient permissions to manage ad accounts');
     }
 
     // 2. Exchange short-lived token for long-lived token

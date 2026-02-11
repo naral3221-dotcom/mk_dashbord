@@ -1,6 +1,7 @@
 import { User } from '../entities/User';
 import { IInvitationRepository } from '../repositories/IInvitationRepository';
 import { IUserRepository } from '../repositories/IUserRepository';
+import { NotFoundError, ValidationError } from '../errors';
 
 export interface AcceptInvitationInput {
   token: string;
@@ -17,30 +18,30 @@ export class AcceptInvitationUseCase {
     // 1. Find invitation by token
     const invitation = await this.invitationRepo.findByToken(input.token);
     if (!invitation) {
-      throw new Error('Invitation not found');
+      throw new NotFoundError('Invitation');
     }
 
     // 2. Check if expired
     if (invitation.isExpired()) {
-      throw new Error('Invitation has expired');
+      throw new ValidationError('Invitation has expired');
     }
 
     // 3. Check if already accepted
     if (invitation.acceptedAt !== null) {
-      throw new Error('Invitation has already been accepted');
+      throw new ValidationError('Invitation has already been accepted');
     }
 
     // 4. Find the user by userId
     const user = await this.userRepo.findById(input.userId);
     if (!user) {
-      throw new Error('User not found');
+      throw new NotFoundError('User');
     }
 
     // 5. Check email matches (case-insensitive)
     const userEmail = user.email.trim().toLowerCase();
     const invitationEmail = invitation.email.trim().toLowerCase();
     if (userEmail !== invitationEmail) {
-      throw new Error('Email does not match invitation');
+      throw new ValidationError('Email does not match invitation');
     }
 
     // 6. Accept invitation

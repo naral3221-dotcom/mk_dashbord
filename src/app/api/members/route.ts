@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getPrisma } from '@/infrastructure/database/prisma';
 import { PrismaUserRepository } from '@/infrastructure/repositories/PrismaUserRepository';
 import { requireAuth } from '@/lib/auth';
+import { handleApiError } from '@/lib/apiErrorHandler';
 
 function getUserRepo() {
   return new PrismaUserRepository(getPrisma());
@@ -24,8 +25,7 @@ export async function GET(req: NextRequest) {
       })),
     );
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Internal server error';
-    const status = message === 'Unauthorized' ? 401 : 400;
-    return NextResponse.json({ error: message }, { status });
+    const { body, status } = handleApiError(error);
+    return NextResponse.json(body, { status });
   }
 }

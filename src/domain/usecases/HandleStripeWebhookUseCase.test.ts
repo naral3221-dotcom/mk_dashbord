@@ -11,6 +11,7 @@ import { Subscription } from '../entities/Subscription';
 import { BillingEvent } from '../entities/BillingEvent';
 import { Organization } from '../entities/Organization';
 import { Plan, SubscriptionStatus } from '../entities/types';
+import { NotFoundError } from '../errors';
 
 describe('HandleStripeWebhookUseCase', () => {
   let useCase: HandleStripeWebhookUseCase;
@@ -235,6 +236,7 @@ describe('HandleStripeWebhookUseCase', () => {
     await expect(useCase.execute(defaultInput)).rejects.toThrow(
       'Organization not found',
     );
+    await expect(useCase.execute(defaultInput)).rejects.toBeInstanceOf(NotFoundError);
   });
 
   // ─── invoice.paid ───────────────────────────────────────────────────

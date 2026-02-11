@@ -3,6 +3,7 @@ import { Role, RolePermissions, PlanLimits } from '../entities/types';
 import { IInvitationRepository } from '../repositories/IInvitationRepository';
 import { IUserRepository } from '../repositories/IUserRepository';
 import { IOrganizationRepository } from '../repositories/IOrganizationRepository';
+import { NotFoundError, ForbiddenError, PlanLimitError, ConflictError } from '../errors';
 
 export interface InviteUserInput {
   email: string;
@@ -22,24 +23,24 @@ export class InviteUserUseCase {
     // 1. Find the actor (invitedBy) user
     const actor = await this.userRepo.findById(input.invitedById);
     if (!actor) {
-      throw new Error('Inviter not found');
+      throw new NotFoundError('User');
     }
 
     // 2. Check actor has canManageUsers permission
     const permissions = RolePermissions[actor.role];
     if (!permissions.canManageUsers) {
-      throw new Error('Insufficient permissions');
+      throw new ForbiddenError('Insufficient permissions');
     }
 
     // 3. Cannot invite as OWNER role
     if (input.role === Role.OWNER) {
-      throw new Error('Cannot invite user as OWNER');
+      throw new ForbiddenError('Cannot invite user as OWNER');
     }
 
     // 4. Find organization
     const organization = await this.organizationRepo.findById(input.organizationId);
     if (!organization) {
-      throw new Error('Organization not found');
+      throw new NotFoundError('Organization');
     }
 
     // 5. Check PlanLimits: count current users + pending invitations
@@ -50,14 +51,14 @@ export class InviteUserUseCase {
       const currentCount = userCount + pendingInvitations.length;
 
       if (currentCount >= planLimit.maxUsers) {
-        throw new Error('User limit reached for current plan');
+        throw new PlanLimitError('User limit reached for current plan', 'users');
       }
     }
 
     // 6. Check email not already a member of the same organization
     const existingUser = await this.userRepo.findByEmail(input.email);
     if (existingUser && existingUser.organizationId === input.organizationId) {
-      throw new Error('User already exists in this organization');
+      throw new ConflictError('User already exists in this organization', 'User');
     }
 
     // 7. Generate token

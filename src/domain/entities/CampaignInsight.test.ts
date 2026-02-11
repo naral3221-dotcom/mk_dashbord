@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { CampaignInsight } from './CampaignInsight';
+import { ValidationError } from '../errors';
 
 describe('CampaignInsight Entity', () => {
   const validProps = {
@@ -66,6 +67,10 @@ describe('CampaignInsight Entity', () => {
       expect(() =>
         CampaignInsight.create({ ...validProps, campaignId: '' })
       ).toThrow('Campaign ID is required');
+    });
+
+    it('should throw ValidationError instance on validation failure', () => {
+      expect(() => CampaignInsight.create({ ...validProps, spend: -1 })).toThrow(ValidationError);
     });
 
     it('should throw on negative spend', () => {

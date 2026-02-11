@@ -1,6 +1,7 @@
 import { Plan, SubscriptionStatus } from '../entities/types';
 import { ISubscriptionRepository } from '../repositories/ISubscriptionRepository';
 import { IOrganizationRepository } from '../repositories/IOrganizationRepository';
+import { NotFoundError } from '../errors';
 
 export interface GetSubscriptionInput {
   organizationId: string;
@@ -31,7 +32,7 @@ export class GetSubscriptionUseCase {
     // 1. Find organization
     const org = await this.orgRepo.findById(input.organizationId);
     if (!org) {
-      throw new Error('Organization not found');
+      throw new NotFoundError('Organization');
     }
 
     // 2. Find subscription by organization ID

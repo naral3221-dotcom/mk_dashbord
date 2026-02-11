@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { Conversion } from './Conversion';
+import { ValidationError } from '../errors';
 
 describe('Conversion Entity', () => {
   const validProps = {
@@ -84,6 +85,10 @@ describe('Conversion Entity', () => {
       expect(() =>
         Conversion.create({ ...validProps, organizationId: '' })
       ).toThrow('Organization ID is required');
+    });
+
+    it('should throw ValidationError instance on validation failure', () => {
+      expect(() => Conversion.create({ ...validProps, organizationId: '' })).toThrow(ValidationError);
     });
 
     it('should throw on negative value', () => {

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getBillingService } from '../../billing/_shared/getBillingService';
+import { handleApiError } from '@/lib/apiErrorHandler';
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,8 +17,8 @@ export async function POST(request: NextRequest) {
     const service = getBillingService();
     const result = await service.handleWebhook(payload, signature);
     return NextResponse.json({ received: true, ...result });
-  } catch (err) {
-    const message = err instanceof Error ? err.message : 'Webhook processing failed';
-    return NextResponse.json({ error: message }, { status: 400 });
+  } catch (error) {
+    const { body, status } = handleApiError(error);
+    return NextResponse.json(body, { status });
   }
 }

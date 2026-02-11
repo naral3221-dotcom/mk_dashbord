@@ -4,6 +4,7 @@ import { PrismaUserRepository } from '@/infrastructure/repositories/PrismaUserRe
 import { ChangeUserRoleUseCase } from '@/domain/usecases/ChangeUserRoleUseCase';
 import { requireAuth } from '@/lib/auth';
 import { Role } from '@/domain/entities/types';
+import { handleApiError } from '@/lib/apiErrorHandler';
 
 function getChangeRoleUseCase() {
   const prisma = getPrisma();
@@ -33,8 +34,7 @@ export async function PATCH(
       role: updatedUser.role,
     });
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Internal server error';
-    const status = message === 'Unauthorized' ? 401 : 400;
-    return NextResponse.json({ error: message }, { status });
+    const { body, status } = handleApiError(error);
+    return NextResponse.json(body, { status });
   }
 }

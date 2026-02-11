@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/infrastructure/auth/nextauth.config';
+import { handleApiError } from '@/lib/apiErrorHandler';
 
 function getService() {
   const { getPrisma } = require('@/infrastructure/database/prisma') as {
@@ -67,10 +68,8 @@ export async function POST(request: NextRequest) {
       message: 'TikTok campaign sync initiated',
       adAccountId: body.adAccountId,
     });
-  } catch (err) {
-    return NextResponse.json(
-      { error: err instanceof Error ? err.message : 'Internal server error' },
-      { status: 500 },
-    );
+  } catch (error) {
+    const { body, status } = handleApiError(error);
+    return NextResponse.json(body, { status });
   }
 }

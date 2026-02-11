@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { handleApiError } from '@/lib/apiErrorHandler';
 
 export async function GET(request: NextRequest) {
   try {
@@ -47,9 +48,7 @@ export async function GET(request: NextRequest) {
       total: accounts.length,
     });
   } catch (error) {
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Failed to fetch accounts' },
-      { status: 500 },
-    );
+    const { body, status } = handleApiError(error);
+    return NextResponse.json(body, { status });
   }
 }
